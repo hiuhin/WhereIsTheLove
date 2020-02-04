@@ -215,88 +215,6 @@ var drawDiamond = function drawDiamond(context, x, y, width, height, color) {
 
 /***/ }),
 
-/***/ "./src/game.js":
-/*!*********************!*\
-  !*** ./src/game.js ***!
-  \*********************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Game; });
-/* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./input */ "./src/input.js");
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-
-
-var Game =
-/*#__PURE__*/
-function () {
-  function Game(gameHeight, gameWidth, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, drawHeart, drawSpade, drawClub, drawDiamond) {
-    _classCallCheck(this, Game);
-
-    this.gameHeight = gameHeight;
-    this.gameWidth = gameWidth;
-    this.round = 0;
-    this.ctx = ctx;
-    this.heartSpots = heartSpots;
-    this.shapeSize = shapeSize;
-    this.spots = [topSpot, rightSpot, bottomSpot, leftSpot];
-    this.colors = ["red", "lawngreen", "gold", "fuchsia", "tomato"];
-    this.drawHeart = drawHeart;
-    this.drawSpade = drawSpade;
-    this.drawClub = drawClub;
-    this.drawDiamond = drawDiamond;
-    this.shuffle = this.shuffle.bind(this);
-  }
-
-  _createClass(Game, [{
-    key: "flashHeart",
-    value: function flashHeart() {
-      this.drawHeart(this.ctx, this.spots[this.heartSpots[this.round]].x, this.spots[this.heartSpots[this.round]].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
-    }
-  }, {
-    key: "flashShapes",
-    value: function flashShapes() {
-      var _this = this;
-
-      var noHeartSpots = this.spots.filter(function (spot, idx) {
-        return idx !== _this.heartSpots[_this.round];
-      });
-      var shuffledSpots = this.shuffle(noHeartSpots);
-      this.drawSpade(this.ctx, shuffledSpots[0].x, shuffledSpots[0].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
-      this.drawDiamond(this.ctx, shuffledSpots[1].x, shuffledSpots[1].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
-      this.drawClub(this.ctx, shuffledSpots[2].x, shuffledSpots[2].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
-    }
-  }, {
-    key: "shuffle",
-    value: function shuffle(spots) {
-      var newPos;
-      var temp;
-
-      for (var i = spots.length - 1; i > 0; i--) {
-        newPos = Math.floor(Math.random() * (i + 1));
-        temp = spots[i];
-        spots[i] = spots[newPos];
-        spots[newPos] = temp;
-      }
-
-      return spots;
-    }
-  }]);
-
-  return Game;
-}();
-
-
-
-/***/ }),
-
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -306,20 +224,19 @@ function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game */ "./src/game.js");
+/* harmony import */ var _round__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./round */ "./src/round.js");
 /* harmony import */ var _drawshapes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./drawshapes */ "./src/drawshapes.js");
 
 
 var canvas = document.querySelector('canvas');
 var ctx = canvas.getContext('2d');
+var roundNum;
+var correct;
+var gameOver;
+var heartSpots = [];
+var intervalId;
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
-var heartSpots = [];
-
-for (var i = 0; i < 10; i++) {
-  heartSpots.push(Math.floor(Math.random() * 4));
-}
-
 var topSpot = {
   x: 161,
   y: 15
@@ -340,9 +257,37 @@ var shapeSize = {
   w: 10,
   h: 15
 };
-var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](GAME_WIDTH, GAME_HEIGHT, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawHeart"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawSpade"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawClub"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawDiamond"]);
-game.flashHeart();
-game.flashShapes();
+
+function play() {
+  roundNum = 0;
+  gameOver = false;
+  heartSpots = [];
+
+  for (var i = 0; i < 10; i++) {
+    heartSpots.push(Math.floor(Math.random() * 4));
+  }
+
+  intervalId = setInterval(startRounds, 800);
+}
+
+function startRounds() {
+  console.log(roundNum);
+
+  if (roundNum === 9) {
+    clearInterval(intervalId);
+    gameOver = true;
+  }
+
+  var round = new _round__WEBPACK_IMPORTED_MODULE_0__["default"](GAME_WIDTH, GAME_HEIGHT, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawHeart"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawSpade"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawClub"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawDiamond"], roundNum);
+  round.flashHeart();
+  round.flashShapes();
+  roundNum++;
+  setTimeout(function () {
+    return round.clearSpots();
+  }, 300);
+}
+
+play();
 
 /***/ }),
 
@@ -376,6 +321,93 @@ var InputHandler = function InputHandler() {
     }
   });
 };
+
+
+
+/***/ }),
+
+/***/ "./src/round.js":
+/*!**********************!*\
+  !*** ./src/round.js ***!
+  \**********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Round; });
+/* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./input */ "./src/input.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+var Round =
+/*#__PURE__*/
+function () {
+  function Round(gameHeight, gameWidth, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, drawHeart, drawSpade, drawClub, drawDiamond, roundNum) {
+    _classCallCheck(this, Round);
+
+    this.gameHeight = gameHeight;
+    this.gameWidth = gameWidth;
+    this.ctx = ctx;
+    this.heartSpots = heartSpots;
+    this.shapeSize = shapeSize;
+    this.spots = [topSpot, rightSpot, bottomSpot, leftSpot];
+    this.colors = ["red", "lawngreen", "gold", "fuchsia", "tomato"];
+    this.drawHeart = drawHeart;
+    this.drawSpade = drawSpade;
+    this.drawClub = drawClub;
+    this.drawDiamond = drawDiamond;
+    this.roundNum = roundNum;
+    this.shuffle = this.shuffle.bind(this);
+  }
+
+  _createClass(Round, [{
+    key: "flashHeart",
+    value: function flashHeart() {
+      this.drawHeart(this.ctx, this.spots[this.heartSpots[this.roundNum]].x, this.spots[this.heartSpots[this.roundNum]].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
+    }
+  }, {
+    key: "flashShapes",
+    value: function flashShapes() {
+      var _this = this;
+
+      var noHeartSpots = this.spots.filter(function (spot, idx) {
+        return idx !== _this.heartSpots[_this.roundNum];
+      });
+      var shuffledSpots = this.shuffle(noHeartSpots);
+      this.drawSpade(this.ctx, shuffledSpots[0].x, shuffledSpots[0].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
+      this.drawDiamond(this.ctx, shuffledSpots[1].x, shuffledSpots[1].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
+      this.drawClub(this.ctx, shuffledSpots[2].x, shuffledSpots[2].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
+    }
+  }, {
+    key: "shuffle",
+    value: function shuffle(spots) {
+      var newPos;
+      var temp;
+
+      for (var i = spots.length - 1; i > 0; i--) {
+        newPos = Math.floor(Math.random() * (i + 1));
+        temp = spots[i];
+        spots[i] = spots[newPos];
+        spots[newPos] = temp;
+      }
+
+      return spots;
+    }
+  }, {
+    key: "clearSpots",
+    value: function clearSpots() {
+      this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+    }
+  }]);
+
+  return Round;
+}();
 
 
 

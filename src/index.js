@@ -1,17 +1,20 @@
-import Game from "./game";
+import Round from "./round";
 import { drawSpade, drawHeart, drawDiamond, drawClub } from "./drawshapes";
 
 
 let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
 
+let roundNum;
+let correct;
+let gameOver;
+let heartSpots = [];
+let intervalId;
+
 const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 1000;
 
-let heartSpots = [];
-for (let i = 0; i < 10; i++) {
-    heartSpots.push(Math.floor(Math.random() * 4))
-}
+
 
 const topSpot = {
     x: 161,
@@ -39,24 +42,47 @@ const shapeSize = {
     h: 15
 }
 
+function play() {
+    roundNum = 0;
+    gameOver = false;
+    heartSpots = [];
+    for (let i = 0; i < 10; i++) {
+        heartSpots.push(Math.floor(Math.random() * 4));
+    }
+    intervalId = setInterval(startRounds, 800);
+}
 
-let game = new Game(
-    GAME_WIDTH, 
-    GAME_HEIGHT, 
-    ctx, 
-    heartSpots, 
-    shapeSize, 
-    topSpot, 
-    rightSpot, 
-    bottomSpot, 
-    leftSpot, 
-    drawHeart,
-    drawSpade,
-    drawClub,
-    drawDiamond
-);
+function startRounds() {
+    console.log(roundNum);
 
-game.flashHeart();
-game.flashShapes();
+    if (roundNum === 9) {
+        clearInterval(intervalId);
+        gameOver = true;
+    }
 
+    let round = new Round(
+        GAME_WIDTH, 
+        GAME_HEIGHT, 
+        ctx, 
+        heartSpots, 
+        shapeSize, 
+        topSpot, 
+        rightSpot, 
+        bottomSpot, 
+        leftSpot, 
+        drawHeart,
+        drawSpade,
+        drawClub,
+        drawDiamond,
+        roundNum
+    );
+    
+    round.flashHeart();
+    round.flashShapes();
+    roundNum++;
+    setTimeout(() => round.clearSpots(), 300);
+}
+
+
+play();
 
