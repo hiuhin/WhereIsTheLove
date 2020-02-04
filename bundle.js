@@ -237,7 +237,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Game =
 /*#__PURE__*/
 function () {
-  function Game(gameHeight, gameWidth, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, drawHeart) {
+  function Game(gameHeight, gameWidth, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, drawHeart, drawSpade, drawClub, drawDiamond) {
     _classCallCheck(this, Game);
 
     this.gameHeight = gameHeight;
@@ -249,12 +249,44 @@ function () {
     this.spots = [topSpot, rightSpot, bottomSpot, leftSpot];
     this.colors = ["red", "lawngreen", "gold", "fuchsia", "tomato"];
     this.drawHeart = drawHeart;
+    this.drawSpade = drawSpade;
+    this.drawClub = drawClub;
+    this.drawDiamond = drawDiamond;
+    this.shuffle = this.shuffle.bind(this);
   }
 
   _createClass(Game, [{
-    key: "draw",
-    value: function draw() {
+    key: "flashHeart",
+    value: function flashHeart() {
       this.drawHeart(this.ctx, this.spots[this.heartSpots[this.round]].x, this.spots[this.heartSpots[this.round]].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
+    }
+  }, {
+    key: "flashShapes",
+    value: function flashShapes() {
+      var _this = this;
+
+      var noHeartSpots = this.spots.filter(function (spot, idx) {
+        return idx !== _this.heartSpots[_this.round];
+      });
+      var shuffledSpots = this.shuffle(noHeartSpots);
+      this.drawSpade(this.ctx, shuffledSpots[0].x, shuffledSpots[0].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
+      this.drawDiamond(this.ctx, shuffledSpots[1].x, shuffledSpots[1].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
+      this.drawClub(this.ctx, shuffledSpots[2].x, shuffledSpots[2].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
+    }
+  }, {
+    key: "shuffle",
+    value: function shuffle(spots) {
+      var newPos;
+      var temp;
+
+      for (var i = spots.length - 1; i > 0; i--) {
+        newPos = Math.floor(Math.random() * (i + 1));
+        temp = spots[i];
+        spots[i] = spots[newPos];
+        spots[newPos] = temp;
+      }
+
+      return spots;
     }
   }]);
 
@@ -308,9 +340,9 @@ var shapeSize = {
   w: 10,
   h: 15
 };
-var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](GAME_WIDTH, GAME_HEIGHT, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawHeart"]);
-game.draw();
-console.log(game.draw);
+var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](GAME_WIDTH, GAME_HEIGHT, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawHeart"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawSpade"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawClub"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawDiamond"]);
+game.flashHeart();
+game.flashShapes();
 
 /***/ }),
 

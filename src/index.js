@@ -40,9 +40,23 @@ const shapeSize = {
 }
 
 
-let game = new Game(GAME_WIDTH, GAME_HEIGHT, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, drawHeart);
+let game = new Game(
+    GAME_WIDTH, 
+    GAME_HEIGHT, 
+    ctx, 
+    heartSpots, 
+    shapeSize, 
+    topSpot, 
+    rightSpot, 
+    bottomSpot, 
+    leftSpot, 
+    drawHeart,
+    drawSpade,
+    drawClub,
+    drawDiamond
+);
 
-game.draw();
-console.log(game.draw);
+game.flashHeart();
+game.flashShapes();
 
 
