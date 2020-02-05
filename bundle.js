@@ -226,6 +226,8 @@ var drawDiamond = function drawDiamond(context, x, y, width, height, color) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _round__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./round */ "./src/round.js");
 /* harmony import */ var _drawshapes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./drawshapes */ "./src/drawshapes.js");
+/* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./input */ "./src/input.js");
+
 
 
 var canvas = document.querySelector('canvas');
@@ -257,6 +259,13 @@ var shapeSize = {
   w: 10,
   h: 15
 };
+var playerSpot = {
+  w: 0,
+  h: 0
+}; // let right = document.getElementById("right");
+// let blue = document.getElementById("blueheart");
+// ctx.drawImage(right, 100, 105, 50, 50);
+// ctx.drawImage(blue, 100, 105, 10, 10);
 
 function play() {
   roundNum = 0;
@@ -267,24 +276,24 @@ function play() {
     heartSpots.push(Math.floor(Math.random() * 4));
   }
 
-  intervalId = setInterval(startRounds, 800);
+  intervalId = setInterval(startRounds, 3000);
+  startRounds();
 }
 
 function startRounds() {
-  console.log(roundNum);
-
   if (roundNum === 9) {
     clearInterval(intervalId);
     gameOver = true;
   }
 
   var round = new _round__WEBPACK_IMPORTED_MODULE_0__["default"](GAME_WIDTH, GAME_HEIGHT, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawHeart"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawSpade"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawClub"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawDiamond"], roundNum);
+  new _input__WEBPACK_IMPORTED_MODULE_2__["default"](round);
   round.flashHeart();
   round.flashShapes();
-  roundNum++;
   setTimeout(function () {
     return round.clearSpots();
-  }, 300);
+  }, 2000);
+  roundNum++;
 }
 
 play();
@@ -303,21 +312,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return InputHandler; });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var InputHandler = function InputHandler() {
+var InputHandler = function InputHandler(round) {
   _classCallCheck(this, InputHandler);
 
   document.addEventListener("keydown", function (event) {
     switch (event.keyCode) {
       case 37:
-        alert("move left");
+        round.choice = 3;
+        break;
+
+      case 38:
+        round.choice = 0;
         break;
 
       case 39:
-        alert("move right");
+        round.choice = 1;
+        break;
+
+      case 40:
+        round.choice = 2;
         break;
       // case 27:
       //     togglePause();
       //     break;
+    }
+
+    if (round.choice === round.heartSpots[round.roundNum]) {
+      console.log("correct!");
+      console.log(round.roundNum);
+      round.clearSpots();
+      round.roundNum++;
+    }
+
+    if (round.choice !== round.heartSpots[round.roundNum] && round.choice !== null) {
+      console.log("incorrect!");
+      round.clearSpots;
+      round.roundNum++;
     }
   });
 };
@@ -364,6 +394,7 @@ function () {
     this.drawDiamond = drawDiamond;
     this.roundNum = roundNum;
     this.shuffle = this.shuffle.bind(this);
+    this.choice = null;
   }
 
   _createClass(Round, [{

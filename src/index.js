@@ -1,10 +1,9 @@
 import Round from "./round";
 import { drawSpade, drawHeart, drawDiamond, drawClub } from "./drawshapes";
-
+import InputHandler from "./input";
 
 let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
-
 let roundNum;
 let correct;
 let gameOver;
@@ -42,24 +41,37 @@ const shapeSize = {
     h: 15
 }
 
+const playerSpot = {
+    w: 0,
+    h: 0
+
+}
+
+
+// let right = document.getElementById("right");
+// let blue = document.getElementById("blueheart");
+// ctx.drawImage(right, 100, 105, 50, 50);
+// ctx.drawImage(blue, 100, 105, 10, 10);
 function play() {
+
     roundNum = 0;
     gameOver = false;
     heartSpots = [];
     for (let i = 0; i < 10; i++) {
         heartSpots.push(Math.floor(Math.random() * 4));
     }
-    intervalId = setInterval(startRounds, 800);
+    intervalId = setInterval(startRounds, 3000);
+    startRounds();
+
 }
 
 function startRounds() {
-    console.log(roundNum);
-
+    
     if (roundNum === 9) {
         clearInterval(intervalId);
         gameOver = true;
     }
-
+    
     let round = new Round(
         GAME_WIDTH, 
         GAME_HEIGHT, 
@@ -75,14 +87,18 @@ function startRounds() {
         drawClub,
         drawDiamond,
         roundNum
-    );
-    
+        );
+        
+    new InputHandler(round);
+
     round.flashHeart();
     round.flashShapes();
+    
+    setTimeout(() => round.clearSpots(), 2000);   
     roundNum++;
-    setTimeout(() => round.clearSpots(), 300);
 }
 
 
 play();
+
 

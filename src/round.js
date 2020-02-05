@@ -36,9 +36,9 @@ export default class Round {
         this.drawDiamond = drawDiamond;
         this.roundNum = roundNum;
         this.shuffle = this.shuffle.bind(this);
-        }
+        this.choice = null;
+    }
         
-
         flashHeart() {
             this.drawHeart(
                 this.ctx,
@@ -101,4 +101,5 @@ export default class Round {
          clearSpots() {
             this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
          }
+
 }
