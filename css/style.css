@@ -23,12 +23,13 @@ canvas {
     max-width: 1000px;
     position: absolute;
     z-index: -1;
+    /* display: none; */
 }
 
-#redheart {
+#right {
     display: none;
 }
 
-#left {
+#blueheart {
     display: none;
 }
