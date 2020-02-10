@@ -237,6 +237,7 @@ var correct;
 var gameOver;
 var heartSpots = [];
 var intervalId;
+var numRounds = 3;
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
 var topSpot = {
@@ -268,20 +269,19 @@ var playerSpot = {
 // ctx.drawImage(blue, 100, 105, 10, 10);
 
 function play() {
-  roundNum = 0;
+  roundNum = 1;
   gameOver = false;
   heartSpots = [];
 
-  for (var i = 0; i < 10; i++) {
+  for (var i = 0; i <= numRounds; i++) {
     heartSpots.push(Math.floor(Math.random() * 4));
   }
 
-  intervalId = setInterval(startRounds, 3000);
-  startRounds();
+  intervalId = setInterval(startRounds, 2000);
 }
 
 function startRounds() {
-  if (roundNum === 9) {
+  if (roundNum === numRounds) {
     clearInterval(intervalId);
     gameOver = true;
   }
@@ -339,15 +339,13 @@ var InputHandler = function InputHandler(round) {
 
     if (round.choice === round.heartSpots[round.roundNum]) {
       console.log("correct!");
-      console.log(round.roundNum);
-      round.clearSpots();
-      round.roundNum++;
+      console.log(round.roundNum); // round.clearSpots();
+      // round.roundNum++;
     }
 
     if (round.choice !== round.heartSpots[round.roundNum] && round.choice !== null) {
-      console.log("incorrect!");
-      round.clearSpots;
-      round.roundNum++;
+      console.log("incorrect!"); // round.clearSpots();
+      // round.roundNum++;
     }
   });
 };

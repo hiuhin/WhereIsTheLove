@@ -22,14 +22,14 @@ export default class InputHandler {
             if (round.choice === round.heartSpots[round.roundNum]) {
                 console.log("correct!");
                 console.log(round.roundNum);
-                round.clearSpots();
-                round.roundNum++;
+                // round.clearSpots();
+                // round.roundNum++;
             } 
             
             if (round.choice !== round.heartSpots[round.roundNum] && round.choice !== null) {
                 console.log("incorrect!");
-                round.clearSpots;
-                round.roundNum++;
+                // round.clearSpots();
+                // round.roundNum++;
             }
         });
     }         

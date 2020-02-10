@@ -9,6 +9,7 @@ let correct;
 let gameOver;
 let heartSpots = [];
 let intervalId;
+let numRounds = 3;
 
 const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 1000;
@@ -54,20 +55,18 @@ const playerSpot = {
 // ctx.drawImage(blue, 100, 105, 10, 10);
 function play() {
 
-    roundNum = 0;
+    roundNum = 1;
     gameOver = false;
     heartSpots = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i <= numRounds; i++) {
         heartSpots.push(Math.floor(Math.random() * 4));
     }
-    intervalId = setInterval(startRounds, 3000);
-    startRounds();
-
+    intervalId = setInterval(startRounds, 2000);
 }
 
 function startRounds() {
     
-    if (roundNum === 9) {
+    if (roundNum === numRounds) {
         clearInterval(intervalId);
         gameOver = true;
     }
