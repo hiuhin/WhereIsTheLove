@@ -42,8 +42,8 @@ export default class Round {
         flashHeart() {
             this.drawHeart(
                 this.ctx,
-                this.spots[this.heartSpots[this.roundNum]].x,
-                this.spots[this.heartSpots[this.roundNum]].y,
+                this.spots[this.heartSpots[this.roundNum-1]].x,
+                this.spots[this.heartSpots[this.roundNum-1]].y,
                 this.shapeSize.w,
                 this.shapeSize.h,
                 this.colors[Math.floor(Math.random() * this.colors.length)]
@@ -51,7 +51,7 @@ export default class Round {
         }
 
         flashShapes() {
-            let noHeartSpots = this.spots.filter((spot, idx) => idx !== this.heartSpots[this.roundNum]);
+            let noHeartSpots = this.spots.filter((spot, idx) => idx !== this.heartSpots[this.roundNum-1]);
             let shuffledSpots = this.shuffle(noHeartSpots);
 
             this.drawSpade(

@@ -6,10 +6,11 @@ let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
 let roundNum;
 let correct;
-let gameOver;
 let heartSpots = [];
 let intervalId;
-let numRounds = 3;
+let clearIntervalId;
+let numRounds = 4;
+let round;
 
 const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 1000;
@@ -55,24 +56,29 @@ const playerSpot = {
 // ctx.drawImage(blue, 100, 105, 10, 10);
 function play() {
 
-    roundNum = 1;
-    gameOver = false;
+    roundNum = 0;
     heartSpots = [];
-    for (let i = 0; i <= numRounds; i++) {
+    for (let i = 0; i < numRounds; i++) {
         heartSpots.push(Math.floor(Math.random() * 4));
     }
-    intervalId = setInterval(startRounds, 2000);
+
+    console.log(heartSpots);
+    // setTimeout(() => nextRound(), 2000)
+    intervalId = setInterval(nextRound, 3500);
 }
 
-function startRounds() {
+export function nextRound() {
+    // debugger;
+    roundNum += 1;
     
-    if (roundNum === numRounds) {
+    if (roundNum > numRounds) {
+        gameOver();
         clearInterval(intervalId);
-        gameOver = true;
+        return;
     }
-    
-    let round = new Round(
-        GAME_WIDTH, 
+
+    round = new Round(
+        GAME_WIDTH,
         GAME_HEIGHT, 
         ctx, 
         heartSpots, 
@@ -87,16 +93,64 @@ function startRounds() {
         drawDiamond,
         roundNum
         );
-        
-    new InputHandler(round);
 
+  
     round.flashHeart();
     round.flashShapes();
-    
-    setTimeout(() => round.clearSpots(), 2000);   
-    roundNum++;
+
+    document.addEventListener("keydown", event => {
+        // debugger;
+        switch (event.keyCode) {
+            case 37:
+                // round.choice = 3;
+                check(round, 3);
+                break;
+            case 38:
+                // round.choice = 0;
+                check(round, 0);
+                break;
+            case 39:
+                // round.choice = 1;
+                check(round, 1);
+                break;
+            case 40:
+                // round.choice = 2;
+                check(round, 2);
+                break;
+        }
+    });
+    // console.log(round.ctx);
+    // round.clearSpots();
+    // setTimeout(round.clearSpots, 3000);
 }
 
+
+export function check(round, userChoice) {
+    if (userChoice === round.heartSpots[round.roundNum - 1]) {
+        console.log(`${round.roundNum}${roundNum}: correct!`);
+        round.clearSpots();
+        // nextRound();
+        // console.log("next" + roundNum);
+    } else {
+        console.log(`${round.roundNum}${roundNum}: incorrect!`);
+        round.clearSpots();
+        // nextRound();
+        // console.log("next" + roundNum);
+    }
+}
+
+function gameOver(ctx) {
+    // play();
+    console.log("gameover!")
+    // ctx.rect(0,0, this.GAME_WIDTH, this.GAME_HEIGHT);
+    // ctx.fillStyle = "rgba(0,0,0,0.5";
+    // ctx.fill();
+
+    // ctx.font = "30px Arial";
+    // ctx.fillStyle = "white";
+    // ctx.textAlign = "center";
+    // ctx.fillText("Game Over", this.GAME_WIDTH/2, this.GAME_HEIGHT/2);
+}
 
 play();
 
