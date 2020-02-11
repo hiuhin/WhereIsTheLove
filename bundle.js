@@ -219,11 +219,13 @@ var drawDiamond = function drawDiamond(context, x, y, width, height, color) {
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-/*! no exports provided */
+/*! exports provided: nextRound, check */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "nextRound", function() { return nextRound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "check", function() { return check; });
 /* harmony import */ var _round__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./round */ "./src/round.js");
 /* harmony import */ var _drawshapes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./drawshapes */ "./src/drawshapes.js");
 /* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./input */ "./src/input.js");
@@ -234,10 +236,11 @@ var canvas = document.querySelector('canvas');
 var ctx = canvas.getContext('2d');
 var roundNum;
 var correct;
-var gameOver;
 var heartSpots = [];
-var intervalId;
-var numRounds = 3;
+var numRounds = 4;
+var round;
+var on;
+var speed = 500;
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
 var topSpot = {
@@ -269,31 +272,101 @@ var playerSpot = {
 // ctx.drawImage(blue, 100, 105, 10, 10);
 
 function play() {
-  roundNum = 1;
-  gameOver = false;
+  on = false;
+  roundNum = 0;
   heartSpots = [];
 
-  for (var i = 0; i <= numRounds; i++) {
+  for (var i = 0; i < numRounds; i++) {
     heartSpots.push(Math.floor(Math.random() * 4));
   }
 
-  intervalId = setInterval(startRounds, 2000);
+  console.log(heartSpots);
+  setTimeout(function () {
+    return nextRound();
+  }, 1500);
 }
 
-function startRounds() {
-  if (roundNum === numRounds) {
-    clearInterval(intervalId);
-    gameOver = true;
+function nextRound() {
+  roundNum += 1;
+
+  if (roundNum > numRounds) {
+    gameOver();
+    on = false;
+    return;
   }
 
-  var round = new _round__WEBPACK_IMPORTED_MODULE_0__["default"](GAME_WIDTH, GAME_HEIGHT, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawHeart"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawSpade"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawClub"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawDiamond"], roundNum);
-  new _input__WEBPACK_IMPORTED_MODULE_2__["default"](round);
+  round = new _round__WEBPACK_IMPORTED_MODULE_0__["default"](GAME_WIDTH, GAME_HEIGHT, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawHeart"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawSpade"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawClub"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawDiamond"], roundNum, speed);
   round.flashHeart();
   round.flashShapes();
+  on = true;
+  document.addEventListener("keydown", function (event) {
+    // debugger;
+    switch (event.keyCode) {
+      case 37:
+        if (on) {
+          check(round, 3);
+        }
+
+        on = false;
+        break;
+
+      case 38:
+        if (on) {
+          check(round, 0);
+        }
+
+        on = false;
+        break;
+
+      case 39:
+        if (on) {
+          check(round, 1);
+        }
+
+        on = false;
+        break;
+
+      case 40:
+        if (on) {
+          check(round, 2);
+        }
+
+        on = false;
+        break;
+    }
+  });
   setTimeout(function () {
     return round.clearSpots();
-  }, 2000);
-  roundNum++;
+  }, speed);
+  setTimeout(function () {
+    return toggleOn();
+  }, speed);
+  setTimeout(nextRound, speed + 1500);
+}
+
+function toggleOn() {
+  on = false;
+}
+
+function check(round, userChoice) {
+  if (userChoice === round.heartSpots[round.roundNum - 1]) {
+    console.log("".concat(roundNum, ": correct!"));
+    round.clearSpots();
+  } else {
+    console.log("".concat(roundNum, ": incorrect!"));
+    round.clearSpots();
+  }
+}
+
+function gameOver(ctx) {
+  // play();
+  console.log("gameover!"); // ctx.rect(0,0, this.GAME_WIDTH, this.GAME_HEIGHT);
+  // ctx.fillStyle = "rgba(0,0,0,0.5";
+  // ctx.fill();
+  // ctx.font = "30px Arial";
+  // ctx.fillStyle = "white";
+  // ctx.textAlign = "center";
+  // ctx.fillText("Game Over", this.GAME_WIDTH/2, this.GAME_HEIGHT/2);
 }
 
 play();
@@ -310,43 +383,51 @@ play();
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return InputHandler; });
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index */ "./src/index.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var InputHandler = function InputHandler(round) {
+
+
+
+var InputHandler = function InputHandler(round, roundNum) {
   _classCallCheck(this, InputHandler);
 
   document.addEventListener("keydown", function (event) {
     switch (event.keyCode) {
       case 37:
-        round.choice = 3;
+        // round.choice = 3;
+        debugger;
+        Object(_index__WEBPACK_IMPORTED_MODULE_0__["check"])(round, 3);
         break;
 
       case 38:
-        round.choice = 0;
+        // round.choice = 0;
+        debugger;
+        Object(_index__WEBPACK_IMPORTED_MODULE_0__["check"])(round, 0);
         break;
 
       case 39:
-        round.choice = 1;
+        // round.choice = 1;
+        debugger;
+        Object(_index__WEBPACK_IMPORTED_MODULE_0__["check"])(round, 1);
         break;
 
       case 40:
-        round.choice = 2;
+        // round.choice = 2;
+        debugger;
+        Object(_index__WEBPACK_IMPORTED_MODULE_0__["check"])(round, 2);
         break;
       // case 27:
       //     togglePause();
       //     break;
-    }
+    } // if (round.choice === round.heartSpots[round.roundNum - 1]) {
+    //     console.log(`${round.roundNum}: correct!`);
+    //     round.clearSpots();
+    //     nextRound();
+    // } else {
+    //     console.log(`${round.roundNum}: incorrect!`);
+    // }
 
-    if (round.choice === round.heartSpots[round.roundNum]) {
-      console.log("correct!");
-      console.log(round.roundNum); // round.clearSpots();
-      // round.roundNum++;
-    }
-
-    if (round.choice !== round.heartSpots[round.roundNum] && round.choice !== null) {
-      console.log("incorrect!"); // round.clearSpots();
-      // round.roundNum++;
-    }
   });
 };
 
@@ -376,7 +457,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Round =
 /*#__PURE__*/
 function () {
-  function Round(gameHeight, gameWidth, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, drawHeart, drawSpade, drawClub, drawDiamond, roundNum) {
+  function Round(gameHeight, gameWidth, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, drawHeart, drawSpade, drawClub, drawDiamond, roundNum, speed) {
     _classCallCheck(this, Round);
 
     this.gameHeight = gameHeight;
@@ -393,12 +474,13 @@ function () {
     this.roundNum = roundNum;
     this.shuffle = this.shuffle.bind(this);
     this.choice = null;
+    this.speed = speed;
   }
 
   _createClass(Round, [{
     key: "flashHeart",
     value: function flashHeart() {
-      this.drawHeart(this.ctx, this.spots[this.heartSpots[this.roundNum]].x, this.spots[this.heartSpots[this.roundNum]].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
+      this.drawHeart(this.ctx, this.spots[this.heartSpots[this.roundNum - 1]].x, this.spots[this.heartSpots[this.roundNum - 1]].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
     }
   }, {
     key: "flashShapes",
@@ -406,12 +488,18 @@ function () {
       var _this = this;
 
       var noHeartSpots = this.spots.filter(function (spot, idx) {
-        return idx !== _this.heartSpots[_this.roundNum];
+        return idx !== _this.heartSpots[_this.roundNum - 1];
       });
       var shuffledSpots = this.shuffle(noHeartSpots);
       this.drawSpade(this.ctx, shuffledSpots[0].x, shuffledSpots[0].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
       this.drawDiamond(this.ctx, shuffledSpots[1].x, shuffledSpots[1].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
-      this.drawClub(this.ctx, shuffledSpots[2].x, shuffledSpots[2].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
+      this.drawClub(this.ctx, shuffledSpots[2].x, shuffledSpots[2].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]); //clear left spot only:
+      // setTimeout(() => {
+      //     this.ctx.clearRect(70,
+      //         50,
+      //         30,
+      //         30)
+      // }, 2000)
     }
   }, {
     key: "shuffle",
