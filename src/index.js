@@ -11,6 +11,7 @@ let intervalId;
 let clearIntervalId;
 let numRounds = 4;
 let round;
+let on;
 
 const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 1000;
@@ -55,7 +56,7 @@ const playerSpot = {
 // ctx.drawImage(right, 100, 105, 50, 50);
 // ctx.drawImage(blue, 100, 105, 10, 10);
 function play() {
-
+    on = false;
     roundNum = 0;
     heartSpots = [];
     for (let i = 0; i < numRounds; i++) {
@@ -63,8 +64,8 @@ function play() {
     }
 
     console.log(heartSpots);
-    // setTimeout(() => nextRound(), 2000)
-    intervalId = setInterval(nextRound, 3500);
+    setTimeout(() => nextRound(), 2000);
+    // intervalId = setInterval(nextRound, 3000);
 }
 
 export function nextRound() {
@@ -74,13 +75,14 @@ export function nextRound() {
     if (roundNum > numRounds) {
         gameOver();
         clearInterval(intervalId);
+        on = false;
         return;
     }
 
     round = new Round(
         GAME_WIDTH,
         GAME_HEIGHT, 
-        ctx, 
+        ctx,
         heartSpots, 
         shapeSize, 
         topSpot, 
@@ -97,45 +99,55 @@ export function nextRound() {
   
     round.flashHeart();
     round.flashShapes();
+    on = true;
 
     document.addEventListener("keydown", event => {
         // debugger;
         switch (event.keyCode) {
             case 37:
                 // round.choice = 3;
-                check(round, 3);
+                if (on) {
+                    check(round, 3); }
+                on = false;
                 break;
             case 38:
                 // round.choice = 0;
-                check(round, 0);
+                if (on) {
+                    check(round, 0);
+                }
+                on = false;
                 break;
             case 39:
                 // round.choice = 1;
-                check(round, 1);
+                if (on) {
+                    check(round, 1);
+                }
+                on = false;
                 break;
             case 40:
                 // round.choice = 2;
-                check(round, 2);
+                if (on) {
+                    check(round, 2);
+                }
+                on = false;
                 break;
         }
     });
     // console.log(round.ctx);
     // round.clearSpots();
-    // setTimeout(round.clearSpots, 3000);
+    setTimeout(nextRound, 3000);
 }
 
 
 export function check(round, userChoice) {
     if (userChoice === round.heartSpots[round.roundNum - 1]) {
-        console.log(`${round.roundNum}${roundNum}: correct!`);
+        console.log(`${roundNum}: correct!`);
         round.clearSpots();
-        // nextRound();
-        // console.log("next" + roundNum);
+        
     } else {
-        console.log(`${round.roundNum}${roundNum}: incorrect!`);
+        console.log(`${roundNum}: incorrect!`);
         round.clearSpots();
-        // nextRound();
-        // console.log("next" + roundNum);
+     
     }
 }
 
