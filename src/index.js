@@ -7,11 +7,10 @@ let ctx = canvas.getContext('2d');
 let roundNum;
 let correct;
 let heartSpots = [];
-let intervalId;
-let clearIntervalId;
 let numRounds = 4;
 let round;
 let on;
+let speed = 500;
 
 const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 1000;
@@ -64,17 +63,15 @@ function play() {
     }
 
     console.log(heartSpots);
-    setTimeout(() => nextRound(), 2000);
-    // intervalId = setInterval(nextRound, 3000);
+    setTimeout(() => nextRound(), 1500);
 }
 
 export function nextRound() {
-    // debugger;
+
     roundNum += 1;
     
     if (roundNum > numRounds) {
         gameOver();
-        clearInterval(intervalId);
         on = false;
         return;
     }
@@ -93,39 +90,36 @@ export function nextRound() {
         drawSpade,
         drawClub,
         drawDiamond,
-        roundNum
+        roundNum,
+        speed
         );
 
   
-    round.flashHeart();
-    round.flashShapes();
-    on = true;
+        round.flashHeart();
+        round.flashShapes();
+        on = true;
 
     document.addEventListener("keydown", event => {
         // debugger;
         switch (event.keyCode) {
             case 37:
-                // round.choice = 3;
                 if (on) {
                     check(round, 3); }
                 on = false;
                 break;
             case 38:
-                // round.choice = 0;
                 if (on) {
                     check(round, 0);
                 }
                 on = false;
                 break;
             case 39:
-                // round.choice = 1;
                 if (on) {
                     check(round, 1);
                 }
                 on = false;
                 break;
             case 40:
-                // round.choice = 2;
                 if (on) {
                     check(round, 2);
                 }
@@ -133,11 +127,14 @@ export function nextRound() {
                 break;
         }
     });
-    // console.log(round.ctx);
-    // round.clearSpots();
-    setTimeout(nextRound, 3000);
+    setTimeout(() => round.clearSpots(), speed);
+    setTimeout(() => toggleOn(), speed);
+    setTimeout(nextRound, speed + 1500);  
 }
 
+function toggleOn() {
+    on = false;
+}
 
 export function check(round, userChoice) {
     if (userChoice === round.heartSpots[round.roundNum - 1]) {

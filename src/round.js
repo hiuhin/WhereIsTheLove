@@ -15,7 +15,8 @@ export default class Round {
         drawSpade,
         drawClub,
         drawDiamond,
-        roundNum
+        roundNum,
+        speed
     ) {
         this.gameHeight = gameHeight;
         this.gameWidth = gameWidth;
@@ -37,6 +38,7 @@ export default class Round {
         this.roundNum = roundNum;
         this.shuffle = this.shuffle.bind(this);
         this.choice = null;
+        this.speed = speed;
     }
         
         flashHeart() {
@@ -60,8 +62,8 @@ export default class Round {
                 shuffledSpots[0].y,
                 this.shapeSize.w,
                 this.shapeSize.h,
-                this.colors[Math.floor(Math.random() * this.colors.length)]
-            );
+                this.colors[Math.floor(Math.random() * this.colors.length)],
+                );
 
             this.drawDiamond(
                 this.ctx,
@@ -84,6 +86,15 @@ export default class Round {
                 Math.floor(Math.random() * this.colors.length)
                 ]
             ); 
+            
+            //clear left spot only:
+            // setTimeout(() => {
+            //     this.ctx.clearRect(70,
+            //         50,
+            //         30,
+            //         30)
+            // }, 2000)
+
         }
 
         shuffle(spots) {

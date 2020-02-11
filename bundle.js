@@ -237,11 +237,10 @@ var ctx = canvas.getContext('2d');
 var roundNum;
 var correct;
 var heartSpots = [];
-var intervalId;
-var clearIntervalId;
 var numRounds = 4;
 var round;
 var on;
+var speed = 500;
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
 var topSpot = {
@@ -284,21 +283,19 @@ function play() {
   console.log(heartSpots);
   setTimeout(function () {
     return nextRound();
-  }, 2000); // intervalId = setInterval(nextRound, 3000);
+  }, 1500);
 }
 
 function nextRound() {
-  // debugger;
   roundNum += 1;
 
   if (roundNum > numRounds) {
     gameOver();
-    clearInterval(intervalId);
     on = false;
     return;
   }
 
-  round = new _round__WEBPACK_IMPORTED_MODULE_0__["default"](GAME_WIDTH, GAME_HEIGHT, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawHeart"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawSpade"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawClub"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawDiamond"], roundNum);
+  round = new _round__WEBPACK_IMPORTED_MODULE_0__["default"](GAME_WIDTH, GAME_HEIGHT, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawHeart"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawSpade"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawClub"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawDiamond"], roundNum, speed);
   round.flashHeart();
   round.flashShapes();
   on = true;
@@ -306,7 +303,6 @@ function nextRound() {
     // debugger;
     switch (event.keyCode) {
       case 37:
-        // round.choice = 3;
         if (on) {
           check(round, 3);
         }
@@ -315,7 +311,6 @@ function nextRound() {
         break;
 
       case 38:
-        // round.choice = 0;
         if (on) {
           check(round, 0);
         }
@@ -324,7 +319,6 @@ function nextRound() {
         break;
 
       case 39:
-        // round.choice = 1;
         if (on) {
           check(round, 1);
         }
@@ -333,7 +327,6 @@ function nextRound() {
         break;
 
       case 40:
-        // round.choice = 2;
         if (on) {
           check(round, 2);
         }
@@ -341,11 +334,20 @@ function nextRound() {
         on = false;
         break;
     }
-  }); // console.log(round.ctx);
-  // round.clearSpots();
-
-  setTimeout(nextRound, 3000);
+  });
+  setTimeout(function () {
+    return round.clearSpots();
+  }, speed);
+  setTimeout(function () {
+    return toggleOn();
+  }, speed);
+  setTimeout(nextRound, speed + 1500);
 }
+
+function toggleOn() {
+  on = false;
+}
+
 function check(round, userChoice) {
   if (userChoice === round.heartSpots[round.roundNum - 1]) {
     console.log("".concat(roundNum, ": correct!"));
@@ -455,7 +457,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Round =
 /*#__PURE__*/
 function () {
-  function Round(gameHeight, gameWidth, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, drawHeart, drawSpade, drawClub, drawDiamond, roundNum) {
+  function Round(gameHeight, gameWidth, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, drawHeart, drawSpade, drawClub, drawDiamond, roundNum, speed) {
     _classCallCheck(this, Round);
 
     this.gameHeight = gameHeight;
@@ -472,6 +474,7 @@ function () {
     this.roundNum = roundNum;
     this.shuffle = this.shuffle.bind(this);
     this.choice = null;
+    this.speed = speed;
   }
 
   _createClass(Round, [{
@@ -490,7 +493,13 @@ function () {
       var shuffledSpots = this.shuffle(noHeartSpots);
       this.drawSpade(this.ctx, shuffledSpots[0].x, shuffledSpots[0].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
       this.drawDiamond(this.ctx, shuffledSpots[1].x, shuffledSpots[1].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
-      this.drawClub(this.ctx, shuffledSpots[2].x, shuffledSpots[2].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
+      this.drawClub(this.ctx, shuffledSpots[2].x, shuffledSpots[2].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]); //clear left spot only:
+      // setTimeout(() => {
+      //     this.ctx.clearRect(70,
+      //         50,
+      //         30,
+      //         30)
+      // }, 2000)
     }
   }, {
     key: "shuffle",
