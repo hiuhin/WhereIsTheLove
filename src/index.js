@@ -10,7 +10,7 @@ let heartSpots = [];
 let numRounds = 10;
 let round;
 let on;
-let speed = 500;
+let speed = 1500;
 let points_div = document.getElementById('points');
 let point = 0;
 
