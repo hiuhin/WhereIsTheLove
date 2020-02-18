@@ -240,7 +240,7 @@ var heartSpots = [];
 var numRounds = 10;
 var round;
 var on;
-var speed = 500;
+var speed = 1500;
 var points_div = document.getElementById('points');
 var point = 0;
 var GAME_WIDTH = 1000;
