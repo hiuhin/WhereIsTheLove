@@ -7,15 +7,15 @@ let ctx = canvas.getContext('2d');
 let roundNum;
 let correct;
 let heartSpots = [];
-let numRounds = 4;
+let numRounds = 10;
 let round;
 let on;
 let speed = 500;
+let points_div = document.getElementById('points');
+let point = 0;
 
 const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 1000;
-
-
 
 const topSpot = {
     x: 161,
@@ -63,6 +63,7 @@ function play() {
     }
 
     console.log(heartSpots);
+
     setTimeout(() => nextRound(), 1500);
 }
 
@@ -138,11 +139,15 @@ function toggleOn() {
 
 export function check(round, userChoice) {
     if (userChoice === round.heartSpots[round.roundNum - 1]) {
+        point += 5;
+        points_div.innerText = point;
         console.log(`${roundNum}: correct!`);
         round.clearSpots();
         
     } else {
         console.log(`${roundNum}: incorrect!`);
+        point -= 5;
+        points_div.innerText = point;
         round.clearSpots();
      
     }

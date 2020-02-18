@@ -237,10 +237,12 @@ var ctx = canvas.getContext('2d');
 var roundNum;
 var correct;
 var heartSpots = [];
-var numRounds = 4;
+var numRounds = 10;
 var round;
 var on;
 var speed = 500;
+var points_div = document.getElementById('points');
+var point = 0;
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
 var topSpot = {
@@ -350,10 +352,14 @@ function toggleOn() {
 
 function check(round, userChoice) {
   if (userChoice === round.heartSpots[round.roundNum - 1]) {
+    point += 5;
+    points_div.innerText = point;
     console.log("".concat(roundNum, ": correct!"));
     round.clearSpots();
   } else {
     console.log("".concat(roundNum, ": incorrect!"));
+    point -= 5;
+    points_div.innerText = point;
     round.clearSpots();
   }
 }
