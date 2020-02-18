@@ -18,24 +18,24 @@ const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 1000;
 
 const topSpot = {
-    x: 161,
-    y: 15
+    x: 152,
+    y: 17
 }
 
 const rightSpot = {
-    x: 246,
-    y: 57
+    x: 239,
+    y: 60
 }
 
 const bottomSpot = {
-    x: 161,
-    y: 99
+    x: 152,
+    y: 103
 }
 
 
 const leftSpot = {
-    x: 76,
-    y: 57
+    x: 64,
+    y: 60
 }
 
 const shapeSize = {

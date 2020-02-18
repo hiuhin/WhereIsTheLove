@@ -246,20 +246,20 @@ var point = 0;
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
 var topSpot = {
-  x: 161,
-  y: 15
+  x: 152,
+  y: 17
 };
 var rightSpot = {
-  x: 246,
-  y: 57
+  x: 239,
+  y: 60
 };
 var bottomSpot = {
-  x: 161,
-  y: 99
+  x: 152,
+  y: 103
 };
 var leftSpot = {
-  x: 76,
-  y: 57
+  x: 64,
+  y: 60
 };
 var shapeSize = {
   w: 10,
@@ -472,7 +472,7 @@ function () {
     this.heartSpots = heartSpots;
     this.shapeSize = shapeSize;
     this.spots = [topSpot, rightSpot, bottomSpot, leftSpot];
-    this.colors = ["red", "lawngreen", "gold", "fuchsia", "tomato"];
+    this.colors = ["red", "lawngreen", "crimson", "gold", "orangered"];
     this.drawHeart = drawHeart;
     this.drawSpade = drawSpade;
     this.drawClub = drawClub;

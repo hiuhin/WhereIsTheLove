@@ -27,9 +27,9 @@ export default class Round {
         this.colors = [
             "red",
             "lawngreen",
+            "crimson",
             "gold",
-            "fuchsia",
-            "tomato"
+            "orangered"
         ];
         this.drawHeart = drawHeart;
         this.drawSpade = drawSpade;
