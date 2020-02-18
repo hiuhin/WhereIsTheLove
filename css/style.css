@@ -1,21 +1,26 @@
 
 body {
     margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 0;
 }
 
 .gametitle {
+    text-align: center;
     font-size: 40px;
 }
 
-canvas {
+.gamebody {
+    position: relative;
+    text-align: center;
+    left: -530px;
+}
+
+.canvas {
     border: 1px solid black;
     min-width: 998px;
     max-width: 998px;
     height: 504px;
-    position: relative;
+    position: absolute;
 }
 
 #bg {
@@ -32,4 +37,13 @@ canvas {
 
 #blueheart {
     display: none;
+}
+
+.score {
+    font-size: 35px;
+    color: rgba(29, 28, 28, 0.849);
+    left: 70px;
+    top: 80px;
+    font-family: 'Gochi Hand', cursive;
+    position: relative;
 }

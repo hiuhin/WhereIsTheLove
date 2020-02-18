@@ -240,7 +240,7 @@ var heartSpots = [];
 var numRounds = 4;
 var round;
 var on;
-var speed = 500;
+var speed = 1000;
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
 var topSpot = {

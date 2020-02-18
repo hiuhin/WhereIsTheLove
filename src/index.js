@@ -10,7 +10,7 @@ let heartSpots = [];
 let numRounds = 4;
 let round;
 let on;
-let speed = 500;
+let speed = 1000;
 
 const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 1000;
