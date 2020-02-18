@@ -5,14 +5,16 @@ import InputHandler from "./input";
 let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
 let roundNum;
-let correct;
 let heartSpots = [];
-let numRounds = 10;
+let numRounds = 4;
 let round;
-let on;
-let speed = 1500;
+let arrowKeys = false;
+let speed = 300;
 let points_div = document.getElementById('points');
-let point = 0;
+let point;
+let howtoplay = document.getElementById("howtoplay");
+let gameover_span = document.getElementById("gameover");
+let gameInSession = false;
 
 const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 1000;
@@ -49,31 +51,36 @@ const playerSpot = {
 
 }
 
+document.addEventListener("keyup", event => {
+    if (event.code === "Space") {
+        if (gameInSession === false) {
+            play();
+            point = 0;
+            points_div.innerText = point;
+            gameInSession = true;
+            howtoplay.style.display = "none";
+        }
 
-// let right = document.getElementById("right");
-// let blue = document.getElementById("blueheart");
-// ctx.drawImage(right, 100, 105, 50, 50);
-// ctx.drawImage(blue, 100, 105, 10, 10);
+        gameover_span.style.display = "none";
+    }
+})
+
 function play() {
-    on = false;
+    arrowKeys = false;
     roundNum = 0;
     heartSpots = [];
     for (let i = 0; i < numRounds; i++) {
         heartSpots.push(Math.floor(Math.random() * 4));
     }
-
-    console.log(heartSpots);
-
     setTimeout(() => nextRound(), 1500);
 }
 
 export function nextRound() {
-
     roundNum += 1;
     
     if (roundNum > numRounds) {
         gameOver();
-        on = false;
+        arrowKeys = false;
         return;
     }
 
@@ -98,33 +105,33 @@ export function nextRound() {
   
         round.flashHeart();
         round.flashShapes();
-        on = true;
+        arrowKeys = true;
 
     document.addEventListener("keydown", event => {
         // debugger;
         switch (event.keyCode) {
             case 37:
-                if (on) {
+                if (arrowKeys) {
                     check(round, 3); }
-                on = false;
+                arrowKeys = false;
                 break;
             case 38:
-                if (on) {
+                if (arrowKeys) {
                     check(round, 0);
                 }
-                on = false;
+                arrowKeys = false;
                 break;
             case 39:
-                if (on) {
+                if (arrowKeys) {
                     check(round, 1);
                 }
-                on = false;
+                arrowKeys = false;
                 break;
             case 40:
-                if (on) {
+                if (arrowKeys) {
                     check(round, 2);
                 }
-                on = false;
+                arrowKeys = false;
                 break;
         }
     });
@@ -134,7 +141,7 @@ export function nextRound() {
 }
 
 function toggleOn() {
-    on = false;
+    arrowKeys = false;
 }
 
 export function check(round, userChoice) {
@@ -153,19 +160,10 @@ export function check(round, userChoice) {
     }
 }
 
-function gameOver(ctx) {
-    // play();
-    console.log("gameover!")
-    // ctx.rect(0,0, this.GAME_WIDTH, this.GAME_HEIGHT);
-    // ctx.fillStyle = "rgba(0,0,0,0.5";
-    // ctx.fill();
-
-    // ctx.font = "30px Arial";
-    // ctx.fillStyle = "white";
-    // ctx.textAlign = "center";
-    // ctx.fillText("Game Over", this.GAME_WIDTH/2, this.GAME_HEIGHT/2);
+function gameOver() {
+    gameInSession = false;
+    gameover_span.style.display = "inline-block";
 }
 
-play();
 
 

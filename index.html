@@ -4,25 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css?family=Gochi+Hand&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Gochi+Hand|Permanent+Marker|Press+Start+2P|Share+Tech+Mono&display=swap"
+    rel="stylesheet">
     <title>Where is the Love?</title>
 </head>
 <body>
-    <img id="bg" src="assets/images/wood.jpg">
     <div class="gametitle">Where is the Love?</div>
     <div class="gamebody">
-            <img id="game-bg" src="assets/images/bgimg.png">
-            <canvas class="canvas"></canvas>
-            <div class="score">Score:
-                <div id="points">0</div>
-            </div>
-            <footer>
-                GITHUB LINKEDIN LINKS GO HERE LATER
-            </footer>
+        <img id="game-bg" src="assets/images/bgimg.png">
+        <canvas class="canvas"></canvas>
+        <div class="links">
+            <a href="https://github.com/hiuhin">
+                <img src="https://cdn0.iconfinder.com/data/icons/octicons/1024/mark-github-512.png" width="40px" height="40px">
+            </a>
+            <a href="https://www.linkedin.com/in/anne-wong-231b0417a/">
+                <img src="https://image.flaticon.com/icons/png/512/174/174857.png" width="40px" height="40px">
+            </a>
         </div>
+        <span id="howtoplay">Use Arrow Keys to Select the Heart
+            <br /> Press SPACE to start
+        </span>
+        <span id="gameover">Game Over! 
+            <br /> Press SPACE to Play Again!
+        </span>
         
-        <script src="./bundle.js"></script>
+        <div class="score">Score:
+            <div id="points">0</div>
+        </div>
+    </div>
+        
+    
+    <script src="./bundle.js"></script>
 </body>
 </html>
 

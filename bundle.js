@@ -235,14 +235,16 @@ __webpack_require__.r(__webpack_exports__);
 var canvas = document.querySelector('canvas');
 var ctx = canvas.getContext('2d');
 var roundNum;
-var correct;
 var heartSpots = [];
-var numRounds = 10;
+var numRounds = 4;
 var round;
-var on;
-var speed = 1500;
+var arrowKeys = false;
+var speed = 300;
 var points_div = document.getElementById('points');
-var point = 0;
+var point;
+var howtoplay = document.getElementById("howtoplay");
+var gameover_span = document.getElementById("gameover");
+var gameInSession = false;
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
 var topSpot = {
@@ -268,13 +270,23 @@ var shapeSize = {
 var playerSpot = {
   w: 0,
   h: 0
-}; // let right = document.getElementById("right");
-// let blue = document.getElementById("blueheart");
-// ctx.drawImage(right, 100, 105, 50, 50);
-// ctx.drawImage(blue, 100, 105, 10, 10);
+};
+document.addEventListener("keyup", function (event) {
+  if (event.code === "Space") {
+    if (gameInSession === false) {
+      play();
+      point = 0;
+      points_div.innerText = point;
+      gameInSession = true;
+      howtoplay.style.display = "none";
+    }
+
+    gameover_span.style.display = "none";
+  }
+});
 
 function play() {
-  on = false;
+  arrowKeys = false;
   roundNum = 0;
   heartSpots = [];
 
@@ -282,7 +294,6 @@ function play() {
     heartSpots.push(Math.floor(Math.random() * 4));
   }
 
-  console.log(heartSpots);
   setTimeout(function () {
     return nextRound();
   }, 1500);
@@ -293,47 +304,47 @@ function nextRound() {
 
   if (roundNum > numRounds) {
     gameOver();
-    on = false;
+    arrowKeys = false;
     return;
   }
 
   round = new _round__WEBPACK_IMPORTED_MODULE_0__["default"](GAME_WIDTH, GAME_HEIGHT, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawHeart"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawSpade"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawClub"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawDiamond"], roundNum, speed);
   round.flashHeart();
   round.flashShapes();
-  on = true;
+  arrowKeys = true;
   document.addEventListener("keydown", function (event) {
     // debugger;
     switch (event.keyCode) {
       case 37:
-        if (on) {
+        if (arrowKeys) {
           check(round, 3);
         }
 
-        on = false;
+        arrowKeys = false;
         break;
 
       case 38:
-        if (on) {
+        if (arrowKeys) {
           check(round, 0);
         }
 
-        on = false;
+        arrowKeys = false;
         break;
 
       case 39:
-        if (on) {
+        if (arrowKeys) {
           check(round, 1);
         }
 
-        on = false;
+        arrowKeys = false;
         break;
 
       case 40:
-        if (on) {
+        if (arrowKeys) {
           check(round, 2);
         }
 
-        on = false;
+        arrowKeys = false;
         break;
     }
   });
@@ -347,7 +358,7 @@ function nextRound() {
 }
 
 function toggleOn() {
-  on = false;
+  arrowKeys = false;
 }
 
 function check(round, userChoice) {
@@ -364,18 +375,10 @@ function check(round, userChoice) {
   }
 }
 
-function gameOver(ctx) {
-  // play();
-  console.log("gameover!"); // ctx.rect(0,0, this.GAME_WIDTH, this.GAME_HEIGHT);
-  // ctx.fillStyle = "rgba(0,0,0,0.5";
-  // ctx.fill();
-  // ctx.font = "30px Arial";
-  // ctx.fillStyle = "white";
-  // ctx.textAlign = "center";
-  // ctx.fillText("Game Over", this.GAME_WIDTH/2, this.GAME_HEIGHT/2);
+function gameOver() {
+  gameInSession = false;
+  gameover_span.style.display = "inline-block";
 }
-
-play();
 
 /***/ }),
 
