@@ -20,24 +20,24 @@ const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 1000;
 
 const topSpot = {
-    x: 152,
-    y: 17
+    x: 159,
+    y: 16
 }
 
 const rightSpot = {
-    x: 239,
-    y: 60
+    x: 251,
+    y: 57
 }
 
 const bottomSpot = {
-    x: 152,
-    y: 103
+    x: 159,
+    y: 99
 }
 
 
 const leftSpot = {
-    x: 64,
-    y: 60
+    x: 67,
+    y: 57
 }
 
 const shapeSize = {
@@ -162,7 +162,7 @@ export function check(round, userChoice) {
 
 function gameOver() {
     gameInSession = false;
-    gameover_span.style.display = "inline-block";
+    gameover_span.style.display = "block";
 }
 
 

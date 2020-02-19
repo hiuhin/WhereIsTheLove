@@ -248,20 +248,20 @@ var gameInSession = false;
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
 var topSpot = {
-  x: 152,
-  y: 17
+  x: 159,
+  y: 16
 };
 var rightSpot = {
-  x: 239,
-  y: 60
+  x: 251,
+  y: 57
 };
 var bottomSpot = {
-  x: 152,
-  y: 103
+  x: 159,
+  y: 99
 };
 var leftSpot = {
-  x: 64,
-  y: 60
+  x: 67,
+  y: 57
 };
 var shapeSize = {
   w: 10,
@@ -377,7 +377,7 @@ function check(round, userChoice) {
 
 function gameOver() {
   gameInSession = false;
-  gameover_span.style.display = "inline-block";
+  gameover_span.style.display = "block";
 }
 
 /***/ }),
