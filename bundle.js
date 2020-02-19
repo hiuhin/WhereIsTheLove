@@ -236,17 +236,26 @@ var canvas = document.querySelector('canvas');
 var ctx = canvas.getContext('2d');
 var roundNum;
 var heartSpots = [];
-var numRounds = 4;
+var numRounds = 10;
 var round;
 var arrowKeys = false;
-var speed = 300;
+var speed = 900;
 var points_div = document.getElementById('points');
 var point;
 var howtoplay = document.getElementById("howtoplay");
 var gameover_span = document.getElementById("gameover");
 var gameInSession = false;
+var level = "medium";
+var easy_span = document.getElementById('easy');
+var medium_span = document.getElementById('medium');
+var hard_span = document.getElementById('hard');
+var impossible_span = document.getElementById('impossible');
+var plus_span = document.getElementById('plus');
+var minus_span = document.getElementById('minus');
+var round_div = document.getElementById('round');
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
+var roundDots = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 var topSpot = {
   x: 159,
   y: 16
@@ -271,6 +280,55 @@ var playerSpot = {
   w: 0,
   h: 0
 };
+easy_span.addEventListener("click", function () {
+  return changeLevel("easy");
+});
+medium_span.addEventListener("click", function () {
+  return changeLevel("medium");
+});
+hard_span.addEventListener("click", function () {
+  return changeLevel("hard");
+});
+impossible_span.addEventListener("click", function () {
+  return changeLevel("impossible");
+});
+
+function changeLevel(level) {
+  if (gameInSession === false) {
+    switch (level) {
+      case "easy":
+        speed = 2000;
+        resetLevelColors();
+        easy_span.style.color = "tomato";
+        break;
+
+      case "medium":
+        speed = 1000;
+        resetLevelColors();
+        medium_span.style.color = "tomato";
+        break;
+
+      case "hard":
+        speed = 700;
+        resetLevelColors();
+        hard_span.style.color = "tomato";
+        break;
+
+      case "impossible":
+        speed = 400;
+        resetLevelColors();
+        impossible_span.style.color = "tomato";
+    }
+  }
+}
+
+function resetLevelColors() {
+  easy_span.style.color = "black";
+  medium_span.style.color = "black";
+  hard_span.style.color = "black";
+  impossible_span.style.color = "black";
+}
+
 document.addEventListener("keyup", function (event) {
   if (event.code === "Space") {
     if (gameInSession === false) {
@@ -301,6 +359,8 @@ function play() {
 
 function nextRound() {
   roundNum += 1;
+  plus_span.style.display = "none";
+  minus_span.style.display = "none";
 
   if (roundNum > numRounds) {
     gameOver();
@@ -313,7 +373,6 @@ function nextRound() {
   round.flashShapes();
   arrowKeys = true;
   document.addEventListener("keydown", function (event) {
-    // debugger;
     switch (event.keyCode) {
       case 37:
         if (arrowKeys) {
@@ -363,12 +422,14 @@ function toggleOn() {
 
 function check(round, userChoice) {
   if (userChoice === round.heartSpots[round.roundNum - 1]) {
+    plus_span.style.display = "block";
+    plus_span.classList.add("popup");
     point += 5;
     points_div.innerText = point;
-    console.log("".concat(roundNum, ": correct!"));
     round.clearSpots();
   } else {
-    console.log("".concat(roundNum, ": incorrect!"));
+    minus_span.style.display = "block";
+    minus_span.classList.add("popup");
     point -= 5;
     points_div.innerText = point;
     round.clearSpots();
@@ -378,7 +439,8 @@ function check(round, userChoice) {
 function gameOver() {
   gameInSession = false;
   gameover_span.style.display = "block";
-}
+} // round_div.innerText = numbers;
+// numbers.forEach(num => round_div.innerText += " " + num);
 
 /***/ }),
 

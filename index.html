@@ -16,14 +16,25 @@
     <div class="gamebody">
         <canvas class="canvas"></canvas>
         <div class="gametext" id="howtoplay">Use Arrow Keys to Select the Heart
-            <br /> Press SPACE to start
+            <br /> Press SPACE to Start
         </div>
         <div class="gametext" id="gameover">Game Over!
-            <br /> Press SPACE to Play Again!
+            <br /> Press SPACE to Play Again! 
+        </div>
+        <div class="response">
+            <span id="plus">+5</span>
+            <span id="minus">-5</span>
+        </div>
+        <div class="levels">
+            <span class="level" id="easy">EASY</span>
+            <span class="level" id="medium">MEDIUM</span>
+            <span class="level" id="hard">HARD</span>
+            <span class="level" id="impossible">IMPOSSIBLE</span>
         </div>
         <div class="score">Score:
             <div id="points">0</div>
         </div>
+        <div id="round"></div>
         <div class="links">
             <a href="https://github.com/hiuhin" target="_blank">
                 <img src="assets/images/github.png">
@@ -32,6 +43,7 @@
                 <img src="assets/images/linkedin.png">
             </a>
         </div>
+        
     </div>
 
     <script src="./bundle.js"></script>

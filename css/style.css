@@ -14,7 +14,7 @@ h1 {
     font-weight: bolder;
     font-family: 'Gochi Hand', cursive;
     margin: 20px 0 15px 0;
-    color: rgb(175, 52, 30);
+    color: rgb(175, 30, 30);
     text-shadow: 2px 3px #000000bd;  
 }
 
@@ -36,10 +36,47 @@ h1 {
     margin-left: -500px;
 }
 
+.levels {
+    display: flex;
+    justify-content: center;
+    padding-top: 140px;
+    padding-left: 70px;
+}
+
+.level {
+    padding: 20px;
+    font-size: 15px;
+    font-family: 'Press Start 2P', monospace;
+}
+
+#easy {
+    color: black;
+    cursor: pointer;
+    z-index: 2;
+}
+
+#medium {
+    color: rgb(214, 63, 36);
+    cursor: pointer;
+    z-index: 2;
+}
+
+#hard {
+    color: black;
+    cursor: pointer;
+    z-index: 2;
+}
+
+#impossible {
+    color: black;
+    cursor: pointer;
+    z-index: 2;
+}
+
 .score {
     font-size: 40px;
-    color: rgb(192, 64, 4);;
-    left: -10px;
+    color: rgb(192, 57, 4);
+    left: -35px;
     top: 100px;
     font-family: 'Permanent Marker', cursive;
     position: absolute;
@@ -49,24 +86,10 @@ h1 {
 
 #points {
     font-size: 80px;
-    /* text-shadow: 5px 5px #25252598; */
-    /* animation: zoominoutsinglefeatured 2s infinite ; */
     -webkit-transform-origin: 50% 0;
     transform-origin: 50% 0;
     -webkit-animation: swinging 2s ease-in-out forwards infinite;
     animation: swinging 2s ease-in-out forwards infinite;
-}
-
-@keyframes zoominoutsinglefeatured {
-    0% {
-        transform: scale(1,1);
-    }
-    50% {
-        transform: scale(1.2,1.2);
-    }
-    100% {
-        transform: scale(1,1);
-    }
 }
 
 @-webkit-keyframes swinging{
@@ -95,7 +118,49 @@ h1 {
     left: 50%;
     margin-left: -174px;
     top: 50%;
-    margin-top: -58px;
+    margin-top: -50px;
+    animation: zoom 2s 1 ;
+}
+
+@keyframes zoom {
+    0% {
+        transform: scale(0.3,0.3);
+    }
+    100% {
+        transform: scale(1,1);
+    }
+}
+
+@-webkit-keyframes zoom {
+    0% {
+        transform: scale(0.3,0.3);
+    }
+    100% {
+        transform: scale(1,1);
+    }
+}
+
+@keyframes zoomandfade {
+    0% {
+        transform: scale(0.3,0.3);
+        opacity: 1;
+    }
+    2% {
+        transform: scale(1,1);
+        opacity: 1;
+    }
+    10% {
+        transform: scale(1,1);
+        opacity: 1;
+    }
+    30% {
+        transform: scale(1,1);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1,1);
+        opacity: 0;
+    }
 }
 
 #gameover {
@@ -104,7 +169,43 @@ h1 {
     left: 50%;
     margin-left: -140px;
     top: 50%;
-    margin-top: -70px;
+    margin-top: -60px;
+}
+
+.response {
+    text-shadow: 2px 3px #000000bd;
+}
+
+#plus {
+    color: rgb(75, 134, 40);
+    font-size: 95px;
+    font-family: 'Permanent Marker';
+    display: none;
+    left: 50%;
+    margin-left: -35px;
+    top: 50%;
+    position: absolute;
+    margin-top: -100px;
+}
+
+.popup {
+    animation: zoomandfade 6s 1;
+}
+
+#minus {
+    font-size: 95px;
+    font-family: 'Permanent Marker';
+    display: none;
+    left: 50%;
+    margin-left: -35px;
+    top: 50%;
+    position: absolute;
+    margin-top: -100px;
+    color: rgb(192, 57, 4);
+}
+
+#round {
+    /* padding: 15px; */
 }
 
 .links {
