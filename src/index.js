@@ -25,12 +25,17 @@ let minus_span = document.getElementById('minus');
 let round_div = document.getElementById('round');
 let reset_div = document.getElementById('reset');
 let reset = false;
+let sound = true;
 let startgame_sound = new Audio('assets/sounds/startgame.mp3');
 let correct_sound = new Audio('assets/sounds/correct.wav');
 let wrong_sound = new Audio('assets/sounds/wrong2.wav');
 let gameover_sound = new Audio('assets/sounds/gameover.wav');
 let reset_sound = new Audio('assets/sounds/reset.wav');
-let intro_music = new Audio('assets/sounds/intro.mp3');
+let music = new Audio('assets/sounds/BEPmidi.mp3');
+music.currentTime = 220;
+music.volume = 0.7;
+music.loop = true; 
+let playbutton = document.getElementById("playbutton");
 
 const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 1000;
@@ -248,4 +253,16 @@ function gameOver() {
     round_div.style.display = "none"
     gameover_sound.play();
     reset_div.style.display = "none";
+}
+
+playbutton.addEventListener("click", toggleMusic);
+
+function toggleMusic() {
+    if (playbutton.classList.value === "play") {
+        playbutton.classList = "pause";
+        music.play();
+    } else {
+        playbutton.classList = "play";
+        music.pause();
+    }
 }

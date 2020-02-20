@@ -255,12 +255,17 @@ var minus_span = document.getElementById('minus');
 var round_div = document.getElementById('round');
 var reset_div = document.getElementById('reset');
 var reset = false;
+var sound = true;
 var startgame_sound = new Audio('assets/sounds/startgame.mp3');
 var correct_sound = new Audio('assets/sounds/correct.wav');
 var wrong_sound = new Audio('assets/sounds/wrong2.wav');
 var gameover_sound = new Audio('assets/sounds/gameover.wav');
 var reset_sound = new Audio('assets/sounds/reset.wav');
-var intro_music = new Audio('assets/sounds/intro.mp3');
+var music = new Audio('assets/sounds/BEPmidi.mp3');
+music.currentTime = 220;
+music.volume = 0.7;
+music.loop = true;
+var playbutton = document.getElementById("playbutton");
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
 var topSpot = {
@@ -477,6 +482,18 @@ function gameOver() {
   round_div.style.display = "none";
   gameover_sound.play();
   reset_div.style.display = "none";
+}
+
+playbutton.addEventListener("click", toggleMusic);
+
+function toggleMusic() {
+  if (playbutton.classList.value === "play") {
+    playbutton.classList = "pause";
+    music.play();
+  } else {
+    playbutton.classList = "play";
+    music.pause();
+  }
 }
 
 /***/ }),
