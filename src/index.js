@@ -25,6 +25,12 @@ let minus_span = document.getElementById('minus');
 let round_div = document.getElementById('round');
 let reset_div = document.getElementById('reset');
 let reset = false;
+let startgame_sound = new Audio('assets/sounds/startgame.mp3');
+let correct_sound = new Audio('assets/sounds/correct.wav');
+let wrong_sound = new Audio('assets/sounds/wrong2.wav');
+let gameover_sound = new Audio('assets/sounds/gameover.wav');
+let reset_sound = new Audio('assets/sounds/reset.wav');
+let intro_music = new Audio('assets/sounds/intro.mp3');
 
 const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 1000;
@@ -114,8 +120,8 @@ document.addEventListener("keyup", event => {
     }
 })
 
-
 function play() {
+    startgame_sound.play();
     arrowKeys = false;
     roundNum = 0;
     heartSpots = [];
@@ -133,7 +139,7 @@ export function nextRound() {
     plus_span.style.display = "none";
     minus_span.style.display = "none";
     
-    reset_div.addEventListener("click", () => {reset = true; reset_div.style.color ="red";});
+    reset_div.addEventListener("click", () => { reset = true; reset_div.style.color = "red"; reset_sound.play();});
 
     if (reset === true) {
         startOver();
@@ -224,6 +230,7 @@ export function check(round, userChoice) {
         point += 5;
         points_div.innerText = point;
         round.clearSpots();
+        correct_sound.play();
         
     } else {
         minus_span.style.display = "block";
@@ -231,6 +238,7 @@ export function check(round, userChoice) {
         point -= 5;
         points_div.innerText = point;
         round.clearSpots();
+        wrong_sound.play();
     }
 }
 
@@ -238,6 +246,6 @@ function gameOver() {
     gameInSession = false;
     gameover_span.style.display = "block";
     round_div.style.display = "none"
+    gameover_sound.play();
+    reset_div.style.display = "none";
 }
-
-

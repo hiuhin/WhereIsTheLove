@@ -255,6 +255,12 @@ var minus_span = document.getElementById('minus');
 var round_div = document.getElementById('round');
 var reset_div = document.getElementById('reset');
 var reset = false;
+var startgame_sound = new Audio('assets/sounds/startgame.mp3');
+var correct_sound = new Audio('assets/sounds/correct.wav');
+var wrong_sound = new Audio('assets/sounds/wrong2.wav');
+var gameover_sound = new Audio('assets/sounds/gameover.wav');
+var reset_sound = new Audio('assets/sounds/reset.wav');
+var intro_music = new Audio('assets/sounds/intro.mp3');
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
 var topSpot = {
@@ -345,6 +351,7 @@ document.addEventListener("keyup", function (event) {
 });
 
 function play() {
+  startgame_sound.play();
   arrowKeys = false;
   roundNum = 0;
   heartSpots = [];
@@ -368,6 +375,7 @@ function nextRound() {
   reset_div.addEventListener("click", function () {
     reset = true;
     reset_div.style.color = "red";
+    reset_sound.play();
   });
 
   if (reset === true) {
@@ -452,12 +460,14 @@ function check(round, userChoice) {
     point += 5;
     points_div.innerText = point;
     round.clearSpots();
+    correct_sound.play();
   } else {
     minus_span.style.display = "block";
     minus_span.classList.add("popup");
     point -= 5;
     points_div.innerText = point;
     round.clearSpots();
+    wrong_sound.play();
   }
 }
 
@@ -465,6 +475,8 @@ function gameOver() {
   gameInSession = false;
   gameover_span.style.display = "block";
   round_div.style.display = "none";
+  gameover_sound.play();
+  reset_div.style.display = "none";
 }
 
 /***/ }),
