@@ -23,6 +23,8 @@ let impossible_span = document.getElementById('impossible');
 let plus_span = document.getElementById('plus');
 let minus_span = document.getElementById('minus');
 let round_div = document.getElementById('round');
+let reset_div = document.getElementById('reset');
+let reset = false;
 
 const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 1000;
@@ -127,9 +129,17 @@ export function nextRound() {
     roundNum += 1;
     round_div.style.display = "block";
     round_div.innerText = "Round " + roundNum;
+    reset_div.style.display = "block";
     plus_span.style.display = "none";
     minus_span.style.display = "none";
     
+    reset_div.addEventListener("click", () => {reset = true; reset_div.style.color ="red";});
+
+    if (reset === true) {
+        startOver();
+        return;
+    }
+
     if (roundNum > numRounds) {
         gameOver();
         arrowKeys = false;
@@ -189,6 +199,18 @@ export function nextRound() {
     setTimeout(() => round.clearSpots(), speed);
     setTimeout(() => toggleOn(), speed);
     setTimeout(nextRound, speed + 1500);  
+}
+
+function startOver() {
+    reset = false;
+    round = 0;
+    point = 0;
+    points_div.innerText = point;
+    round_div.style.display = "none";
+    reset_div.style.display = "none";
+    gameInSession = false;
+    howtoplay.style.display = "block";
+    reset_div.style.color = "rgb(246, 171, 73)";
 }
 
 function toggleOn() {

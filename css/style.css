@@ -214,6 +214,17 @@ h1 {
     display: none;
 }
 
+#reset {
+    display: none;
+    font-size: 15px;
+    font-family: "Press Start 2P";
+    bottom: 220px;
+    right: 235px;
+    color: rgb(246, 171, 73);
+    position: absolute;
+    cursor: pointer;
+}
+
 .links {
     font-size: 30px;
     width: 100px;
