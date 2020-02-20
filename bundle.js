@@ -255,7 +255,6 @@ var minus_span = document.getElementById('minus');
 var round_div = document.getElementById('round');
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
-var roundDots = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 var topSpot = {
   x: 159,
   y: 16
@@ -359,6 +358,8 @@ function play() {
 
 function nextRound() {
   roundNum += 1;
+  round_div.style.display = "block";
+  round_div.innerText = "Round " + roundNum;
   plus_span.style.display = "none";
   minus_span.style.display = "none";
 
@@ -439,8 +440,8 @@ function check(round, userChoice) {
 function gameOver() {
   gameInSession = false;
   gameover_span.style.display = "block";
-} // round_div.innerText = numbers;
-// numbers.forEach(num => round_div.innerText += " " + num);
+  round_div.style.display = "none";
+}
 
 /***/ }),
 

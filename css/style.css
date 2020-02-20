@@ -118,7 +118,7 @@ h1 {
     left: 50%;
     margin-left: -174px;
     top: 50%;
-    margin-top: -50px;
+    margin-top: -60px;
     animation: zoom 2s 1 ;
 }
 
@@ -205,7 +205,13 @@ h1 {
 }
 
 #round {
-    /* padding: 15px; */
+    font-size: 20px;
+    font-family: "Lucia";
+    bottom: 220px;
+    left: 295px;
+    color: rgb(246, 171, 73);
+    position: absolute;
+    display: none;
 }
 
 .links {
