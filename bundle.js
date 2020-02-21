@@ -236,16 +236,16 @@ var canvas = document.querySelector('canvas');
 var ctx = canvas.getContext('2d');
 var roundNum;
 var heartSpots = [];
-var numRounds = 10;
+var numRounds = 1;
 var round;
 var arrowKeys = false;
 var speed = 900;
+var level = "medium";
 var points_div = document.getElementById('points');
 var point;
 var howtoplay = document.getElementById("howtoplay");
 var gameover_span = document.getElementById("gameover");
 var gameInSession = false;
-var level = "medium";
 var easy_span = document.getElementById('easy');
 var medium_span = document.getElementById('medium');
 var hard_span = document.getElementById('hard');
@@ -262,10 +262,14 @@ var wrong_sound = new Audio('assets/sounds/wrong2.wav');
 var gameover_sound = new Audio('assets/sounds/gameover.wav');
 var reset_sound = new Audio('assets/sounds/reset.wav');
 var music = new Audio('assets/sounds/BEPmidi.mp3');
-music.currentTime = 220;
-music.volume = 0.7;
+music.currentTime = 2;
+music.volume = 0.6;
 music.loop = true;
 var playbutton = document.getElementById("playbutton");
+var name_input = document.getElementById("name");
+var name = "Player";
+var scoreNum = 0;
+var scorelist_ul = document.getElementById("scorelist");
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
 var topSpot = {
@@ -305,31 +309,36 @@ impossible_span.addEventListener("click", function () {
   return changeLevel("impossible");
 });
 
-function changeLevel(level) {
+function changeLevel(lev) {
   if (gameInSession === false) {
-    switch (level) {
+    switch (lev) {
       case "easy":
         speed = 2000;
+        level = "easy";
         resetLevelColors();
         easy_span.style.color = "tomato";
         break;
 
       case "medium":
         speed = 1000;
+        level = "medium";
         resetLevelColors();
         medium_span.style.color = "tomato";
         break;
 
       case "hard":
         speed = 700;
+        level = "hard";
         resetLevelColors();
         hard_span.style.color = "tomato";
         break;
 
       case "impossible":
-        speed = 400;
         resetLevelColors();
         impossible_span.style.color = "tomato";
+        speed = 400;
+        level = "impossible";
+        break;
     }
   }
 }
@@ -482,6 +491,20 @@ function gameOver() {
   round_div.style.display = "none";
   gameover_sound.play();
   reset_div.style.display = "none";
+  addScore();
+}
+
+function addScore() {
+  scoreNum += 1;
+
+  if (scoreNum === 9) {
+    scorelist_ul.removeChild(scorelist_ul.firstChild);
+    scoreNum -= 1;
+  }
+
+  var div = document.createElement("div");
+  div.innerText = name + " " + point + "pts" + " " + level;
+  scorelist_ul.appendChild(div);
 }
 
 playbutton.addEventListener("click", toggleMusic);
@@ -494,6 +517,14 @@ function toggleMusic() {
     playbutton.classList = "play";
     music.pause();
   }
+}
+
+name_input.onchange = updateName;
+
+function updateName() {
+  name = name_input.value;
+  name_input.style.color = "rgb(240, 102, 38)";
+  name_input.blur();
 }
 
 /***/ }),

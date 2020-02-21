@@ -6,16 +6,16 @@ let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
 let roundNum;
 let heartSpots = [];
-let numRounds = 10;
+let numRounds = 1;
 let round;
 let arrowKeys = false;
 let speed = 900;
+let level = "medium";
 let points_div = document.getElementById('points');
 let point;
 let howtoplay = document.getElementById("howtoplay");
 let gameover_span = document.getElementById("gameover");
 let gameInSession = false;
-let level = "medium";
 let easy_span = document.getElementById('easy');
 let medium_span = document.getElementById('medium');
 let hard_span = document.getElementById('hard');
@@ -32,10 +32,14 @@ let wrong_sound = new Audio('assets/sounds/wrong2.wav');
 let gameover_sound = new Audio('assets/sounds/gameover.wav');
 let reset_sound = new Audio('assets/sounds/reset.wav');
 let music = new Audio('assets/sounds/BEPmidi.mp3');
-music.currentTime = 220;
-music.volume = 0.7;
+music.currentTime = 2;
+music.volume = 0.6;
 music.loop = true; 
 let playbutton = document.getElementById("playbutton");
+let name_input = document.getElementById("name");
+let name = "Player";
+let scoreNum = 0;
+let scorelist_ul = document.getElementById("scorelist");
 
 const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 1000;
@@ -78,28 +82,33 @@ hard_span.addEventListener("click", () => changeLevel("hard"));
 impossible_span.addEventListener("click", () => changeLevel("impossible"));
 
 
-function changeLevel(level) {
+function changeLevel(lev) {
     if (gameInSession === false) {
-        switch (level) {
+        switch (lev) {
             case "easy":
                 speed = 2000;
+                level = "easy";
                 resetLevelColors();
                 easy_span.style.color = "tomato";
                 break;
             case "medium":
                 speed = 1000;
+                level = "medium";
                 resetLevelColors();
                 medium_span.style.color = "tomato";
                 break;
             case "hard":
                 speed = 700;
+                level = "hard";
                 resetLevelColors();
                 hard_span.style.color = "tomato";
                 break;
             case "impossible":
-                speed = 400;
                 resetLevelColors();
                 impossible_span.style.color = "tomato";
+                speed = 400;
+                level = "impossible";
+                break;
         }
     }
 }
@@ -124,6 +133,8 @@ document.addEventListener("keyup", event => {
         gameover_span.style.display = "none";
     }
 })
+
+
 
 function play() {
     startgame_sound.play();
@@ -253,6 +264,20 @@ function gameOver() {
     round_div.style.display = "none"
     gameover_sound.play();
     reset_div.style.display = "none";
+    addScore();
+}
+
+function addScore() {
+    scoreNum += 1;
+
+    if (scoreNum === 9) {
+        scorelist_ul.removeChild(scorelist_ul.firstChild);
+        scoreNum -= 1;
+    }
+    
+    let div = document.createElement("div");
+    div.innerText = name + " " + point + "pts" + " " + level;
+    scorelist_ul.appendChild(div);
 }
 
 playbutton.addEventListener("click", toggleMusic);
@@ -265,4 +290,12 @@ function toggleMusic() {
         playbutton.classList = "play";
         music.pause();
     }
+}
+
+name_input.onchange = updateName;
+
+function updateName() {
+    name = name_input.value;
+    name_input.style.color = "rgb(240, 102, 38)";
+    name_input.blur();
 }
