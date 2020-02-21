@@ -25,7 +25,6 @@ let minus_span = document.getElementById('minus');
 let round_div = document.getElementById('round');
 let reset_div = document.getElementById('reset');
 let reset = false;
-let sound = true;
 let startgame_sound = new Audio('assets/sounds/startgame.mp3');
 let correct_sound = new Audio('assets/sounds/correct.wav');
 let wrong_sound = new Audio('assets/sounds/wrong2.wav');
@@ -36,6 +35,8 @@ music.currentTime = 2;
 music.volume = 0.6;
 music.loop = true; 
 let playbutton = document.getElementById("playbutton");
+let sounds_div = document.getElementById("sounds");
+let sound = true;
 let name_input = document.getElementById("name");
 let name = "Player";
 let scoreNum = 0;
@@ -137,7 +138,7 @@ document.addEventListener("keyup", event => {
 
 
 function play() {
-    startgame_sound.play();
+    if (sound) startgame_sound.play();
     arrowKeys = false;
     roundNum = 0;
     heartSpots = [];
@@ -155,7 +156,7 @@ export function nextRound() {
     plus_span.style.display = "none";
     minus_span.style.display = "none";
     
-    reset_div.addEventListener("click", () => { reset = true; reset_div.style.color = "red"; reset_sound.play();});
+    reset_div.addEventListener("click", () => { reset = true; reset_div.style.color = "red"; if (sound) reset_sound.play();});
 
     if (reset === true) {
         startOver();
@@ -246,7 +247,7 @@ export function check(round, userChoice) {
         point += 5;
         points_div.innerText = point;
         round.clearSpots();
-        correct_sound.play();
+        if (sound) correct_sound.play();
         
     } else {
         minus_span.style.display = "block";
@@ -254,7 +255,7 @@ export function check(round, userChoice) {
         point -= 5;
         points_div.innerText = point;
         round.clearSpots();
-        wrong_sound.play();
+        if (sound) wrong_sound.play();
     }
 }
 
@@ -262,7 +263,7 @@ function gameOver() {
     gameInSession = false;
     gameover_span.style.display = "block";
     round_div.style.display = "none"
-    gameover_sound.play();
+    if (sound) gameover_sound.play();
     reset_div.style.display = "none";
     addScore();
 }
@@ -274,7 +275,7 @@ function addScore() {
         scorelist_ul.removeChild(scorelist_ul.firstChild);
         scoreNum -= 1;
     }
-    
+
     let div = document.createElement("div");
     div.innerText = name + " " + point + "pts" + " " + level;
     scorelist_ul.appendChild(div);
@@ -289,6 +290,18 @@ function toggleMusic() {
     } else {
         playbutton.classList = "play";
         music.pause();
+    }
+}
+
+sounds_div.addEventListener("click", toggleSounds);
+
+function toggleSounds() {
+    if (sounds_div.classList.value === "sounds") {
+        sounds_div.classList = "mute";
+        sound = false;
+    } else {
+        sounds_div.classList = "sounds";
+        sound = true;
     }
 }
 

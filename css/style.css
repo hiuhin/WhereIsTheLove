@@ -343,3 +343,23 @@ input:-webkit-autofill {
 .pause {
     background-position: 50% -32px;
 }
+
+.sounds, .mute{
+    background: url("../assets/images/sounds.png") no-repeat;
+    cursor: pointer; 
+    position: absolute;
+    left: 230px;
+    bottom: 150px;
+}
+
+.sounds{
+	background-position: -13px -13px ;
+	width: 26px;
+	height: 26px;
+}
+
+.mute{
+	background-position: -12px -62px ;
+	width: 26px;
+	height: 26px;
+}
