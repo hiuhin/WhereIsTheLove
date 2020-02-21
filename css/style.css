@@ -275,7 +275,7 @@ input {
     bottom: 225px;
     border: none;
     color: black;
-    font-size: 30px;
+    font-size: 26px;
     background-color: transparent;
     outline: none;
 ;
@@ -290,7 +290,7 @@ input {
 
 @-webkit-keyframes autofill {
     0%,100% {
-        color: rgb(51, 32, 1);
+        color: rgb(240, 102, 38);
         background: transparent;
     }
 }

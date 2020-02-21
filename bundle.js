@@ -236,14 +236,14 @@ var canvas = document.querySelector('canvas');
 var ctx = canvas.getContext('2d');
 var roundNum;
 var heartSpots = [];
-var numRounds = 1;
+var numRounds = 10;
 var round;
 var arrowKeys = false;
 var speed = 900;
 var level = "medium";
 var points_div = document.getElementById('points');
 var point;
-var howtoplay = document.getElementById("howtoplay");
+var howtoplay_div = document.getElementById("howtoplay");
 var gameover_span = document.getElementById("gameover");
 var gameInSession = false;
 var easy_span = document.getElementById('easy');
@@ -261,6 +261,8 @@ var wrong_sound = new Audio('assets/sounds/wrong2.wav');
 var gameover_sound = new Audio('assets/sounds/gameover.wav');
 var reset_sound = new Audio('assets/sounds/reset.wav');
 var music = new Audio('assets/sounds/BEPmidi.mp3');
+var select_sound = new Audio('assets/sounds/select.wav');
+var submit_sound = new Audio('assets/sounds/submit.wav');
 music.currentTime = 2;
 music.volume = 0.6;
 music.loop = true;
@@ -312,6 +314,8 @@ impossible_span.addEventListener("click", function () {
 
 function changeLevel(lev) {
   if (gameInSession === false) {
+    if (sound) select_sound.play();
+
     switch (lev) {
       case "easy":
         speed = 2000;
@@ -358,7 +362,7 @@ document.addEventListener("keyup", function (event) {
       point = 0;
       points_div.innerText = point;
       gameInSession = true;
-      howtoplay.style.display = "none";
+      howtoplay_div.style.display = "none";
     }
 
     gameover_span.style.display = "none";
@@ -460,7 +464,7 @@ function startOver() {
   round_div.style.display = "none";
   reset_div.style.display = "none";
   gameInSession = false;
-  howtoplay.style.display = "block";
+  howtoplay_div.style.display = "block";
   reset_div.style.color = "rgb(246, 171, 73)";
 }
 
@@ -535,6 +539,7 @@ function toggleSounds() {
 name_input.onchange = updateName;
 
 function updateName() {
+  if (sound) submit_sound.play();
   name = name_input.value;
   name_input.style.color = "rgb(240, 102, 38)";
   name_input.blur();

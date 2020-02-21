@@ -6,14 +6,14 @@ let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
 let roundNum;
 let heartSpots = [];
-let numRounds = 1;
+let numRounds = 10;
 let round;
 let arrowKeys = false;
 let speed = 900;
 let level = "medium";
 let points_div = document.getElementById('points');
 let point;
-let howtoplay = document.getElementById("howtoplay");
+let howtoplay_div = document.getElementById("howtoplay");
 let gameover_span = document.getElementById("gameover");
 let gameInSession = false;
 let easy_span = document.getElementById('easy');
@@ -31,6 +31,8 @@ let wrong_sound = new Audio('assets/sounds/wrong2.wav');
 let gameover_sound = new Audio('assets/sounds/gameover.wav');
 let reset_sound = new Audio('assets/sounds/reset.wav');
 let music = new Audio('assets/sounds/BEPmidi.mp3');
+let select_sound = new Audio('assets/sounds/select.wav');
+let submit_sound = new Audio('assets/sounds/submit.wav');
 music.currentTime = 2;
 music.volume = 0.6;
 music.loop = true; 
@@ -85,6 +87,7 @@ impossible_span.addEventListener("click", () => changeLevel("impossible"));
 
 function changeLevel(lev) {
     if (gameInSession === false) {
+        if (sound) select_sound.play();
         switch (lev) {
             case "easy":
                 speed = 2000;
@@ -128,7 +131,7 @@ document.addEventListener("keyup", event => {
             point = 0;
             points_div.innerText = point;
             gameInSession = true;
-            howtoplay.style.display = "none";
+            howtoplay_div.style.display = "none";
         }
 
         gameover_span.style.display = "none";
@@ -232,7 +235,7 @@ function startOver() {
     round_div.style.display = "none";
     reset_div.style.display = "none";
     gameInSession = false;
-    howtoplay.style.display = "block";
+    howtoplay_div.style.display = "block";
     reset_div.style.color = "rgb(246, 171, 73)";
 }
 
@@ -308,6 +311,7 @@ function toggleSounds() {
 name_input.onchange = updateName;
 
 function updateName() {
+    if (sound) submit_sound.play();
     name = name_input.value;
     name_input.style.color = "rgb(240, 102, 38)";
     name_input.blur();
