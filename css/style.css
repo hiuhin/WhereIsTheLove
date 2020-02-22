@@ -164,7 +164,7 @@ h1 {
 
 #gameover {
     font-size: 25px;
-    display: block;
+    display: none;
     left: 50%;
     margin-left: -140px;
     top: 50%;
