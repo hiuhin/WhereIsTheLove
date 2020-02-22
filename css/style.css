@@ -164,11 +164,11 @@ h1 {
 
 #gameover {
     font-size: 25px;
-    display: none;
+    display: block;
     left: 50%;
     margin-left: -140px;
     top: 50%;
-    margin-top: -70px;
+    margin-top: -60px;
 }
 
 .response {
@@ -261,6 +261,7 @@ h1 {
 
 #scorelist div {
     padding-top: 15px;
+    font-family: 'Pangolin';
 }
 
 input {

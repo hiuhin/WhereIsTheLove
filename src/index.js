@@ -73,11 +73,6 @@ const shapeSize = {
     h: 15
 }
 
-const playerSpot = {
-    w: 0,
-    h: 0
-}
-
 
 easy_span.addEventListener("click", () => changeLevel("easy"));
 medium_span.addEventListener("click", () => changeLevel("medium"));
@@ -223,7 +218,7 @@ export function nextRound() {
         }
     });
     setTimeout(() => round.clearSpots(), speed);
-    setTimeout(() => toggleOn(), speed);
+    setTimeout(() => toggleOff(), speed);
     setTimeout(nextRound, speed + 1500);  
 }
 
@@ -239,7 +234,7 @@ function startOver() {
     reset_div.style.color = "rgb(246, 171, 73)";
 }
 
-function toggleOn() {
+function toggleff() {
     arrowKeys = false;
 }
 
