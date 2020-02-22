@@ -6,7 +6,7 @@ A quick-reaction game based on Super Mario Party minigame "Looking for Love". Up
 
 ![game](assets/gifs/game.gif)
 
-### Technology
+### Technologies
 * Javascript
 * Canvas
 * HTML5
