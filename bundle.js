@@ -464,7 +464,7 @@ function startOver() {
   reset_div.style.color = "rgb(246, 171, 73)";
 }
 
-function toggleff() {
+function toggleOff() {
   arrowKeys = false;
 }
 
