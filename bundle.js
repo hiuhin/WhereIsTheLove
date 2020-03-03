@@ -504,7 +504,7 @@ function addScore() {
   }
 
   var div = document.createElement("div");
-  div.innerText = name + " " + point + "pts" + " " + level;
+  div.innerText = name + "  |  " + point + "pts" + "  |  " + level;
   scorelist_ul.appendChild(div);
 }
 
