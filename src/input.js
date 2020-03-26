@@ -1,6 +1,7 @@
 import {nextRound} from "./index";
 import {check} from "./index";
 
+
 export default class InputHandler {
     constructor(round, roundNum) {
         document.addEventListener("keydown", event => {
@@ -29,14 +30,7 @@ export default class InputHandler {
             //     togglePause();
             //     break;
             }
-        
-            // if (round.choice === round.heartSpots[round.roundNum - 1]) {
-            //     console.log(`${round.roundNum}: correct!`);
-            //     round.clearSpots();
-            //     nextRound();
-            // } else {
-            //     console.log(`${round.roundNum}: incorrect!`);
-            // }
+
         });
     }         
 }

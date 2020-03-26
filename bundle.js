@@ -86,6 +86,48 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/dom-loader.js":
+/*!***************************!*\
+  !*** ./src/dom-loader.js ***!
+  \***************************/
+/*! exports provided: easy_span, medium_span, hard_span, impossible_span, plus_span, minus_span, round_div, reset_div, points_div, howtoplay_div, gameover_span, playbutton, sounds_div, scorelist_ul, name_input */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "easy_span", function() { return easy_span; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "medium_span", function() { return medium_span; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hard_span", function() { return hard_span; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "impossible_span", function() { return impossible_span; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "plus_span", function() { return plus_span; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "minus_span", function() { return minus_span; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "round_div", function() { return round_div; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reset_div", function() { return reset_div; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "points_div", function() { return points_div; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "howtoplay_div", function() { return howtoplay_div; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gameover_span", function() { return gameover_span; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "playbutton", function() { return playbutton; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sounds_div", function() { return sounds_div; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "scorelist_ul", function() { return scorelist_ul; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "name_input", function() { return name_input; });
+var easy_span = document.getElementById('easy');
+var medium_span = document.getElementById('medium');
+var hard_span = document.getElementById('hard');
+var impossible_span = document.getElementById('impossible');
+var plus_span = document.getElementById('plus');
+var minus_span = document.getElementById('minus');
+var round_div = document.getElementById('round');
+var reset_div = document.getElementById('reset');
+var points_div = document.getElementById('points');
+var howtoplay_div = document.getElementById("howtoplay");
+var gameover_span = document.getElementById("gameover");
+var playbutton = document.getElementById("playbutton");
+var sounds_div = document.getElementById("sounds");
+var scorelist_ul = document.getElementById("scorelist");
+var name_input = document.getElementById("name");
+
+/***/ }),
+
 /***/ "./src/drawshapes.js":
 /*!***************************!*\
   !*** ./src/drawshapes.js ***!
@@ -229,6 +271,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _round__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./round */ "./src/round.js");
 /* harmony import */ var _drawshapes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./drawshapes */ "./src/drawshapes.js");
 /* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./input */ "./src/input.js");
+/* harmony import */ var _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./dom-loader.js */ "./src/dom-loader.js");
+
 
 
 
@@ -241,19 +285,8 @@ var round;
 var arrowKeys = false;
 var speed = 900;
 var level = "medium";
-var points_div = document.getElementById('points');
 var point;
-var howtoplay_div = document.getElementById("howtoplay");
-var gameover_span = document.getElementById("gameover");
 var gameInSession = false;
-var easy_span = document.getElementById('easy');
-var medium_span = document.getElementById('medium');
-var hard_span = document.getElementById('hard');
-var impossible_span = document.getElementById('impossible');
-var plus_span = document.getElementById('plus');
-var minus_span = document.getElementById('minus');
-var round_div = document.getElementById('round');
-var reset_div = document.getElementById('reset');
 var reset = false;
 var startgame_sound = new Audio('assets/sounds/startgame.mp3');
 var correct_sound = new Audio('assets/sounds/correct.wav');
@@ -266,13 +299,9 @@ var submit_sound = new Audio('assets/sounds/submit.wav');
 music.currentTime = 2;
 music.volume = 0.6;
 music.loop = true;
-var playbutton = document.getElementById("playbutton");
-var sounds_div = document.getElementById("sounds");
 var sound = true;
-var name_input = document.getElementById("name");
 var name = "Player";
 var scoreNum = 0;
-var scorelist_ul = document.getElementById("scorelist");
 var GAME_WIDTH = 1000;
 var GAME_HEIGHT = 1000;
 var topSpot = {
@@ -295,16 +324,16 @@ var shapeSize = {
   w: 10,
   h: 15
 };
-easy_span.addEventListener("click", function () {
+_dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["easy_span"].addEventListener("click", function () {
   return changeLevel("easy");
 });
-medium_span.addEventListener("click", function () {
+_dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["medium_span"].addEventListener("click", function () {
   return changeLevel("medium");
 });
-hard_span.addEventListener("click", function () {
+_dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["hard_span"].addEventListener("click", function () {
   return changeLevel("hard");
 });
-impossible_span.addEventListener("click", function () {
+_dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["impossible_span"].addEventListener("click", function () {
   return changeLevel("impossible");
 });
 
@@ -317,26 +346,26 @@ function changeLevel(lev) {
         speed = 2000;
         level = "easy";
         resetLevelColors();
-        easy_span.style.color = "tomato";
+        _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["easy_span"].style.color = "tomato";
         break;
 
       case "medium":
         speed = 1000;
         level = "medium";
         resetLevelColors();
-        medium_span.style.color = "tomato";
+        _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["medium_span"].style.color = "tomato";
         break;
 
       case "hard":
         speed = 700;
         level = "hard";
         resetLevelColors();
-        hard_span.style.color = "tomato";
+        _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["hard_span"].style.color = "tomato";
         break;
 
       case "impossible":
         resetLevelColors();
-        impossible_span.style.color = "tomato";
+        _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["impossible_span"].style.color = "tomato";
         speed = 400;
         level = "impossible";
         break;
@@ -345,10 +374,10 @@ function changeLevel(lev) {
 }
 
 function resetLevelColors() {
-  easy_span.style.color = "black";
-  medium_span.style.color = "black";
-  hard_span.style.color = "black";
-  impossible_span.style.color = "black";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["easy_span"].style.color = "black";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["medium_span"].style.color = "black";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["hard_span"].style.color = "black";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["impossible_span"].style.color = "black";
 }
 
 document.addEventListener("keyup", function (event) {
@@ -356,12 +385,12 @@ document.addEventListener("keyup", function (event) {
     if (gameInSession === false) {
       play();
       point = 0;
-      points_div.innerText = point;
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["points_div"].innerText = point;
       gameInSession = true;
-      howtoplay_div.style.display = "none";
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["howtoplay_div"].style.display = "none";
     }
 
-    gameover_span.style.display = "none";
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["gameover_span"].style.display = "none";
   }
 });
 
@@ -382,15 +411,15 @@ function play() {
 
 function nextRound() {
   roundNum += 1;
-  round_div.style.display = "block";
-  round_div.innerText = "Round " + roundNum;
-  reset_div.style.display = "block";
-  plus_span.style.display = "none";
-  minus_span.style.display = "none";
-  reset_div.addEventListener("click", function () {
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["round_div"].style.display = "block";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["round_div"].innerText = "Round " + roundNum;
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.display = "block";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["plus_span"].style.display = "none";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["minus_span"].style.display = "none";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["reset_div"].addEventListener("click", function () {
     reset = true;
-    reset_div.style.color = "red";
-    if (sound) reset_sound.play();
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.color = "red";
+    if (sound) _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["reset_sound"].play();
   });
 
   if (reset === true) {
@@ -456,12 +485,12 @@ function startOver() {
   reset = false;
   round = 0;
   point = 0;
-  points_div.innerText = point;
-  round_div.style.display = "none";
-  reset_div.style.display = "none";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["points_div"].innerText = point;
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["round_div"].style.display = "none";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.display = "none";
   gameInSession = false;
-  howtoplay_div.style.display = "block";
-  reset_div.style.color = "rgb(246, 171, 73)";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["howtoplay_div"].style.display = "block";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.color = "rgb(246, 171, 73)";
 }
 
 function toggleOff() {
@@ -470,17 +499,17 @@ function toggleOff() {
 
 function check(round, userChoice) {
   if (userChoice === round.heartSpots[round.roundNum - 1]) {
-    plus_span.style.display = "block";
-    plus_span.classList.add("popup");
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["plus_span"].style.display = "block";
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["plus_span"].classList.add("popup");
     point += 5;
-    points_div.innerText = point;
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["points_div"].innerText = point;
     round.clearSpots();
     if (sound) correct_sound.play();
   } else {
-    minus_span.style.display = "block";
-    minus_span.classList.add("popup");
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["minus_span"].style.display = "block";
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["minus_span"].classList.add("popup");
     point -= 5;
-    points_div.innerText = point;
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["points_div"].innerText = point;
     round.clearSpots();
     if (sound) wrong_sound.play();
   }
@@ -488,10 +517,10 @@ function check(round, userChoice) {
 
 function gameOver() {
   gameInSession = false;
-  gameover_span.style.display = "block";
-  round_div.style.display = "none";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["gameover_span"].style.display = "block";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["round_div"].style.display = "none";
   if (sound) gameover_sound.play();
-  reset_div.style.display = "none";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.display = "none";
   addScore();
 }
 
@@ -520,25 +549,25 @@ function toggleMusic() {
   }
 }
 
-sounds_div.addEventListener("click", toggleSounds);
+_dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["sounds_div"].addEventListener("click", toggleSounds);
 
 function toggleSounds() {
-  if (sounds_div.classList.value === "sounds") {
-    sounds_div.classList = "mute";
+  if (_dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["sounds_div"].classList.value === "sounds") {
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["sounds_div"].classList = "mute";
     sound = false;
   } else {
-    sounds_div.classList = "sounds";
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["sounds_div"].classList = "sounds";
     sound = true;
   }
 }
 
-name_input.onchange = updateName;
+_dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["name_input"].onchange = updateName;
 
 function updateName() {
   if (sound) submit_sound.play();
   name = name_input.value;
-  name_input.style.color = "rgb(240, 102, 38)";
-  name_input.blur();
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["name_input"].style.color = "rgb(240, 102, 38)";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["name_input"].blur();
 }
 
 /***/ }),
@@ -590,14 +619,7 @@ var InputHandler = function InputHandler(round, roundNum) {
       // case 27:
       //     togglePause();
       //     break;
-    } // if (round.choice === round.heartSpots[round.roundNum - 1]) {
-    //     console.log(`${round.roundNum}: correct!`);
-    //     round.clearSpots();
-    //     nextRound();
-    // } else {
-    //     console.log(`${round.roundNum}: incorrect!`);
-    // }
-
+    }
   });
 };
 
