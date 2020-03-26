@@ -128,132 +128,138 @@ var name_input = document.getElementById("name");
 
 /***/ }),
 
-/***/ "./src/drawshapes.js":
-/*!***************************!*\
-  !*** ./src/drawshapes.js ***!
-  \***************************/
-/*! exports provided: drawSpade, drawHeart, drawClub, drawDiamond */
+/***/ "./src/game.js":
+/*!*********************!*\
+  !*** ./src/game.js ***!
+  \*********************/
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawSpade", function() { return drawSpade; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawHeart", function() { return drawHeart; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawClub", function() { return drawClub; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawDiamond", function() { return drawDiamond; });
-var drawSpade = function drawSpade(context, x, y, width, height, color) {
-  context.save();
-  var bottomWidth = width * 0.7;
-  var topHeight = height * 0.7;
-  var bottomHeight = height * 0.3;
-  context.beginPath();
-  context.moveTo(x, y); // top left of spade          
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Game; });
+/* harmony import */ var _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dom-loader.js */ "./src/dom-loader.js");
+/* harmony import */ var _round_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./round.js */ "./src/round.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  context.bezierCurveTo(x, y + topHeight / 2, // control point 1
-  x - width / 2, y + topHeight / 2, // control point 2
-  x - width / 2, y + topHeight // end point
-  ); // bottom left of spade
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  context.bezierCurveTo(x - width / 2, y + topHeight * 1.3, // control point 1
-  x, y + topHeight * 1.3, // control point 2
-  x, y + topHeight // end point
-  ); // bottom right of spade
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-  context.bezierCurveTo(x, y + topHeight * 1.3, // control point 1
-  x + width / 2, y + topHeight * 1.3, // control point 2
-  x + width / 2, y + topHeight // end point
-  ); // top right of spade
 
-  context.bezierCurveTo(x + width / 2, y + topHeight / 2, // control point 1
-  x, y + topHeight / 2, // control point 2
-  x, y // end point
-  );
-  context.closePath();
-  context.fillStyle = color;
-  context.fill(); // bottom of spade
 
-  context.beginPath();
-  context.moveTo(x, y + topHeight);
-  context.quadraticCurveTo(x, y + topHeight + bottomHeight, // control point
-  x - bottomWidth / 2, y + topHeight + bottomHeight // end point
-  );
-  context.lineTo(x + bottomWidth / 2, y + topHeight + bottomHeight);
-  context.quadraticCurveTo(x, y + topHeight + bottomHeight, // control point
-  x, y + topHeight // end point
-  );
-  context.closePath();
-  context.fillStyle = color;
-  context.fill();
-  context.restore();
-};
-var drawHeart = function drawHeart(context, x, y, width, height, color) {
-  context.save();
-  context.beginPath();
-  var topCurveHeight = height * 0.3;
-  context.moveTo(x, y + topCurveHeight); // top left curve
 
-  context.bezierCurveTo(x, y, x - width / 2, y, x - width / 2, y + topCurveHeight); // bottom left curve
+var Game =
+/*#__PURE__*/
+function () {
+  function Game() {
+    _classCallCheck(this, Game);
 
-  context.bezierCurveTo(x - width / 2, y + (height + topCurveHeight) / 2, x, y + (height + topCurveHeight) / 2, x, y + height); // bottom right curve
+    this.heartSpots = [];
+    this.level = "medium";
+    this.speed = 900;
+    this.numRounds = 10;
+    this.roundNum = 0;
+  }
 
-  context.bezierCurveTo(x, y + (height + topCurveHeight) / 2, x + width / 2, y + (height + topCurveHeight) / 2, x + width / 2, y + topCurveHeight); // top right curve
+  _createClass(Game, [{
+    key: "play",
+    value: function play() {
+      var _this = this;
 
-  context.bezierCurveTo(x + width / 2, y, x, y, x, y + topCurveHeight);
-  context.closePath();
-  context.fillStyle = color;
-  context.fill();
-  context.restore();
-};
-var drawClub = function drawClub(context, x, y, width, height, color) {
-  context.save();
-  var circleRadius = width * 0.3;
-  var bottomWidth = width * 0.5;
-  var bottomHeight = height * 0.35;
-  context.fillStyle = color; // top circle
+      // if (sound) startgame_sound.play();
+      // arrowKeys = false;
+      // roundNum = 0;
+      this.generateHeartSpots();
+      setTimeout(function () {
+        return _this.nextRound();
+      }, 1500);
+    }
+  }, {
+    key: "generateHeartSpots",
+    value: function generateHeartSpots() {
+      for (var i = 0; i < this.numRounds; i++) {
+        this.heartSpots.push(Math.floor(Math.random() * 4));
+      }
+    }
+  }, {
+    key: "nextRound",
+    value: function nextRound() {
+      roundNum += 1;
+      round = new _round_js__WEBPACK_IMPORTED_MODULE_1__["default"](this.heartSpots);
+    } // dom.round_div.style.display = "block";
+    // dom.round_div.innerText = "Round " + roundNum;
+    // dom.reset_div.style.display = "block";
+    // dom.plus_span.style.display = "none";
+    // dom.minus_span.style.display = "none";
+    // dom.reset_div.addEventListener("click", () => { 
+    //     reset = true; dom.reset_div.style.color = "red"; 
+    //     if (sound) dom.reset_sound.play();});
+    //     if (reset === true) {
+    //         startOver();
+    //         return;
+    //     }
+    //     if (roundNum > numRounds) {
+    //         gameOver();
+    //         arrowKeys = false;
+    //         return;
+    //     }
+    //         round = new Round(
+    //             ctx,
+    //             heartSpots, 
+    //             shapeSize, 
+    //             topSpot, 
+    //             rightSpot, 
+    //             bottomSpot, 
+    //             leftSpot, 
+    //             drawHeart,
+    //             drawSpade,
+    //             drawClub,
+    //             drawDiamond,
+    //             roundNum,
+    //             speed
+    //             );
+    //             round.flashHeart();
+    //             round.flashShapes();
+    //             arrowKeys = true;
+    //         document.addEventListener("keydown", event => {
+    //             switch (event.keyCode) {
+    //                 case 37:
+    //                     if (arrowKeys) {
+    //                         check(round, 3); }
+    //                     arrowKeys = false;
+    //                     break;
+    //                 case 38:
+    //                     if (arrowKeys) {
+    //                         check(round, 0);
+    //                     }
+    //                     arrowKeys = false;
+    //                     break;
+    //                 case 39:
+    //                     if (arrowKeys) {
+    //                         check(round, 1);
+    //                     }
+    //                     arrowKeys = false;
+    //                     break;
+    //                 case 40:
+    //                     if (arrowKeys) {
+    //                         check(round, 2);
+    //                     }
+    //                     arrowKeys = false;
+    //                     break;
+    //             }
+    //     });
+    //     setTimeout(() => round.clearSpots(), speed);
+    //     setTimeout(() => toggleOff(), speed);
+    //     setTimeout(nextRound, speed + 1500);  
+    // }
 
-  context.beginPath();
-  context.arc(x, y + circleRadius + height * 0.05, circleRadius, 0, 2 * Math.PI, false);
-  context.fill(); // bottom right circle
+  }]);
 
-  context.beginPath();
-  context.arc(x + circleRadius, y + height * 0.6, circleRadius, 0, 2 * Math.PI, false);
-  context.fillStyle = color;
-  context.fill(); // bottom left circle
+  return Game;
+}();
 
-  context.beginPath();
-  context.arc(x - circleRadius, y + height * 0.6, circleRadius, 0, 2 * Math.PI, false);
-  context.fillStyle = color;
-  context.fill(); // center filler circle
 
-  context.beginPath();
-  context.arc(x, y + height * 0.5, circleRadius / 2, 0, 2 * Math.PI, false);
-  context.fill(); // bottom of club
-
-  context.moveTo(x, y + height * 0.6);
-  context.quadraticCurveTo(x, y + height, x - bottomWidth / 2, y + height);
-  context.lineTo(x + bottomWidth / 2, y + height);
-  context.quadraticCurveTo(x, y + height, x, y + height * 0.6);
-  context.closePath();
-  context.fill();
-  context.restore();
-};
-var drawDiamond = function drawDiamond(context, x, y, width, height, color) {
-  context.save();
-  context.beginPath();
-  context.moveTo(x, y); // top left edge
-
-  context.lineTo(x - width / 2, y + height / 2); // bottom left edge
-
-  context.lineTo(x, y + height); // bottom right edge
-
-  context.lineTo(x + width / 2, y + height / 2); // closing the path automatically creates
-  // the top right edge
-
-  context.closePath();
-  context.fillStyle = color;
-  context.fill();
-  context.restore();
-};
 
 /***/ }),
 
@@ -261,367 +267,270 @@ var drawDiamond = function drawDiamond(context, x, y, width, height, color) {
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-/*! exports provided: nextRound, check */
+/*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "nextRound", function() { return nextRound; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "check", function() { return check; });
-/* harmony import */ var _round__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./round */ "./src/round.js");
-/* harmony import */ var _drawshapes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./drawshapes */ "./src/drawshapes.js");
-/* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./input */ "./src/input.js");
-/* harmony import */ var _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./dom-loader.js */ "./src/dom-loader.js");
-
-
-
-
-var canvas = document.querySelector('canvas');
-var ctx = canvas.getContext('2d');
-var roundNum;
-var heartSpots = [];
-var numRounds = 10;
-var round;
-var arrowKeys = false;
-var speed = 900;
-var level = "medium";
-var point;
-var gameInSession = false;
-var reset = false;
-var startgame_sound = new Audio('assets/sounds/startgame.mp3');
-var correct_sound = new Audio('assets/sounds/correct.wav');
-var wrong_sound = new Audio('assets/sounds/wrong2.wav');
-var gameover_sound = new Audio('assets/sounds/gameover.wav');
-var reset_sound = new Audio('assets/sounds/reset.wav');
-var music = new Audio('assets/sounds/BEPmidi.mp3');
-var select_sound = new Audio('assets/sounds/select.wav');
-var submit_sound = new Audio('assets/sounds/submit.wav');
-music.currentTime = 2;
-music.volume = 0.6;
-music.loop = true;
-var sound = true;
-var name = "Player";
-var scoreNum = 0;
-var topSpot = {
-  x: 159,
-  y: 16
-};
-var rightSpot = {
-  x: 251,
-  y: 57
-};
-var bottomSpot = {
-  x: 159,
-  y: 99
-};
-var leftSpot = {
-  x: 67,
-  y: 57
-};
-var shapeSize = {
-  w: 10,
-  h: 15
-};
-_dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["easy_span"].addEventListener("click", function () {
-  return changeLevel("easy");
-});
-_dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["medium_span"].addEventListener("click", function () {
-  return changeLevel("medium");
-});
-_dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["hard_span"].addEventListener("click", function () {
-  return changeLevel("hard");
-});
-_dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["impossible_span"].addEventListener("click", function () {
-  return changeLevel("impossible");
-});
-
-function changeLevel(lev) {
-  if (gameInSession === false) {
-    if (sound) select_sound.play();
-
-    switch (lev) {
-      case "easy":
-        speed = 2000;
-        level = "easy";
-        resetLevelColors();
-        _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["easy_span"].style.color = "tomato";
-        break;
-
-      case "medium":
-        speed = 1000;
-        level = "medium";
-        resetLevelColors();
-        _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["medium_span"].style.color = "tomato";
-        break;
-
-      case "hard":
-        speed = 700;
-        level = "hard";
-        resetLevelColors();
-        _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["hard_span"].style.color = "tomato";
-        break;
-
-      case "impossible":
-        resetLevelColors();
-        _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["impossible_span"].style.color = "tomato";
-        speed = 400;
-        level = "impossible";
-        break;
-    }
-  }
-}
-
-function resetLevelColors() {
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["easy_span"].style.color = "black";
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["medium_span"].style.color = "black";
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["hard_span"].style.color = "black";
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["impossible_span"].style.color = "black";
-}
+/* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game.js */ "./src/game.js");
+// import Round from "./round";
+// // import InputHandler from "./input";
+// import * as dom from "./dom-loader.js"
+ // let roundNum;
+// let heartSpots = [];
+// let numRounds = 10;
+// let round;
+// let arrowKeys = false;
+// // let speed = 900;
+// // let level = "medium";
+// let point;
+// let gameInSession = false;
+// let reset = false;
+// let startgame_sound = new Audio('assets/sounds/startgame.mp3');
+// let correct_sound = new Audio('assets/sounds/correct.wav');
+// let wrong_sound = new Audio('assets/sounds/wrong2.wav');
+// let gameover_sound = new Audio('assets/sounds/gameover.wav');
+// let reset_sound = new Audio('assets/sounds/reset.wav');
+// let music = new Audio('assets/sounds/BEPmidi.mp3');
+// let select_sound = new Audio('assets/sounds/select.wav');
+// let submit_sound = new Audio('assets/sounds/submit.wav');
+// music.currentTime = 2;
+// music.volume = 0.6;
+// music.loop = true; 
+// let sound = true;
+// let name = "Player";
+// let scoreNum = 0;
+// const topSpot = {
+//     x: 159,
+//     y: 16
+// }
+// const rightSpot = {
+//     x: 251,
+//     y: 57
+// }
+// const bottomSpot = {
+//     x: 159,
+//     y: 99
+// }
+// const leftSpot = {
+//     x: 67,
+//     y: 57
+// }
+// const shapeSize = {
+//     w: 10,
+//     h: 15
+// }
+// dom.easy_span.addEventListener("click", () => changeLevel("easy"));
+// dom.medium_span.addEventListener("click", () => changeLevel("medium"));
+// dom.hard_span.addEventListener("click", () => changeLevel("hard"));
+// dom.impossible_span.addEventListener("click", () => changeLevel("impossible"));
+// function changeLevel(lev) {
+//     if (gameInSession === false) {
+//         if (sound) select_sound.play();
+//         switch (lev) {
+//             case "easy":
+//                 speed = 2000;
+//                 level = "easy";
+//                 resetLevelColors();
+//                 dom.easy_span.style.color = "tomato";
+//                 break;
+//             case "medium":
+//                 speed = 1000;
+//                 level = "medium";
+//                 resetLevelColors();
+//                 dom.medium_span.style.color = "tomato";
+//                 break;
+//             case "hard":
+//                 speed = 700;
+//                 level = "hard";
+//                 resetLevelColors();
+//                 dom.hard_span.style.color = "tomato";
+//                 break;
+//             case "impossible":
+//                 resetLevelColors();
+//                 dom.impossible_span.style.color = "tomato";
+//                 speed = 400;
+//                 level = "impossible";
+//                 break;
+//         }
+//     }
+// }
+// function resetLevelColors() {
+//     dom.easy_span.style.color = "black";
+//     dom.medium_span.style.color = "black";
+//     dom.hard_span.style.color = "black";
+//     dom.impossible_span.style.color = "black";
+// }
+// document.addEventListener("keyup", event => {
+//     if (event.code === "Space") {
+//         if (gameInSession === false) {
+//             play();
+//             point = 0;
+//             dom.points_div.innerText = point;
+//             gameInSession = true;
+//             dom.howtoplay_div.style.display = "none";
+//         }
+//         dom.gameover_span.style.display = "none";
+//     }
+// })
 
 document.addEventListener("keyup", function (event) {
   if (event.code === "Space") {
-    if (gameInSession === false) {
-      play();
-      point = 0;
-      _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["points_div"].innerText = point;
-      gameInSession = true;
-      _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["howtoplay_div"].style.display = "none";
-    }
-
-    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["gameover_span"].style.display = "none";
+    var game = new _game_js__WEBPACK_IMPORTED_MODULE_0__["default"]();
+    game.play();
   }
-});
-
-function play() {
-  if (sound) startgame_sound.play();
-  arrowKeys = false;
-  roundNum = 0;
-  heartSpots = [];
-
-  for (var i = 0; i < numRounds; i++) {
-    heartSpots.push(Math.floor(Math.random() * 4));
-  }
-
-  setTimeout(function () {
-    return nextRound();
-  }, 1500);
-}
-
-function nextRound() {
-  roundNum += 1;
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["round_div"].style.display = "block";
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["round_div"].innerText = "Round " + roundNum;
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.display = "block";
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["plus_span"].style.display = "none";
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["minus_span"].style.display = "none";
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["reset_div"].addEventListener("click", function () {
-    reset = true;
-    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.color = "red";
-    if (sound) _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["reset_sound"].play();
-  });
-
-  if (reset === true) {
-    startOver();
-    return;
-  }
-
-  if (roundNum > numRounds) {
-    gameOver();
-    arrowKeys = false;
-    return;
-  }
-
-  round = new _round__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawHeart"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawSpade"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawClub"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawDiamond"], roundNum, speed);
-  round.flashHeart();
-  round.flashShapes();
-  arrowKeys = true;
-  document.addEventListener("keydown", function (event) {
-    switch (event.keyCode) {
-      case 37:
-        if (arrowKeys) {
-          check(round, 3);
-        }
-
-        arrowKeys = false;
-        break;
-
-      case 38:
-        if (arrowKeys) {
-          check(round, 0);
-        }
-
-        arrowKeys = false;
-        break;
-
-      case 39:
-        if (arrowKeys) {
-          check(round, 1);
-        }
-
-        arrowKeys = false;
-        break;
-
-      case 40:
-        if (arrowKeys) {
-          check(round, 2);
-        }
-
-        arrowKeys = false;
-        break;
-    }
-  });
-  setTimeout(function () {
-    return round.clearSpots();
-  }, speed);
-  setTimeout(function () {
-    return toggleOff();
-  }, speed);
-  setTimeout(nextRound, speed + 1500);
-}
-
-function startOver() {
-  reset = false;
-  round = 0;
-  point = 0;
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["points_div"].innerText = point;
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["round_div"].style.display = "none";
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.display = "none";
-  gameInSession = false;
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["howtoplay_div"].style.display = "block";
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.color = "rgb(246, 171, 73)";
-}
-
-function toggleOff() {
-  arrowKeys = false;
-}
-
-function check(round, userChoice) {
-  if (userChoice === round.heartSpots[round.roundNum - 1]) {
-    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["plus_span"].style.display = "block";
-    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["plus_span"].classList.add("popup");
-    point += 5;
-    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["points_div"].innerText = point;
-    round.clearSpots();
-    if (sound) correct_sound.play();
-  } else {
-    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["minus_span"].style.display = "block";
-    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["minus_span"].classList.add("popup");
-    point -= 5;
-    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["points_div"].innerText = point;
-    round.clearSpots();
-    if (sound) wrong_sound.play();
-  }
-}
-
-function gameOver() {
-  gameInSession = false;
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["gameover_span"].style.display = "block";
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["round_div"].style.display = "none";
-  if (sound) gameover_sound.play();
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.display = "none";
-  addScore();
-}
-
-function addScore() {
-  scoreNum += 1;
-
-  if (scoreNum === 9) {
-    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["scorelist_ul"].removeChild(scorelist_ul.firstChild);
-    scoreNum -= 1;
-  }
-
-  var div = document.createElement("div");
-  div.innerText = name + "  |  " + point + "pts" + "  |  " + level;
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["scorelist_ul"].appendChild(div);
-}
-
-playbutton.addEventListener("click", toggleMusic);
-
-function toggleMusic() {
-  if (playbutton.classList.value === "play") {
-    playbutton.classList = "pause";
-    music.play();
-  } else {
-    playbutton.classList = "play";
-    music.pause();
-  }
-}
-
-_dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["sounds_div"].addEventListener("click", toggleSounds);
-
-function toggleSounds() {
-  if (_dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["sounds_div"].classList.value === "sounds") {
-    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["sounds_div"].classList = "mute";
-    sound = false;
-  } else {
-    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["sounds_div"].classList = "sounds";
-    sound = true;
-  }
-}
-
-_dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["name_input"].onchange = updateName;
-
-function updateName() {
-  if (sound) submit_sound.play();
-  name = name_input.value;
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["name_input"].style.color = "rgb(240, 102, 38)";
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["name_input"].blur();
-}
-
-/***/ }),
-
-/***/ "./src/input.js":
-/*!**********************!*\
-  !*** ./src/input.js ***!
-  \**********************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return InputHandler; });
-/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index */ "./src/index.js");
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-
-var InputHandler = function InputHandler(round, roundNum) {
-  _classCallCheck(this, InputHandler);
-
-  document.addEventListener("keydown", function (event) {
-    switch (event.keyCode) {
-      case 37:
-        // round.choice = 3;
-        debugger;
-        Object(_index__WEBPACK_IMPORTED_MODULE_0__["check"])(round, 3);
-        break;
-
-      case 38:
-        // round.choice = 0;
-        debugger;
-        Object(_index__WEBPACK_IMPORTED_MODULE_0__["check"])(round, 0);
-        break;
-
-      case 39:
-        // round.choice = 1;
-        debugger;
-        Object(_index__WEBPACK_IMPORTED_MODULE_0__["check"])(round, 1);
-        break;
-
-      case 40:
-        // round.choice = 2;
-        debugger;
-        Object(_index__WEBPACK_IMPORTED_MODULE_0__["check"])(round, 2);
-        break;
-      // case 27:
-      //     togglePause();
-      //     break;
-    }
-  });
-};
-
-
+}); // // function play() {
+// //     if (sound) startgame_sound.play();
+// //     arrowKeys = false;
+// //     roundNum = 0;
+// //     heartSpots = [];
+// //     for (let i = 0; i < numRounds; i++) {
+// //         heartSpots.push(Math.floor(Math.random() * 4));
+// //     }
+// //     setTimeout(() => nextRound(), 1500);
+// // }
+// export function nextRound() {
+//     roundNum += 1;
+//     dom.round_div.style.display = "block";
+//     dom.round_div.innerText = "Round " + roundNum;
+//     dom.reset_div.style.display = "block";
+//     dom.plus_span.style.display = "none";
+//     dom.minus_span.style.display = "none";
+//     dom.reset_div.addEventListener("click", () => { reset = true; dom.reset_div.style.color = "red"; if (sound) dom.reset_sound.play();});
+//     if (reset === true) {
+//         startOver();
+//         return;
+//     }
+//     if (roundNum > numRounds) {
+//         gameOver();
+//         arrowKeys = false;
+//         return;
+//     }
+//     round = new Round(
+//         ctx,
+//         heartSpots, 
+//         shapeSize, 
+//         topSpot, 
+//         rightSpot, 
+//         bottomSpot, 
+//         leftSpot, 
+//         drawHeart,
+//         drawSpade,
+//         drawClub,
+//         drawDiamond,
+//         roundNum,
+//         speed
+//         );
+//         round.flashHeart();
+//         round.flashShapes();
+//         arrowKeys = true;
+//     document.addEventListener("keydown", event => {
+//         switch (event.keyCode) {
+//             case 37:
+//                 if (arrowKeys) {
+//                     check(round, 3); }
+//                 arrowKeys = false;
+//                 break;
+//             case 38:
+//                 if (arrowKeys) {
+//                     check(round, 0);
+//                 }
+//                 arrowKeys = false;
+//                 break;
+//             case 39:
+//                 if (arrowKeys) {
+//                     check(round, 1);
+//                 }
+//                 arrowKeys = false;
+//                 break;
+//             case 40:
+//                 if (arrowKeys) {
+//                     check(round, 2);
+//                 }
+//                 arrowKeys = false;
+//                 break;
+//         }
+//     });
+//     setTimeout(() => round.clearSpots(), speed);
+//     setTimeout(() => toggleOff(), speed);
+//     setTimeout(nextRound, speed + 1500);  
+// }
+// function startOver() {
+//     reset = false;
+//     round = 0;
+//     point = 0;
+//     dom.points_div.innerText = point;
+//     dom.round_div.style.display = "none";
+//     dom.reset_div.style.display = "none";
+//     gameInSession = false;
+//     dom.howtoplay_div.style.display = "block";
+//     dom.reset_div.style.color = "rgb(246, 171, 73)";
+// }
+// function toggleOff() {
+//     arrowKeys = false;
+// }
+// export function check(round, userChoice) {
+//     if (userChoice === round.heartSpots[round.roundNum - 1]) {
+//         dom.plus_span.style.display = "block";
+//         dom.plus_span.classList.add("popup");
+//         point += 5;
+//         dom.points_div.innerText = point;
+//         round.clearSpots();
+//         if (sound) correct_sound.play();
+//     } else {
+//         dom.minus_span.style.display = "block";
+//         dom.minus_span.classList.add("popup");
+//         point -= 5;
+//         dom.points_div.innerText = point;
+//         round.clearSpots();
+//         if (sound) wrong_sound.play();
+//     }
+// }
+// function gameOver() {
+//     gameInSession = false;
+//     dom.gameover_span.style.display = "block";
+//     dom.round_div.style.display = "none"
+//     if (sound) gameover_sound.play();
+//     dom.reset_div.style.display = "none";
+//     addScore();
+// }
+// function addScore() {
+//     scoreNum += 1;
+//     if (scoreNum === 9) {
+//         dom.scorelist_ul.removeChild(scorelist_ul.firstChild);
+//         scoreNum -= 1;
+//     }
+//     let div = document.createElement("div");
+//     div.innerText = name + "  |  " + point + "pts" + "  |  " + level;
+//     dom.scorelist_ul.appendChild(div);
+// }
+// playbutton.addEventListener("click", toggleMusic);
+// function toggleMusic() {
+//     if (playbutton.classList.value === "play") {
+//         playbutton.classList = "pause";
+//         music.play();
+//     } else {
+//         playbutton.classList = "play";
+//         music.pause();
+//     }
+// }
+// dom.sounds_div.addEventListener("click", toggleSounds);
+// function toggleSounds() {
+//     if (dom.sounds_div.classList.value === "sounds") {
+//         dom.sounds_div.classList = "mute";
+//         sound = false;
+//     } else {
+//         dom.sounds_div.classList = "sounds";
+//         sound = true;
+//     }
+// }
+// dom.name_input.onchange = updateName;
+// function updateName() {
+//     if (sound) submit_sound.play();
+//     name = dom.name_input.value;
+//     dom.name_input.style.color = "rgb(240, 102, 38)";
+//     dom.name_input.blur();
+// }
 
 /***/ }),
 
@@ -635,86 +544,99 @@ var InputHandler = function InputHandler(round, roundNum) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Round; });
-/* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./input */ "./src/input.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+var Round = function Round() {
+  _classCallCheck(this, Round);
+}; // import InputHandler from "./input";
+// export default class Round {
+//     constructor(
+//         ctx,
+//         heartSpots,
+//         shapeSize,
+//         topSpot,
+//         rightSpot,
+//         bottomSpot,
+//         leftSpot,
+//         roundNum,
+//         speed
+//     ) {
+//         this.gameHeight = 1000;
+//         this.gameWidth = 1000;
+//         this.ctx = ctx;
+//         this.heartSpots = heartSpots;
+//         this.shapeSize = shapeSize;
+//         this.spots = [topSpot, rightSpot, bottomSpot, leftSpot];
+//         this.colors = [
+//             "red",
+//             "lawngreen",
+//             "crimson",
+//             "gold",
+//             "orangered"
+//         ];
+//         this.roundNum = roundNum;
+//         this.shuffle = this.shuffle.bind(this);
+//         this.choice = null;
+//         this.speed = speed;
+//     }
+//         // flashHeart() {
+//         //     this.drawHeart(
+//         //         this.ctx,
+//         //         this.spots[this.heartSpots[this.roundNum-1]].x,
+//         //         this.spots[this.heartSpots[this.roundNum-1]].y,
+//         //         this.shapeSize.w,
+//         //         this.shapeSize.h,
+//         //         this.colors[Math.floor(Math.random() * this.colors.length)]
+//         //     );
+//         // }
+//         // flashShapes() {
+//         //     let noHeartSpots = this.spots.filter((spot, idx) => idx !== this.heartSpots[this.roundNum-1]);
+//         //     let shuffledSpots = this.shuffle(noHeartSpots);
+//         //     this.drawSpade(
+//         //         this.ctx,
+//         //         shuffledSpots[0].x,
+//         //         shuffledSpots[0].y,
+//         //         this.shapeSize.w,
+//         //         this.shapeSize.h,
+//         //         this.colors[Math.floor(Math.random() * this.colors.length)],
+//         //         );
+//         //     this.drawDiamond(
+//         //         this.ctx,
+//         //         shuffledSpots[1].x,
+//         //         shuffledSpots[1].y,
+//         //         this.shapeSize.w,
+//         //         this.shapeSize.h,
+//         //         this.colors[
+//         //         Math.floor(Math.random() * this.colors.length)
+//         //         ]
+//         //     ); 
+//         //     this.drawClub(
+//         //         this.ctx,
+//         //         shuffledSpots[2].x,
+//         //         shuffledSpots[2].y,
+//         //         this.shapeSize.w,
+//         //         this.shapeSize.h,
+//         //         this.colors[
+//         //         Math.floor(Math.random() * this.colors.length)
+//         //         ]
+//         //     ); 
+//         // }
+//         // shuffle(spots) {
+//         //     let newPos;
+//         //     let temp;
+//         //     for (let i = spots.length - 1; i > 0; i--) {
+//         //         newPos = Math.floor(Math.random() * (i + 1));
+//         //         temp = spots[i];
+//         //         spots[i] = spots[newPos];
+//         //         spots[newPos] = temp;
+//         //     }
+//         //     return spots;
+//         //  }
+//         //  clearSpots() {
+//         //     this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+//         //  }
+// }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-
-
-var Round =
-/*#__PURE__*/
-function () {
-  function Round(ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, drawHeart, drawSpade, drawClub, drawDiamond, roundNum, speed) {
-    _classCallCheck(this, Round);
-
-    this.gameHeight = 1000;
-    this.gameWidth = 1000;
-    this.ctx = ctx;
-    this.heartSpots = heartSpots;
-    this.shapeSize = shapeSize;
-    this.spots = [topSpot, rightSpot, bottomSpot, leftSpot];
-    this.colors = ["red", "lawngreen", "crimson", "gold", "orangered"];
-    this.drawHeart = drawHeart;
-    this.drawSpade = drawSpade;
-    this.drawClub = drawClub;
-    this.drawDiamond = drawDiamond;
-    this.roundNum = roundNum;
-    this.shuffle = this.shuffle.bind(this);
-    this.choice = null;
-    this.speed = speed;
-  }
-
-  _createClass(Round, [{
-    key: "flashHeart",
-    value: function flashHeart() {
-      this.drawHeart(this.ctx, this.spots[this.heartSpots[this.roundNum - 1]].x, this.spots[this.heartSpots[this.roundNum - 1]].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
-    }
-  }, {
-    key: "flashShapes",
-    value: function flashShapes() {
-      var _this = this;
-
-      var noHeartSpots = this.spots.filter(function (spot, idx) {
-        return idx !== _this.heartSpots[_this.roundNum - 1];
-      });
-      var shuffledSpots = this.shuffle(noHeartSpots);
-      this.drawSpade(this.ctx, shuffledSpots[0].x, shuffledSpots[0].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
-      this.drawDiamond(this.ctx, shuffledSpots[1].x, shuffledSpots[1].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]);
-      this.drawClub(this.ctx, shuffledSpots[2].x, shuffledSpots[2].y, this.shapeSize.w, this.shapeSize.h, this.colors[Math.floor(Math.random() * this.colors.length)]); //clear left spot only:
-      // setTimeout(() => {
-      //     this.ctx.clearRect(70,
-      //         50,
-      //         30,
-      //         30)
-      // }, 2000)
-    }
-  }, {
-    key: "shuffle",
-    value: function shuffle(spots) {
-      var newPos;
-      var temp;
-
-      for (var i = spots.length - 1; i > 0; i--) {
-        newPos = Math.floor(Math.random() * (i + 1));
-        temp = spots[i];
-        spots[i] = spots[newPos];
-        spots[newPos] = temp;
-      }
-
-      return spots;
-    }
-  }, {
-    key: "clearSpots",
-    value: function clearSpots() {
-      this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
-    }
-  }]);
-
-  return Round;
-}();
 
 
 

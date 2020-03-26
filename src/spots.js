@@ -17,6 +17,7 @@ export default class Spot {
                 break;
             case left:
                 return { x: 67, y: 57 };
-                break
+                break;
         }
+    }
 }
