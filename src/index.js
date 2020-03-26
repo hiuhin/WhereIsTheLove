@@ -30,10 +30,6 @@ let sound = true;
 let name = "Player";
 let scoreNum = 0;
 
-
-const GAME_WIDTH = 1000;
-const GAME_HEIGHT = 1000;
-
 const topSpot = {
     x: 159,
     y: 16
@@ -155,8 +151,6 @@ export function nextRound() {
     }
 
     round = new Round(
-        GAME_WIDTH,
-        GAME_HEIGHT, 
         ctx,
         heartSpots, 
         shapeSize, 
@@ -260,13 +254,13 @@ function addScore() {
     scoreNum += 1;
 
     if (scoreNum === 9) {
-        scorelist_ul.removeChild(scorelist_ul.firstChild);
+        dom.scorelist_ul.removeChild(scorelist_ul.firstChild);
         scoreNum -= 1;
     }
 
     let div = document.createElement("div");
     div.innerText = name + "  |  " + point + "pts" + "  |  " + level;
-    scorelist_ul.appendChild(div);
+    dom.scorelist_ul.appendChild(div);
 }
 
 playbutton.addEventListener("click", toggleMusic);

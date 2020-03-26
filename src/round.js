@@ -2,8 +2,6 @@ import InputHandler from "./input";
 
 export default class Round {
     constructor(
-        gameHeight,
-        gameWidth,
         ctx,
         heartSpots,
         shapeSize,
@@ -18,8 +16,8 @@ export default class Round {
         roundNum,
         speed
     ) {
-        this.gameHeight = gameHeight;
-        this.gameWidth = gameWidth;
+        this.gameHeight = 1000;
+        this.gameWidth = 1000;
         this.ctx = ctx;
         this.heartSpots = heartSpots;
         this.shapeSize = shapeSize;

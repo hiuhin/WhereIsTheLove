@@ -302,8 +302,6 @@ music.loop = true;
 var sound = true;
 var name = "Player";
 var scoreNum = 0;
-var GAME_WIDTH = 1000;
-var GAME_HEIGHT = 1000;
 var topSpot = {
   x: 159,
   y: 16
@@ -433,7 +431,7 @@ function nextRound() {
     return;
   }
 
-  round = new _round__WEBPACK_IMPORTED_MODULE_0__["default"](GAME_WIDTH, GAME_HEIGHT, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawHeart"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawSpade"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawClub"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawDiamond"], roundNum, speed);
+  round = new _round__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawHeart"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawSpade"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawClub"], _drawshapes__WEBPACK_IMPORTED_MODULE_1__["drawDiamond"], roundNum, speed);
   round.flashHeart();
   round.flashShapes();
   arrowKeys = true;
@@ -528,13 +526,13 @@ function addScore() {
   scoreNum += 1;
 
   if (scoreNum === 9) {
-    scorelist_ul.removeChild(scorelist_ul.firstChild);
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["scorelist_ul"].removeChild(scorelist_ul.firstChild);
     scoreNum -= 1;
   }
 
   var div = document.createElement("div");
   div.innerText = name + "  |  " + point + "pts" + "  |  " + level;
-  scorelist_ul.appendChild(div);
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_3__["scorelist_ul"].appendChild(div);
 }
 
 playbutton.addEventListener("click", toggleMusic);
@@ -649,11 +647,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Round =
 /*#__PURE__*/
 function () {
-  function Round(gameHeight, gameWidth, ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, drawHeart, drawSpade, drawClub, drawDiamond, roundNum, speed) {
+  function Round(ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, drawHeart, drawSpade, drawClub, drawDiamond, roundNum, speed) {
     _classCallCheck(this, Round);
 
-    this.gameHeight = gameHeight;
-    this.gameWidth = gameWidth;
+    this.gameHeight = 1000;
+    this.gameWidth = 1000;
     this.ctx = ctx;
     this.heartSpots = heartSpots;
     this.shapeSize = shapeSize;
