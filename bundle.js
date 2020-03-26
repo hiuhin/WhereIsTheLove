@@ -90,11 +90,12 @@
 /*!***************************!*\
   !*** ./src/dom-loader.js ***!
   \***************************/
-/*! exports provided: easy_span, medium_span, hard_span, impossible_span, plus_span, minus_span, round_div, reset_div, points_div, howtoplay_div, gameover_span, playbutton, sounds_div, scorelist_ul, name_input */
+/*! exports provided: canvas, easy_span, medium_span, hard_span, impossible_span, plus_span, minus_span, round_div, reset_div, points_div, howtoplay_div, gameover_span, playbutton, sounds_div, scorelist_ul, name_input */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "canvas", function() { return canvas; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "easy_span", function() { return easy_span; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "medium_span", function() { return medium_span; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hard_span", function() { return hard_span; });
@@ -110,6 +111,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sounds_div", function() { return sounds_div; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "scorelist_ul", function() { return scorelist_ul; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "name_input", function() { return name_input; });
+var canvas = document.getElementById('canvas');
 var easy_span = document.getElementById('easy');
 var medium_span = document.getElementById('medium');
 var hard_span = document.getElementById('hard');
@@ -125,6 +127,135 @@ var playbutton = document.getElementById("playbutton");
 var sounds_div = document.getElementById("sounds");
 var scorelist_ul = document.getElementById("scorelist");
 var name_input = document.getElementById("name");
+
+/***/ }),
+
+/***/ "./src/drawshapes.js":
+/*!***************************!*\
+  !*** ./src/drawshapes.js ***!
+  \***************************/
+/*! exports provided: drawSpade, drawHeart, drawClub, drawDiamond */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawSpade", function() { return drawSpade; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawHeart", function() { return drawHeart; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawClub", function() { return drawClub; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawDiamond", function() { return drawDiamond; });
+var drawSpade = function drawSpade(context, x, y, width, height, color) {
+  context.save();
+  var bottomWidth = width * 0.7;
+  var topHeight = height * 0.7;
+  var bottomHeight = height * 0.3;
+  context.beginPath();
+  context.moveTo(x, y); // top left of spade          
+
+  context.bezierCurveTo(x, y + topHeight / 2, // control point 1
+  x - width / 2, y + topHeight / 2, // control point 2
+  x - width / 2, y + topHeight // end point
+  ); // bottom left of spade
+
+  context.bezierCurveTo(x - width / 2, y + topHeight * 1.3, // control point 1
+  x, y + topHeight * 1.3, // control point 2
+  x, y + topHeight // end point
+  ); // bottom right of spade
+
+  context.bezierCurveTo(x, y + topHeight * 1.3, // control point 1
+  x + width / 2, y + topHeight * 1.3, // control point 2
+  x + width / 2, y + topHeight // end point
+  ); // top right of spade
+
+  context.bezierCurveTo(x + width / 2, y + topHeight / 2, // control point 1
+  x, y + topHeight / 2, // control point 2
+  x, y // end point
+  );
+  context.closePath();
+  context.fillStyle = color;
+  context.fill(); // bottom of spade
+
+  context.beginPath();
+  context.moveTo(x, y + topHeight);
+  context.quadraticCurveTo(x, y + topHeight + bottomHeight, // control point
+  x - bottomWidth / 2, y + topHeight + bottomHeight // end point
+  );
+  context.lineTo(x + bottomWidth / 2, y + topHeight + bottomHeight);
+  context.quadraticCurveTo(x, y + topHeight + bottomHeight, // control point
+  x, y + topHeight // end point
+  );
+  context.closePath();
+  context.fillStyle = color;
+  context.fill();
+  context.restore();
+};
+var drawHeart = function drawHeart(context, x, y, width, height, color) {
+  context.save();
+  context.beginPath();
+  var topCurveHeight = height * 0.3;
+  context.moveTo(x, y + topCurveHeight); // top left curve
+
+  context.bezierCurveTo(x, y, x - width / 2, y, x - width / 2, y + topCurveHeight); // bottom left curve
+
+  context.bezierCurveTo(x - width / 2, y + (height + topCurveHeight) / 2, x, y + (height + topCurveHeight) / 2, x, y + height); // bottom right curve
+
+  context.bezierCurveTo(x, y + (height + topCurveHeight) / 2, x + width / 2, y + (height + topCurveHeight) / 2, x + width / 2, y + topCurveHeight); // top right curve
+
+  context.bezierCurveTo(x + width / 2, y, x, y, x, y + topCurveHeight);
+  context.closePath();
+  context.fillStyle = color;
+  context.fill();
+  context.restore();
+};
+var drawClub = function drawClub(context, x, y, width, height, color) {
+  context.save();
+  var circleRadius = width * 0.3;
+  var bottomWidth = width * 0.5;
+  var bottomHeight = height * 0.35;
+  context.fillStyle = color; // top circle
+
+  context.beginPath();
+  context.arc(x, y + circleRadius + height * 0.05, circleRadius, 0, 2 * Math.PI, false);
+  context.fill(); // bottom right circle
+
+  context.beginPath();
+  context.arc(x + circleRadius, y + height * 0.6, circleRadius, 0, 2 * Math.PI, false);
+  context.fillStyle = color;
+  context.fill(); // bottom left circle
+
+  context.beginPath();
+  context.arc(x - circleRadius, y + height * 0.6, circleRadius, 0, 2 * Math.PI, false);
+  context.fillStyle = color;
+  context.fill(); // center filler circle
+
+  context.beginPath();
+  context.arc(x, y + height * 0.5, circleRadius / 2, 0, 2 * Math.PI, false);
+  context.fill(); // bottom of club
+
+  context.moveTo(x, y + height * 0.6);
+  context.quadraticCurveTo(x, y + height, x - bottomWidth / 2, y + height);
+  context.lineTo(x + bottomWidth / 2, y + height);
+  context.quadraticCurveTo(x, y + height, x, y + height * 0.6);
+  context.closePath();
+  context.fill();
+  context.restore();
+};
+var drawDiamond = function drawDiamond(context, x, y, width, height, color) {
+  context.save();
+  context.beginPath();
+  context.moveTo(x, y); // top left edge
+
+  context.lineTo(x - width / 2, y + height / 2); // bottom left edge
+
+  context.lineTo(x, y + height); // bottom right edge
+
+  context.lineTo(x + width / 2, y + height / 2); // closing the path automatically creates
+  // the top right edge
+
+  context.closePath();
+  context.fillStyle = color;
+  context.fill();
+  context.restore();
+};
 
 /***/ }),
 
@@ -152,14 +283,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Game =
 /*#__PURE__*/
 function () {
-  function Game() {
+  function Game(ctx) {
     _classCallCheck(this, Game);
 
-    this.heartSpots = [];
+    this.ctx = ctx;
     this.level = "medium";
     this.speed = 900;
     this.numRounds = 10;
     this.roundNum = 0;
+    this.buffer = 1500;
   }
 
   _createClass(Game, [{
@@ -170,23 +302,18 @@ function () {
       // if (sound) startgame_sound.play();
       // arrowKeys = false;
       // roundNum = 0;
-      this.generateHeartSpots();
       setTimeout(function () {
         return _this.nextRound();
-      }, 1500);
-    }
-  }, {
-    key: "generateHeartSpots",
-    value: function generateHeartSpots() {
-      for (var i = 0; i < this.numRounds; i++) {
-        this.heartSpots.push(Math.floor(Math.random() * 4));
-      }
+      }, this.buffer);
     }
   }, {
     key: "nextRound",
     value: function nextRound() {
-      roundNum += 1;
-      round = new _round_js__WEBPACK_IMPORTED_MODULE_1__["default"](this.heartSpots);
+      this.roundNum += 1;
+      var round = new _round_js__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx);
+      round.start(); // setTimeout(() => round.clearSpots(), this.speed);
+      // setTimeout(() => toggleOff(), this.speed);
+      // setTimeout(this.nextRound, this.speed + this.buffer); 
     } // dom.round_div.style.display = "block";
     // dom.round_div.innerText = "Round " + roundNum;
     // dom.reset_div.style.display = "block";
@@ -272,11 +399,30 @@ function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game.js */ "./src/game.js");
+/* harmony import */ var _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dom-loader.js */ "./src/dom-loader.js");
+/* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game.js */ "./src/game.js");
 // import Round from "./round";
 // // import InputHandler from "./input";
-// import * as dom from "./dom-loader.js"
- // let roundNum;
+
+
+document.addEventListener("keyup", function (event) {
+  var ctx = _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["canvas"].getContext('2d');
+
+  if (event.code === "Space") {
+    var game = new _game_js__WEBPACK_IMPORTED_MODULE_1__["default"](ctx);
+    game.play();
+  }
+}); // document.addEventListener('DOMContentLoaded', () => {
+//     const canvas = document.getElementById('canvas');
+//     const ctx = canvas.getContext('2d');
+//     document.addEventListener("keyup", event => {
+//         if (event.code === "Space") {
+//             let game = new Game(ctx);
+//             game.play();
+//         }
+//     })
+// });
+// let roundNum;
 // let heartSpots = [];
 // let numRounds = 10;
 // let round;
@@ -373,13 +519,7 @@ __webpack_require__.r(__webpack_exports__);
 //         dom.gameover_span.style.display = "none";
 //     }
 // })
-
-document.addEventListener("keyup", function (event) {
-  if (event.code === "Space") {
-    var game = new _game_js__WEBPACK_IMPORTED_MODULE_0__["default"]();
-    game.play();
-  }
-}); // // function play() {
+// // function play() {
 // //     if (sound) startgame_sound.play();
 // //     arrowKeys = false;
 // //     roundNum = 0;
@@ -544,11 +684,68 @@ document.addEventListener("keyup", function (event) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Round; });
+/* harmony import */ var _spots__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./spots */ "./src/spots.js");
+/* harmony import */ var _shapes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shapes */ "./src/shapes.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Round = function Round() {
-  _classCallCheck(this, Round);
-}; // import InputHandler from "./input";
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+var Round =
+/*#__PURE__*/
+function () {
+  function Round(ctx) {
+    var _this = this;
+
+    _classCallCheck(this, Round);
+
+    this.ctx = ctx;
+    this.gameHeight = 1000;
+    this.gameWidth = 1000;
+    this.spots = ["top", "bottom", "left", "right"];
+    this.heartSpot = new _spots__WEBPACK_IMPORTED_MODULE_0__["default"](this.spots[Math.floor(Math.random() * this.spots.length)]);
+    this.otherSpots = this.spots.filter(function (spot) {
+      return spot !== _this.heartSpot.location;
+    }).map(function (spot) {
+      return new _spots__WEBPACK_IMPORTED_MODULE_0__["default"](spot);
+    });
+  }
+
+  _createClass(Round, [{
+    key: "start",
+    value: function start() {
+      var heart = new _shapes__WEBPACK_IMPORTED_MODULE_1__["default"]();
+      console.log(heart);
+      heart.drawHeart(this.ctx, this.heartSpot.coordinates.x, this.heartSpot.coordinates.y);
+    }
+  }, {
+    key: "shuffle",
+    value: function shuffle(spots) {
+      var newPos;
+      var temp;
+
+      for (var i = spots.length - 1; i > 0; i--) {
+        newPos = Math.floor(Math.random() * (i + 1));
+        temp = spots[i];
+        spots[i] = spots[newPos];
+        spots[newPos] = temp;
+      }
+
+      return spots;
+    }
+  }, {
+    key: "clearSpots",
+    value: function clearSpots() {
+      this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+    }
+  }]);
+
+  return Round;
+}(); // import InputHandler from "./input";
 // export default class Round {
 //     constructor(
 //         ctx,
@@ -637,6 +834,236 @@ var Round = function Round() {
 //         //  }
 // }
 
+
+
+
+/***/ }),
+
+/***/ "./src/shapes.js":
+/*!***********************!*\
+  !*** ./src/shapes.js ***!
+  \***********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Shape; });
+/* harmony import */ var _drawshapes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./drawshapes */ "./src/drawshapes.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+var Shape =
+/*#__PURE__*/
+function () {
+  function Shape(type) {
+    _classCallCheck(this, Shape);
+
+    this.height = 15;
+    this.width = 10;
+    this.type = type;
+    this.colors = ["red", "lawngreen", "crimson", "gold", "orangered"];
+    this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+  }
+
+  _createClass(Shape, [{
+    key: "drawSpade",
+    value: function drawSpade(context, x, y) {
+      context.save();
+      var bottomWidth = this.width * 0.7;
+      var topHeight = this.height * 0.7;
+      var bottomHeight = this.height * 0.3;
+      context.beginPath();
+      context.moveTo(x, y); // top left of spade          
+
+      context.bezierCurveTo(x, y + topHeight / 2, // control point 1
+      x - this.width / 2, y + topHeight / 2, // control point 2
+      x - this.width / 2, y + topHeight // end point
+      ); // bottom left of spade
+
+      context.bezierCurveTo(x - this.width / 2, y + topHeight * 1.3, // control point 1
+      x, y + topHeight * 1.3, // control point 2
+      x, y + topHeight // end point
+      ); // bottom right of spade
+
+      context.bezierCurveTo(x, y + topHeight * 1.3, // control point 1
+      x + widtthis.h / 2, y + topHeight * 1.3, // control point 2
+      x + widtthis.h / 2, y + topHeight // end point
+      ); // top right of spade
+
+      context.bezierCurveTo(x + widtthis.h / 2, y + topHeight / 2, // control point 1
+      x, y + topHeight / 2, // control point 2
+      x, y // end point
+      );
+      context.closePath();
+      context.fillStyle = this.color;
+      context.fill(); // bottom of spade
+
+      context.beginPath();
+      context.moveTo(x, y + topHeight);
+      context.quadraticCurveTo(x, y + topHeight + bottomHeight, // control point
+      x - bottomWidth / 2, y + topHeight + bottomHeight // end point
+      );
+      context.lineTo(x + bottomWidth / 2, y + topHeight + bottomHeight);
+      context.quadraticCurveTo(x, y + topHeight + bottomHeight, // control point
+      x, y + topHeight // end point
+      );
+      context.closePath();
+      context.fillStyle = this.color;
+      context.fill();
+      context.restore();
+    }
+  }, {
+    key: "drawHeart",
+    value: function drawHeart(context, x, y) {
+      context.save();
+      context.beginPath();
+      var topCurveHeight = this.height * 0.3;
+      context.moveTo(x, y + topCurveHeight); // top left curve
+
+      context.bezierCurveTo(x, y, x - this.width / 2, y, x - this.width / 2, y + topCurveHeight); // bottom left curve
+
+      context.bezierCurveTo(x - this.width / 2, y + (this.height + topCurveHeight) / 2, x, y + (this.height + topCurveHeight) / 2, x, y + this.height); // bottom right curve
+
+      context.bezierCurveTo(x, y + (this.height + topCurveHeight) / 2, x + this.width / 2, y + (this.height + topCurveHeight) / 2, x + this.width / 2, y + topCurveHeight); // top right curve
+
+      context.bezierCurveTo(x + this.width / 2, y, x, y, x, y + topCurveHeight);
+      context.closePath();
+      context.fillStyle = this.color;
+      context.fill();
+      context.restore();
+    }
+  }, {
+    key: "drawClub",
+    value: function drawClub(context, x, y) {
+      context.save();
+      var circleRadius = this.width * 0.3;
+      var bottomWidth = this.width * 0.5;
+      var bottomHeight = this.height * 0.35;
+      context.fillStyle = this.color; // top circle
+
+      context.beginPath();
+      context.arc(x, y + circleRadius + this.height * 0.05, circleRadius, 0, 2 * Math.PI, false);
+      context.fill(); // bottom right circle
+
+      context.beginPath();
+      context.arc(x + circleRadius, y + this.height * 0.6, circleRadius, 0, 2 * Math.PI, false);
+      context.fillStyle = this.color;
+      context.fill(); // bottom left circle
+
+      context.beginPath();
+      context.arc(x - circleRadius, y + this.height * 0.6, circleRadius, 0, 2 * Math.PI, false);
+      context.fillStyle = this.color;
+      context.fill(); // center filler circle
+
+      context.beginPath();
+      context.arc(x, y + this.height * 0.5, circleRadius / 2, 0, 2 * Math.PI, false);
+      context.fill(); // bottom of club
+
+      context.moveTo(x, y + this.height * 0.6);
+      context.quadraticCurveTo(x, y + this.height, x - bottomWidth / 2, y + this.height);
+      context.lineTo(x + bottomWidth / 2, y + this.height);
+      context.quadraticCurveTo(x, y + this.height, x, y + this.height * 0.6);
+      context.closePath();
+      context.fill();
+      context.restore();
+    }
+  }, {
+    key: "drawDiamond",
+    value: function drawDiamond(context, x, y) {
+      context.save();
+      context.beginPath();
+      context.moveTo(x, y); // top left edge
+
+      context.lineTo(x - this.width / 2, y + this.height / 2); // bottom left edge
+
+      context.lineTo(x, y + this.height); // bottom right edge
+
+      context.lineTo(x + this.width / 2, y + this.height / 2); // closing the path automatically creates
+      // the top right edge
+
+      context.closePath();
+      context.fillStyle = this.color;
+      context.fill();
+      context.restore();
+    }
+  }]);
+
+  return Shape;
+}();
+
+
+
+/***/ }),
+
+/***/ "./src/spots.js":
+/*!**********************!*\
+  !*** ./src/spots.js ***!
+  \**********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Spot; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Spot =
+/*#__PURE__*/
+function () {
+  function Spot(location) {
+    _classCallCheck(this, Spot);
+
+    this.location = location;
+    this.coordinates = this.getCoordinates();
+  }
+
+  _createClass(Spot, [{
+    key: "getCoordinates",
+    value: function getCoordinates() {
+      switch (this.location) {
+        case "top":
+          return {
+            x: 159,
+            y: 16
+          };
+          break;
+
+        case "right":
+          return {
+            x: 251,
+            y: 57
+          };
+          break;
+
+        case "bottom":
+          return {
+            x: 159,
+            y: 99
+          };
+          break;
+
+        case "left":
+          return {
+            x: 67,
+            y: 57
+          };
+          break;
+      }
+    }
+  }]);
+
+  return Spot;
+}();
 
 
 

@@ -2,12 +2,13 @@ import * as dom from "./dom-loader.js"
 import Round from "./round.js";
 
 export default class Game {
-    constructor() {
-        this.heartSpots = [];
+    constructor(ctx) {
+        this.ctx = ctx;
         this.level = "medium";
         this.speed = 900;
         this.numRounds = 10;
         this.roundNum = 0;
+        this.buffer = 1500;
 
 
     }
@@ -16,19 +17,17 @@ export default class Game {
         // if (sound) startgame_sound.play();
         // arrowKeys = false;
         // roundNum = 0;
-        this.generateHeartSpots();
-        setTimeout(() => this.nextRound(), 1500);
-    }
-
-    generateHeartSpots() {
-        for (let i = 0; i < this.numRounds; i++) {
-            this.heartSpots.push(Math.floor(Math.random() * 4));
-        }
+        setTimeout(() => this.nextRound(), this.buffer);
     }
 
     nextRound() {
-        roundNum += 1;
-        round = new Round(this.heartSpots);
+        this.roundNum += 1;
+        let round = new Round(this.ctx);
+        round.start();
+
+        // setTimeout(() => round.clearSpots(), this.speed);
+        // setTimeout(() => toggleOff(), this.speed);
+        // setTimeout(this.nextRound, this.speed + this.buffer); 
     }
         // dom.round_div.style.display = "block";
         // dom.round_div.innerText = "Round " + roundNum;

@@ -1,3 +1,4 @@
+export const canvas = document.getElementById('canvas');
 export const easy_span = document.getElementById('easy');
 export const medium_span = document.getElementById('medium');
 export const hard_span = document.getElementById('hard');

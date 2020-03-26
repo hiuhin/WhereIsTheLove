@@ -1,11 +1,21 @@
+import { drawSpade } from "./drawshapes";
+
 export default class Shape {
     constructor(type) {
         this.height = 15;
         this.width = 10;
         this.type = type;
+        this.colors = [
+            "red",
+            "lawngreen",
+            "crimson",
+            "gold",
+            "orangered"
+        ];
+        this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
     }
 
-    drawSpade(context, x, y, color) {
+    drawSpade(context, x, y) {
         context.save();
         var bottomWidth = this.width * 0.7;
         var topHeight = this.height * 0.7;
@@ -43,7 +53,7 @@ export default class Shape {
         );
 
         context.closePath();
-        context.fillStyle = color;
+        context.fillStyle = this.color;
         context.fill();
 
         // bottom of spade
@@ -59,12 +69,12 @@ export default class Shape {
             x, y + topHeight // end point
         );
         context.closePath();
-        context.fillStyle = color;
+        context.fillStyle = this.color;
         context.fill();
         context.restore();
     }
 
-    drawHeart(context, x, y, color) {
+    drawHeart(context, x, y) {
         context.save();
         context.beginPath();
         var topCurveHeight = this.height * 0.3;
@@ -103,17 +113,17 @@ export default class Shape {
         context.bezierCurveTo(x + this.width / 2, y, x, y, x, y + topCurveHeight);
 
         context.closePath();
-        context.fillStyle = color;
+        context.fillStyle = this.color;
         context.fill();
         context.restore();
     };
 
-    drawClub(context, x, y, color) {
+    drawClub(context, x, y) {
         context.save();
         var circleRadius = this.width * 0.3;
         var bottomWidth = this.width * 0.5;
         var bottomHeight = this.height * 0.35;
-        context.fillStyle = color;
+        context.fillStyle = this.color;
 
         // top circle
         context.beginPath();
@@ -137,7 +147,7 @@ export default class Shape {
             2 * Math.PI,
             false
         );
-        context.fillStyle = color;
+        context.fillStyle = this.color;
         context.fill();
 
         // bottom left circle
@@ -150,7 +160,7 @@ export default class Shape {
             2 * Math.PI,
             false
         );
-        context.fillStyle = color;
+        context.fillStyle = this.color;
         context.fill();
 
         // center filler circle
@@ -168,7 +178,7 @@ export default class Shape {
         context.restore();
     }
 
-    drawDiamond(context, x, y, color) {
+    drawDiamond(context, x, y) {
         context.save();
         context.beginPath();
         context.moveTo(x, y);
@@ -186,7 +196,7 @@ export default class Shape {
         // the top right edge
         context.closePath();
 
-        context.fillStyle = color;
+        context.fillStyle = this.color;
         context.fill();
         context.restore();
     }

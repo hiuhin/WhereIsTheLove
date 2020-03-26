@@ -1,6 +1,40 @@
+import Spot from "./spots";
+import Shape from "./shapes";
+
 export default class Round {
-    constructor() {
+    constructor(ctx) {
+        this.ctx = ctx
+        this.gameHeight = 1000;
+        this.gameWidth = 1000;
+        this.spots = ["top", "bottom", "left", "right"];
+        this.heartSpot = new Spot(this.spots[Math.floor(Math.random() * this.spots.length)]);
+        this.otherSpots = 
+            this.spots.filter(spot => spot !== this.heartSpot.location)
+            .map(spot => new Spot(spot));
+    }
+
+    start() {
+        let heart = new Shape;
+        console.log(heart);
+        heart.drawHeart(this.ctx, this.heartSpot.coordinates.x, this.heartSpot.coordinates.y);
         
+    }
+
+
+    shuffle(spots) {
+        let newPos;
+        let temp;
+        for (let i = spots.length - 1; i > 0; i--) {
+            newPos = Math.floor(Math.random() * (i + 1));
+            temp = spots[i];
+            spots[i] = spots[newPos];
+            spots[newPos] = temp;
+        }
+        return spots;
+    }
+
+    clearSpots() {
+        this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
     }
 }
 

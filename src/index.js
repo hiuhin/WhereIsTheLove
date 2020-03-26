@@ -1,7 +1,32 @@
 // import Round from "./round";
 // // import InputHandler from "./input";
-// import * as dom from "./dom-loader.js"
+
+import * as dom from "./dom-loader.js"
 import Game from "./game.js";
+
+
+
+
+document.addEventListener("keyup", event => {
+    const ctx = dom.canvas.getContext('2d');
+        if (event.code === "Space") {
+            let game = new Game(ctx);
+            game.play();
+        }
+    })
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     const canvas = document.getElementById('canvas');
+//     const ctx = canvas.getContext('2d');
+
+//     document.addEventListener("keyup", event => {
+//         if (event.code === "Space") {
+//             let game = new Game(ctx);
+//             game.play();
+//         }
+//     })
+
+// });
 
 
 
@@ -115,14 +140,6 @@ import Game from "./game.js";
 //         dom.gameover_span.style.display = "none";
 //     }
 // })
-
-document.addEventListener("keyup", event => {
-    if (event.code === "Space") {
-        let game = new Game;
-        game.play();
-    }
-})
-
 
 
 // // function play() {
