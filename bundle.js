@@ -86,6 +86,43 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/audio.js":
+/*!**********************!*\
+  !*** ./src/audio.js ***!
+  \**********************/
+/*! exports provided: startgame_sound, correct_sound, wrong_sound, gameover_sound, reset_sound, music, select_sound, submit_sound, sound, toggleSound */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startgame_sound", function() { return startgame_sound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "correct_sound", function() { return correct_sound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "wrong_sound", function() { return wrong_sound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gameover_sound", function() { return gameover_sound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reset_sound", function() { return reset_sound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "music", function() { return music; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "select_sound", function() { return select_sound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "submit_sound", function() { return submit_sound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sound", function() { return sound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleSound", function() { return toggleSound; });
+function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
+
+var startgame_sound = new Audio('assets/sounds/startgame.mp3');
+var correct_sound = new Audio('assets/sounds/correct.wav');
+var wrong_sound = new Audio('assets/sounds/wrong2.wav');
+var gameover_sound = new Audio('assets/sounds/gameover.wav');
+var reset_sound = new Audio('assets/sounds/reset.wav');
+var music = new Audio('assets/sounds/BEPmidi.mp3');
+var select_sound = new Audio('assets/sounds/select.wav');
+var submit_sound = new Audio('assets/sounds/submit.wav');
+var sound = true;
+function toggleSound() {
+  sound = (_readOnlyError("sound"), !sound);
+}
+;
+
+/***/ }),
+
 /***/ "./src/board.js":
 /*!**********************!*\
   !*** ./src/board.js ***!
@@ -114,15 +151,11 @@ function () {
     this.ctx = ctx;
     this.heartSpot = heartSpot;
     this.otherSpots = otherSpots;
-    this.gameHeight = 1000;
-    this.gameWidth = 1000;
-    console.log(this.ctx);
   }
 
   _createClass(Board, [{
     key: "generate",
     value: function generate() {
-      console.log(this.ctx);
       var heart = new _shapes__WEBPACK_IMPORTED_MODULE_0__["default"]("heart");
       var shuffledSpots = this.shuffle(this.otherSpots);
       var otherShapes = ["spade", "diamond", "club"];
@@ -133,15 +166,8 @@ function () {
 
       for (var i = 0; i < shuffledSpots.length; i++) {
         var shape = otherShapesObj[i];
-        console.log(shuffledSpots);
         shape.draw(this.ctx, shuffledSpots[i].coordinates.x, shuffledSpots[i].coordinates.y);
       }
-    }
-  }, {
-    key: "clear",
-    value: function clear() {
-      console.log(this.ctx);
-      this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
     }
   }, {
     key: "shuffle",
@@ -352,6 +378,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Game; });
 /* harmony import */ var _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dom-loader.js */ "./src/dom-loader.js");
 /* harmony import */ var _round_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./round.js */ "./src/round.js");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./index */ "./src/index.js");
+/* harmony import */ var _audio__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./audio */ "./src/audio.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -361,41 +389,64 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
+
+
 var Game =
 /*#__PURE__*/
 function () {
-  function Game(ctx) {
+  function Game() {
     _classCallCheck(this, Game);
 
-    this.ctx = ctx;
+    this.ctx = _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["canvas"].getContext('2d');
     this.level = "medium";
     this.speed = 900;
-    this.numRounds = 10;
-    this.roundNum = 0;
+    this.numRounds = 2;
+    this.roundNum = null;
     this.buffer = 1500;
+    this.play = this.play.bind(this);
+    this.nextRound = this.nextRound.bind(this);
+    this.point = 0;
   }
 
   _createClass(Game, [{
     key: "play",
     value: function play() {
-      var _this = this;
+      if (_audio__WEBPACK_IMPORTED_MODULE_3__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_3__["startgame_sound"].play(); // arrowKeys = false;
 
-      // if (sound) startgame_sound.play();
-      // arrowKeys = false;
-      // roundNum = 0;
-      setTimeout(function () {
-        return _this.nextRound();
-      }, this.buffer);
+      this.roundNum = 0;
+      setTimeout(this.nextRound, this.speed + this.buffer);
     }
   }, {
     key: "nextRound",
     value: function nextRound() {
+      if (this.roundNum === this.numRounds) {
+        this.gameOver(); // arrowKeys = false;
+
+        return;
+      }
+
       this.roundNum += 1;
-      var round = new _round_js__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx);
-      round.start(); // setTimeout(() => round.clearSpots(), this.speed);
+      var round = new _round_js__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.speed);
+      round.start();
+      setTimeout(this.nextRound, this.speed + this.buffer); // setTimeout(() => round.clearSpots(), this.speed);
       // setTimeout(() => toggleOff(), this.speed);
-      // setTimeout(this.nextRound, this.speed + this.buffer); 
-    } // dom.round_div.style.display = "block";
+    }
+  }, {
+    key: "gameOver",
+    value: function gameOver() {
+      Object(_index__WEBPACK_IMPORTED_MODULE_2__["toggleGameInSession"])();
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["gameover_span"].style.display = "block";
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["round_div"].style.display = "none";
+      if (_audio__WEBPACK_IMPORTED_MODULE_3__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_3__["gameover_sound"].play();
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].style.display = "none";
+      addScore();
+    }
+  }, {
+    key: "changeScore",
+    value: function changeScore(points) {
+      this.point += points;
+    } // }
+    // dom.round_div.style.display = "block";
     // dom.round_div.innerText = "Round " + roundNum;
     // dom.reset_div.style.display = "block";
     // dom.plus_span.style.display = "none";
@@ -475,35 +526,38 @@ function () {
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-/*! no exports provided */
+/*! exports provided: toggleGameInSession */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleGameInSession", function() { return toggleGameInSession; });
 /* harmony import */ var _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dom-loader.js */ "./src/dom-loader.js");
 /* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game.js */ "./src/game.js");
+/* harmony import */ var _audio__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./audio */ "./src/audio.js");
 // import Round from "./round";
 // // import InputHandler from "./input";
 
 
-document.addEventListener("keyup", function (event) {
-  var ctx = _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["canvas"].getContext('2d');
 
-  if (event.code === "Space") {
-    var game = new _game_js__WEBPACK_IMPORTED_MODULE_1__["default"](ctx);
+var gameInSession = false;
+var speed = 900;
+var level = "medium";
+function toggleGameInSession() {
+  // debugger;
+  gameInSession = !gameInSession;
+  console.log(gameInSession);
+}
+document.addEventListener("keyup", function (event) {
+  if (!gameInSession && event.code === "Space") {
+    var game = new _game_js__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    toggleGameInSession();
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["howtoplay_div"].style.display = "none"; // dom.gameover_span.style.display = "none";
+
     game.play();
-  }
-}); // document.addEventListener('DOMContentLoaded', () => {
-//     const canvas = document.getElementById('canvas');
-//     const ctx = canvas.getContext('2d');
-//     document.addEventListener("keyup", event => {
-//         if (event.code === "Space") {
-//             let game = new Game(ctx);
-//             game.play();
-//         }
-//     })
-// });
-// let roundNum;
+  } // debugger;
+
+}); // let roundNum;
 // let heartSpots = [];
 // let numRounds = 10;
 // let round;
@@ -511,7 +565,6 @@ document.addEventListener("keyup", function (event) {
 // // let speed = 900;
 // // let level = "medium";
 // let point;
-// let gameInSession = false;
 // let reset = false;
 // let startgame_sound = new Audio('assets/sounds/startgame.mp3');
 // let correct_sound = new Audio('assets/sounds/correct.wav');
@@ -527,68 +580,62 @@ document.addEventListener("keyup", function (event) {
 // let sound = true;
 // let name = "Player";
 // let scoreNum = 0;
-// const topSpot = {
-//     x: 159,
-//     y: 16
-// }
-// const rightSpot = {
-//     x: 251,
-//     y: 57
-// }
-// const bottomSpot = {
-//     x: 159,
-//     y: 99
-// }
-// const leftSpot = {
-//     x: 67,
-//     y: 57
-// }
-// const shapeSize = {
-//     w: 10,
-//     h: 15
-// }
-// dom.easy_span.addEventListener("click", () => changeLevel("easy"));
-// dom.medium_span.addEventListener("click", () => changeLevel("medium"));
-// dom.hard_span.addEventListener("click", () => changeLevel("hard"));
-// dom.impossible_span.addEventListener("click", () => changeLevel("impossible"));
-// function changeLevel(lev) {
-//     if (gameInSession === false) {
-//         if (sound) select_sound.play();
-//         switch (lev) {
-//             case "easy":
-//                 speed = 2000;
-//                 level = "easy";
-//                 resetLevelColors();
-//                 dom.easy_span.style.color = "tomato";
-//                 break;
-//             case "medium":
-//                 speed = 1000;
-//                 level = "medium";
-//                 resetLevelColors();
-//                 dom.medium_span.style.color = "tomato";
-//                 break;
-//             case "hard":
-//                 speed = 700;
-//                 level = "hard";
-//                 resetLevelColors();
-//                 dom.hard_span.style.color = "tomato";
-//                 break;
-//             case "impossible":
-//                 resetLevelColors();
-//                 dom.impossible_span.style.color = "tomato";
-//                 speed = 400;
-//                 level = "impossible";
-//                 break;
-//         }
-//     }
-// }
-// function resetLevelColors() {
-//     dom.easy_span.style.color = "black";
-//     dom.medium_span.style.color = "black";
-//     dom.hard_span.style.color = "black";
-//     dom.impossible_span.style.color = "black";
-// }
-// document.addEventListener("keyup", event => {
+
+_dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["easy_span"].addEventListener("click", function () {
+  return changeLevel("easy");
+});
+_dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["medium_span"].addEventListener("click", function () {
+  return changeLevel("medium");
+});
+_dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["hard_span"].addEventListener("click", function () {
+  return changeLevel("hard");
+});
+_dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["impossible_span"].addEventListener("click", function () {
+  return changeLevel("impossible");
+});
+
+function changeLevel(lev) {
+  if (gameInSession === false) {
+    if (_audio__WEBPACK_IMPORTED_MODULE_2__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_2__["select_sound"].play();
+
+    switch (lev) {
+      case "easy":
+        speed = 2000;
+        level = "easy";
+        resetLevelColors();
+        _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["easy_span"].style.color = "tomato";
+        break;
+
+      case "medium":
+        speed = 1000;
+        level = "medium";
+        resetLevelColors();
+        _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["medium_span"].style.color = "tomato";
+        break;
+
+      case "hard":
+        speed = 700;
+        level = "hard";
+        resetLevelColors();
+        _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["hard_span"].style.color = "tomato";
+        break;
+
+      case "impossible":
+        resetLevelColors();
+        _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["impossible_span"].style.color = "tomato";
+        speed = 400;
+        level = "impossible";
+        break;
+    }
+  }
+}
+
+function resetLevelColors() {
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["easy_span"].style.color = "black";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["medium_span"].style.color = "black";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["hard_span"].style.color = "black";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["impossible_span"].style.color = "black";
+} // document.addEventListener("keyup", event => {
 //     if (event.code === "Space") {
 //         if (gameInSession === false) {
 //             play();
@@ -767,6 +814,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Round; });
 /* harmony import */ var _spots__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./spots */ "./src/spots.js");
 /* harmony import */ var _board__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./board */ "./src/board.js");
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./game */ "./src/game.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -776,15 +824,17 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
+
 var Round =
 /*#__PURE__*/
 function () {
-  function Round(ctx) {
+  function Round(ctx, speed) {
     var _this = this;
 
     _classCallCheck(this, Round);
 
     this.ctx = ctx;
+    this.speed = speed;
     this.spots = ["top", "bottom", "left", "right"];
     this.heartSpot = new _spots__WEBPACK_IMPORTED_MODULE_0__["default"](this.spots[Math.floor(Math.random() * this.spots.length)]);
     this.otherSpots = this.spots.filter(function (spot) {
@@ -792,6 +842,8 @@ function () {
     }).map(function (spot) {
       return new _spots__WEBPACK_IMPORTED_MODULE_0__["default"](spot);
     });
+    this.gameHeight = 1000;
+    this.gameWidth = 1000;
   }
 
   _createClass(Round, [{
@@ -799,7 +851,16 @@ function () {
     value: function start() {
       var board = new _board__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.heartSpot, this.otherSpots);
       board.generate();
-      setTimeout(board.clear, 1000);
+      this.clearSpots(this.speed);
+    }
+  }, {
+    key: "clearSpots",
+    value: function clearSpots(speed) {
+      var _this2 = this;
+
+      setTimeout(function () {
+        return _this2.ctx.clearRect(0, 0, _this2.gameWidth, _this2.gameHeight);
+      }, speed);
     }
   }]);
 

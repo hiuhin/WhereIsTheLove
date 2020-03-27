@@ -1,34 +1,63 @@
-import * as dom from "./dom-loader.js"
+import * as dom from "./dom-loader.js"; 
 import Round from "./round.js";
+import {toggleGameInSession} from "./index";
+import * as audio from "./audio";
+
 
 export default class Game {
-    constructor(ctx) {
-        this.ctx = ctx;
+    constructor() {
+        this.ctx = dom.canvas.getContext('2d');
         this.level = "medium";
         this.speed = 900;
-        this.numRounds = 10;
-        this.roundNum = 0;
+        this.numRounds = 2;
+        this.roundNum = null;
         this.buffer = 1500;
-
+        this.play = this.play.bind(this);
+        this.nextRound = this.nextRound.bind(this);
+        this.point = 0;
 
     }
 
     play() {  
-        // if (sound) startgame_sound.play();
+        if (audio.sound) audio.startgame_sound.play();
         // arrowKeys = false;
-        // roundNum = 0;
-        setTimeout(() => this.nextRound(), this.buffer);
+        this.roundNum = 0;
+        setTimeout(this.nextRound, this.speed + this.buffer);
     }
 
     nextRound() {
+        if (this.roundNum === this.numRounds) {
+            this.gameOver();
+            // arrowKeys = false;
+            return;
+        }
+
         this.roundNum += 1;
-        let round = new Round(this.ctx);
+        let round = new Round(this.ctx, this.speed);
         round.start();
+        setTimeout(this.nextRound, this.speed + this.buffer);
 
         // setTimeout(() => round.clearSpots(), this.speed);
         // setTimeout(() => toggleOff(), this.speed);
-        // setTimeout(this.nextRound, this.speed + this.buffer); 
     }
+
+
+    gameOver() {
+        toggleGameInSession();
+        dom.gameover_span.style.display = "block";
+        dom.round_div.style.display = "none"
+        if (audio.sound) audio.gameover_sound.play();
+        dom.reset_div.style.display = "none";
+        addScore();
+    }
+
+    changeScore(points) {
+        this.point += points;
+    }
+
+
+
+// }
         // dom.round_div.style.display = "block";
         // dom.round_div.innerText = "Round " + roundNum;
         // dom.reset_div.style.display = "block";

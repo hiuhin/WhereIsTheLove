@@ -3,32 +3,30 @@
 
 import * as dom from "./dom-loader.js"
 import Game from "./game.js";
+import * as audio from "./audio";
 
 
+let gameInSession = false;
+let speed = 900;
+let level = "medium";
+
+export function toggleGameInSession() {
+    // debugger;
+    gameInSession = !gameInSession
+    console.log(gameInSession);
+}
 
 
 document.addEventListener("keyup", event => {
-    const ctx = dom.canvas.getContext('2d');
-        if (event.code === "Space") {
-            let game = new Game(ctx);
-            game.play();
-        }
-    })
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     const canvas = document.getElementById('canvas');
-//     const ctx = canvas.getContext('2d');
-
-//     document.addEventListener("keyup", event => {
-//         if (event.code === "Space") {
-//             let game = new Game(ctx);
-//             game.play();
-//         }
-//     })
-
-// });
-
-
+    if (!gameInSession && event.code === "Space") {
+        let game = new Game();
+        toggleGameInSession();
+        dom.howtoplay_div.style.display = "none";
+        // dom.gameover_span.style.display = "none";
+        game.play();
+    }
+    // debugger;
+})
 
 // let roundNum;
 // let heartSpots = [];
@@ -38,7 +36,6 @@ document.addEventListener("keyup", event => {
 // // let speed = 900;
 // // let level = "medium";
 // let point;
-// let gameInSession = false;
 // let reset = false;
 // let startgame_sound = new Audio('assets/sounds/startgame.mp3');
 // let correct_sound = new Audio('assets/sounds/correct.wav');
@@ -55,77 +52,51 @@ document.addEventListener("keyup", event => {
 // let name = "Player";
 // let scoreNum = 0;
 
-// const topSpot = {
-//     x: 159,
-//     y: 16
-// }
 
-// const rightSpot = {
-//     x: 251,
-//     y: 57
-// }
-
-// const bottomSpot = {
-//     x: 159,
-//     y: 99
-// }
+dom.easy_span.addEventListener("click", () => changeLevel("easy"));
+dom.medium_span.addEventListener("click", () => changeLevel("medium"));
+dom.hard_span.addEventListener("click", () => changeLevel("hard"));
+dom.impossible_span.addEventListener("click", () => changeLevel("impossible"));
 
 
-// const leftSpot = {
-//     x: 67,
-//     y: 57
-// }
+function changeLevel(lev) {
+    if (gameInSession === false) {
+        if (audio.sound) audio.select_sound.play();
+        switch (lev) {
+            case "easy":
+                speed = 2000;
+                level = "easy";
+                resetLevelColors();
+                dom.easy_span.style.color = "tomato";
+                break;
+            case "medium":
+                speed = 1000;
+                level = "medium";
+                resetLevelColors();
+                dom.medium_span.style.color = "tomato";
+                break;
+            case "hard":
+                speed = 700;
+                level = "hard";
+                resetLevelColors();
+                dom.hard_span.style.color = "tomato";
+                break;
+            case "impossible":
+                resetLevelColors();
+                dom.impossible_span.style.color = "tomato";
+                speed = 400;
+                level = "impossible";
+                break;
+        }
+    }
+}
 
-// const shapeSize = {
-//     w: 10,
-//     h: 15
-// }
-
-
-// dom.easy_span.addEventListener("click", () => changeLevel("easy"));
-// dom.medium_span.addEventListener("click", () => changeLevel("medium"));
-// dom.hard_span.addEventListener("click", () => changeLevel("hard"));
-// dom.impossible_span.addEventListener("click", () => changeLevel("impossible"));
-
-
-// function changeLevel(lev) {
-//     if (gameInSession === false) {
-//         if (sound) select_sound.play();
-//         switch (lev) {
-//             case "easy":
-//                 speed = 2000;
-//                 level = "easy";
-//                 resetLevelColors();
-//                 dom.easy_span.style.color = "tomato";
-//                 break;
-//             case "medium":
-//                 speed = 1000;
-//                 level = "medium";
-//                 resetLevelColors();
-//                 dom.medium_span.style.color = "tomato";
-//                 break;
-//             case "hard":
-//                 speed = 700;
-//                 level = "hard";
-//                 resetLevelColors();
-//                 dom.hard_span.style.color = "tomato";
-//                 break;
-//             case "impossible":
-//                 resetLevelColors();
-//                 dom.impossible_span.style.color = "tomato";
-//                 speed = 400;
-//                 level = "impossible";
-//                 break;
-//         }
-//     }
-// }
-
-// function resetLevelColors() {
-//     dom.easy_span.style.color = "black";
-//     dom.medium_span.style.color = "black";
-//     dom.hard_span.style.color = "black";
-//     dom.impossible_span.style.color = "black";
-// }
+function resetLevelColors() {
+    dom.easy_span.style.color = "black";
+    dom.medium_span.style.color = "black";
+    dom.hard_span.style.color = "black";
+    dom.impossible_span.style.color = "black";
+}
 
 // document.addEventListener("keyup", event => {
 //     if (event.code === "Space") {

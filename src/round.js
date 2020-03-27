@@ -1,20 +1,30 @@
 import Spot from "./spots";
 import Board from "./board";
+import {changeScore} from "./game";
 
 export default class Round {
-    constructor(ctx) {
-        this.ctx = ctx
+    constructor(ctx, speed) {
+        this.ctx = ctx;
+        this.speed = speed;
         this.spots = ["top", "bottom", "left", "right"];
         this.heartSpot = new Spot(this.spots[Math.floor(Math.random() * this.spots.length)]);
         this.otherSpots = 
             this.spots.filter(spot => spot !== this.heartSpot.location)
             .map(spot => new Spot(spot));
+        this.gameHeight = 1000;
+        this.gameWidth = 1000;
     }
 
     start() {
         let board = new Board(this.ctx, this.heartSpot, this.otherSpots);
         board.generate();
-        setTimeout(board.clear, 1000);
+        this.clearSpots(this.speed);
+    }
+
+    clearSpots(speed) {
+        setTimeout(() =>
+            this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight), speed
+        )
     }
 
 }

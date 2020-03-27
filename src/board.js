@@ -5,13 +5,9 @@ export default class Board {
         this.ctx = ctx;
         this.heartSpot = heartSpot;
         this.otherSpots = otherSpots;
-        this.gameHeight = 1000;
-        this.gameWidth = 1000;
-        console.log(this.ctx)
     }
 
     generate() {
-        console.log(this.ctx);
         let heart = new Shape("heart");
         let shuffledSpots = this.shuffle(this.otherSpots);
         let otherShapes = ["spade", "diamond", "club"];
@@ -21,14 +17,8 @@ export default class Board {
 
         for (let i = 0; i < shuffledSpots.length; i++) {
             let shape = otherShapesObj[i];
-            console.log(shuffledSpots);
             shape.draw(this.ctx, shuffledSpots[i].coordinates.x, shuffledSpots[i].coordinates.y);
         } 
-    }
-
-    clear() {
-        console.log(this.ctx);
-        this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
     }
 
     shuffle(spots) {
