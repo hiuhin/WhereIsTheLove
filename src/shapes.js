@@ -2,9 +2,9 @@ import { drawSpade } from "./drawshapes";
 
 export default class Shape {
     constructor(type) {
+        this.type = type;
         this.height = 15;
         this.width = 10;
-        this.type = type;
         this.colors = [
             "red",
             "lawngreen",
@@ -13,6 +13,19 @@ export default class Shape {
             "orangered"
         ];
         this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+    }
+
+    draw(ctx, x, y) {
+        switch (this.type) {
+            case "heart":
+                return this.drawHeart(ctx, x, y);
+            case "spade":
+                return this.drawSpade(ctx, x, y);
+            case "club":
+                return this.drawClub(ctx, x, y);
+            case "diamond":
+                return this.drawDiamond(ctx, x, y);
+        }
     }
 
     drawSpade(context, x, y) {
@@ -41,13 +54,13 @@ export default class Shape {
         // bottom right of spade
         context.bezierCurveTo(
             x, y + topHeight * 1.3, // control point 1
-            x + widtthis.h / 2, y + topHeight * 1.3, // control point 2
-            x + widtthis.h / 2, y + topHeight // end point
+            x + this.width / 2, y + topHeight * 1.3, // control point 2
+            x + this.width / 2, y + topHeight // end point
         );
 
         // top right of spade
         context.bezierCurveTo(
-            x + widtthis.h / 2, y + topHeight / 2, // control point 1
+            x + this.width / 2, y + topHeight / 2, // control point 1
             x, y + topHeight / 2, // control point 2
             x, y // end point
         );

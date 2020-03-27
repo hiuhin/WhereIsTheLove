@@ -86,6 +86,87 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/board.js":
+/*!**********************!*\
+  !*** ./src/board.js ***!
+  \**********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Board; });
+/* harmony import */ var _shapes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shapes */ "./src/shapes.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+var Board =
+/*#__PURE__*/
+function () {
+  function Board(ctx, heartSpot, otherSpots) {
+    _classCallCheck(this, Board);
+
+    this.ctx = ctx;
+    this.heartSpot = heartSpot;
+    this.otherSpots = otherSpots;
+    this.gameHeight = 1000;
+    this.gameWidth = 1000;
+    console.log(this.ctx);
+  }
+
+  _createClass(Board, [{
+    key: "generate",
+    value: function generate() {
+      console.log(this.ctx);
+      var heart = new _shapes__WEBPACK_IMPORTED_MODULE_0__["default"]("heart");
+      var shuffledSpots = this.shuffle(this.otherSpots);
+      var otherShapes = ["spade", "diamond", "club"];
+      var otherShapesObj = otherShapes.map(function (shape) {
+        return new _shapes__WEBPACK_IMPORTED_MODULE_0__["default"](shape);
+      });
+      heart.draw(this.ctx, this.heartSpot.coordinates.x, this.heartSpot.coordinates.y);
+
+      for (var i = 0; i < shuffledSpots.length; i++) {
+        var shape = otherShapesObj[i];
+        console.log(shuffledSpots);
+        shape.draw(this.ctx, shuffledSpots[i].coordinates.x, shuffledSpots[i].coordinates.y);
+      }
+    }
+  }, {
+    key: "clear",
+    value: function clear() {
+      console.log(this.ctx);
+      this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+    }
+  }, {
+    key: "shuffle",
+    value: function shuffle(spots) {
+      var newPos;
+      var temp;
+
+      for (var i = spots.length - 1; i > 0; i--) {
+        newPos = Math.floor(Math.random() * (i + 1));
+        temp = spots[i];
+        spots[i] = spots[newPos];
+        spots[newPos] = temp;
+      }
+
+      return spots;
+    }
+  }]);
+
+  return Board;
+}();
+
+
+
+/***/ }),
+
 /***/ "./src/dom-loader.js":
 /*!***************************!*\
   !*** ./src/dom-loader.js ***!
@@ -685,7 +766,7 @@ document.addEventListener("keyup", function (event) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Round; });
 /* harmony import */ var _spots__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./spots */ "./src/spots.js");
-/* harmony import */ var _shapes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shapes */ "./src/shapes.js");
+/* harmony import */ var _board__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./board */ "./src/board.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -704,8 +785,6 @@ function () {
     _classCallCheck(this, Round);
 
     this.ctx = ctx;
-    this.gameHeight = 1000;
-    this.gameWidth = 1000;
     this.spots = ["top", "bottom", "left", "right"];
     this.heartSpot = new _spots__WEBPACK_IMPORTED_MODULE_0__["default"](this.spots[Math.floor(Math.random() * this.spots.length)]);
     this.otherSpots = this.spots.filter(function (spot) {
@@ -718,29 +797,9 @@ function () {
   _createClass(Round, [{
     key: "start",
     value: function start() {
-      var heart = new _shapes__WEBPACK_IMPORTED_MODULE_1__["default"]();
-      console.log(heart);
-      heart.drawHeart(this.ctx, this.heartSpot.coordinates.x, this.heartSpot.coordinates.y);
-    }
-  }, {
-    key: "shuffle",
-    value: function shuffle(spots) {
-      var newPos;
-      var temp;
-
-      for (var i = spots.length - 1; i > 0; i--) {
-        newPos = Math.floor(Math.random() * (i + 1));
-        temp = spots[i];
-        spots[i] = spots[newPos];
-        spots[newPos] = temp;
-      }
-
-      return spots;
-    }
-  }, {
-    key: "clearSpots",
-    value: function clearSpots() {
-      this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+      var board = new _board__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.heartSpot, this.otherSpots);
+      board.generate();
+      setTimeout(board.clear, 1000);
     }
   }]);
 
@@ -864,14 +923,31 @@ function () {
   function Shape(type) {
     _classCallCheck(this, Shape);
 
+    this.type = type;
     this.height = 15;
     this.width = 10;
-    this.type = type;
     this.colors = ["red", "lawngreen", "crimson", "gold", "orangered"];
     this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
   }
 
   _createClass(Shape, [{
+    key: "draw",
+    value: function draw(ctx, x, y) {
+      switch (this.type) {
+        case "heart":
+          return this.drawHeart(ctx, x, y);
+
+        case "spade":
+          return this.drawSpade(ctx, x, y);
+
+        case "club":
+          return this.drawClub(ctx, x, y);
+
+        case "diamond":
+          return this.drawDiamond(ctx, x, y);
+      }
+    }
+  }, {
     key: "drawSpade",
     value: function drawSpade(context, x, y) {
       context.save();
@@ -892,11 +968,11 @@ function () {
       ); // bottom right of spade
 
       context.bezierCurveTo(x, y + topHeight * 1.3, // control point 1
-      x + widtthis.h / 2, y + topHeight * 1.3, // control point 2
-      x + widtthis.h / 2, y + topHeight // end point
+      x + this.width / 2, y + topHeight * 1.3, // control point 2
+      x + this.width / 2, y + topHeight // end point
       ); // top right of spade
 
-      context.bezierCurveTo(x + widtthis.h / 2, y + topHeight / 2, // control point 1
+      context.bezierCurveTo(x + this.width / 2, y + topHeight / 2, // control point 1
       x, y + topHeight / 2, // control point 2
       x, y // end point
       );
