@@ -1,11 +1,16 @@
 import Spot from "./spots";
 import Board from "./board";
-import {changeScore} from "./game";
+import Game from "./game";
+import * as dom from "./dom-loader";
+import * as audio from "./audio";
+
 
 export default class Round {
-    constructor(ctx, speed) {
-        this.ctx = ctx;
-        this.speed = speed;
+    constructor(options) {
+        this.game = options.game;
+        this.ctx = options.ctx;
+        this.speed = options.speed;
+        this.roundNum = options.roundNum;
         this.spots = ["top", "bottom", "left", "right"];
         this.heartSpot = new Spot(this.spots[Math.floor(Math.random() * this.spots.length)]);
         this.otherSpots = 
@@ -13,18 +18,93 @@ export default class Round {
             .map(spot => new Spot(spot));
         this.gameHeight = 1000;
         this.gameWidth = 1000;
+        this.arrowKeysControl = false;
     }
 
     start() {
         let board = new Board(this.ctx, this.heartSpot, this.otherSpots);
+        dom.round_div.style.display = "block";
+        dom.round_div.innerText = "Round " + this.roundNum;
+        dom.reset_div.style.display = "block";
+        dom.plus_span.style.display = "none";
+        dom.minus_span.style.display = "none";
         board.generate();
+        this.arrowKeysControl = true;
         this.clearSpots(this.speed);
+
+        document.addEventListener("keydown", event => {
+            if (this.arrowKeysControl) {
+                this.arrowKeysControl = false;
+                this.check(event.code);
+            }
+        })
+
+        dom.reset_div.addEventListener("click", () => { 
+            this.reset(); 
+            dom.reset_div.style.color = "red"; 
+            if (audio.sound) audio.reset_sound.play(); });
+        }
+
+    check(code) {
+        let keywords = {
+            "top": "ArrowUp", 
+            "bottom": "ArrowDown",
+            "left": "ArrowLeft",
+            "right": "ArrowRight"
+        }
+        console.log("check" + this.game.point);
+        
+        if (keywords[this.heartSpot.location] === code) {
+            console.log("correctb" + this.point);
+            this.point += 5;
+            console.log("correcta" + this.point);
+
+            // Game.changeScore(5);
+            dom.plus_span.style.display = "block";
+            // dom.plus_span.classList.add("popup");
+            dom.points_div.innerText = Game.point;
+            this.clearSpots();
+            if (audio.sound) audio.correct_sound.play();
+        } 
+
+
+        // if (userChoice === round.heartSpots[round.roundNum - 1]) {
+        //     dom.plus_span.style.display = "block";
+        //     dom.plus_span.classList.add("popup");
+        //     point += 5;
+        //     dom.points_div.innerText = point;
+        //     round.clearSpots();
+        //     if (sound) correct_sound.play();
+
+        // } else {
+        //     dom.minus_span.style.display = "block";
+        //     dom.minus_span.classList.add("popup");
+        //     point -= 5;
+        //     dom.points_div.innerText = point;
+        //     round.clearSpots();
+        //     if (sound) wrong_sound.play();
+        // }
     }
+
 
     clearSpots(speed) {
         setTimeout(() =>
             this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight), speed
         )
+    }
+
+    reset() {
+        console.log("reset " + this.game.point);
+        this.game.round = 0;
+        this.game.point = 100;
+        dom.points_div.innerText = this.game.point;
+        console.log("reset " + this.game.point);
+
+        dom.round_div.style.display = "none";
+        dom.reset_div.style.display = "none";
+        // gameInSession = false;
+        dom.howtoplay_div.style.display = "block";
+        dom.reset_div.style.color = "rgb(246, 171, 73)";
     }
 
 }

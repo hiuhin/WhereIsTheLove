@@ -11,9 +11,7 @@ let speed = 900;
 let level = "medium";
 
 export function toggleGameInSession() {
-    // debugger;
     gameInSession = !gameInSession
-    console.log(gameInSession);
 }
 
 
@@ -25,7 +23,6 @@ document.addEventListener("keyup", event => {
         // dom.gameover_span.style.display = "none";
         game.play();
     }
-    // debugger;
 })
 
 // let roundNum;

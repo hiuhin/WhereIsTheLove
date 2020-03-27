@@ -9,13 +9,13 @@ export default class Game {
         this.ctx = dom.canvas.getContext('2d');
         this.level = "medium";
         this.speed = 900;
-        this.numRounds = 2;
+        this.numRounds = 3;
         this.roundNum = null;
         this.buffer = 1500;
         this.play = this.play.bind(this);
         this.nextRound = this.nextRound.bind(this);
         this.point = 0;
-
+        console.log(this.point);
     }
 
     play() {  
@@ -26,6 +26,7 @@ export default class Game {
     }
 
     nextRound() {
+
         if (this.roundNum === this.numRounds) {
             this.gameOver();
             // arrowKeys = false;
@@ -33,7 +34,13 @@ export default class Game {
         }
 
         this.roundNum += 1;
-        let round = new Round(this.ctx, this.speed);
+        // let round = new Round(this, this.ctx, this.speed, this.roundNum);
+        round = new Round({
+            game: this,
+            ctx: this.ctx,
+            speed: this.speed,
+            roundNum: this.roundNum
+        })
         round.start();
         setTimeout(this.nextRound, this.speed + this.buffer);
 
@@ -52,9 +59,8 @@ export default class Game {
     }
 
     changeScore(points) {
-        this.point += points;
+        console.log("hiiii" + this.points);
     }
-
 
 
 // }

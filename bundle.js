@@ -400,12 +400,13 @@ function () {
     this.ctx = _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["canvas"].getContext('2d');
     this.level = "medium";
     this.speed = 900;
-    this.numRounds = 2;
+    this.numRounds = 3;
     this.roundNum = null;
     this.buffer = 1500;
     this.play = this.play.bind(this);
     this.nextRound = this.nextRound.bind(this);
     this.point = 0;
+    console.log(this.point);
   }
 
   _createClass(Game, [{
@@ -426,7 +427,7 @@ function () {
       }
 
       this.roundNum += 1;
-      var round = new _round_js__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.speed);
+      var round = new _round_js__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.speed, this.roundNum);
       round.start();
       setTimeout(this.nextRound, this.speed + this.buffer); // setTimeout(() => round.clearSpots(), this.speed);
       // setTimeout(() => toggleOff(), this.speed);
@@ -444,7 +445,7 @@ function () {
   }, {
     key: "changeScore",
     value: function changeScore(points) {
-      this.point += points;
+      console.log("hiiii" + this.points);
     } // }
     // dom.round_div.style.display = "block";
     // dom.round_div.innerText = "Round " + roundNum;
@@ -544,9 +545,7 @@ var gameInSession = false;
 var speed = 900;
 var level = "medium";
 function toggleGameInSession() {
-  // debugger;
   gameInSession = !gameInSession;
-  console.log(gameInSession);
 }
 document.addEventListener("keyup", function (event) {
   if (!gameInSession && event.code === "Space") {
@@ -555,8 +554,7 @@ document.addEventListener("keyup", function (event) {
     _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["howtoplay_div"].style.display = "none"; // dom.gameover_span.style.display = "none";
 
     game.play();
-  } // debugger;
-
+  }
 }); // let roundNum;
 // let heartSpots = [];
 // let numRounds = 10;
@@ -815,6 +813,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _spots__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./spots */ "./src/spots.js");
 /* harmony import */ var _board__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./board */ "./src/board.js");
 /* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./game */ "./src/game.js");
+/* harmony import */ var _dom_loader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./dom-loader */ "./src/dom-loader.js");
+/* harmony import */ var _audio__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./audio */ "./src/audio.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -825,10 +825,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
+
+
 var Round =
 /*#__PURE__*/
 function () {
-  function Round(ctx, speed) {
+  function Round(ctx, speed, roundNum) {
     var _this = this;
 
     _classCallCheck(this, Round);
@@ -844,23 +846,98 @@ function () {
     });
     this.gameHeight = 1000;
     this.gameWidth = 1000;
+    this.arrowKeysControl = false;
+    this.roundNum = roundNum;
   }
 
   _createClass(Round, [{
     key: "start",
     value: function start() {
+      var _this2 = this;
+
       var board = new _board__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.heartSpot, this.otherSpots);
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].style.display = "block";
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].innerText = "Round " + this.roundNum;
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.display = "block";
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["plus_span"].style.display = "none";
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["minus_span"].style.display = "none";
       board.generate();
+      this.arrowKeysControl = true;
       this.clearSpots(this.speed);
+      document.addEventListener("keydown", function (event) {
+        if (_this2.arrowKeysControl) {
+          _this2.arrowKeysControl = false;
+
+          _this2.check(event.code);
+        }
+      });
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].addEventListener("click", function () {
+        _this2.reset();
+
+        _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.color = "red";
+        if (_audio__WEBPACK_IMPORTED_MODULE_4__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_4__["reset_sound"].play();
+      });
+    }
+  }, {
+    key: "check",
+    value: function check(code) {
+      var keywords = {
+        "top": "ArrowUp",
+        "bottom": "ArrowDown",
+        "left": "ArrowLeft",
+        "right": "ArrowRight"
+      };
+      console.log("check" + _game__WEBPACK_IMPORTED_MODULE_2__["default"].point);
+
+      if (keywords[this.heartSpot.location] === code) {
+        console.log("correctb" + _game__WEBPACK_IMPORTED_MODULE_2__["default"].point);
+        _game__WEBPACK_IMPORTED_MODULE_2__["default"].point += 5;
+        console.log("correcta" + _game__WEBPACK_IMPORTED_MODULE_2__["default"].point); // Game.changeScore(5);
+
+        _dom_loader__WEBPACK_IMPORTED_MODULE_3__["plus_span"].style.display = "block"; // dom.plus_span.classList.add("popup");
+
+        _dom_loader__WEBPACK_IMPORTED_MODULE_3__["points_div"].innerText = _game__WEBPACK_IMPORTED_MODULE_2__["default"].point;
+        this.clearSpots();
+        if (_audio__WEBPACK_IMPORTED_MODULE_4__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_4__["correct_sound"].play();
+      } // if (userChoice === round.heartSpots[round.roundNum - 1]) {
+      //     dom.plus_span.style.display = "block";
+      //     dom.plus_span.classList.add("popup");
+      //     point += 5;
+      //     dom.points_div.innerText = point;
+      //     round.clearSpots();
+      //     if (sound) correct_sound.play();
+      // } else {
+      //     dom.minus_span.style.display = "block";
+      //     dom.minus_span.classList.add("popup");
+      //     point -= 5;
+      //     dom.points_div.innerText = point;
+      //     round.clearSpots();
+      //     if (sound) wrong_sound.play();
+      // }
+
     }
   }, {
     key: "clearSpots",
     value: function clearSpots(speed) {
-      var _this2 = this;
+      var _this3 = this;
 
       setTimeout(function () {
-        return _this2.ctx.clearRect(0, 0, _this2.gameWidth, _this2.gameHeight);
+        return _this3.ctx.clearRect(0, 0, _this3.gameWidth, _this3.gameHeight);
       }, speed);
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      console.log("reset " + _game__WEBPACK_IMPORTED_MODULE_2__["default"].point);
+      _game__WEBPACK_IMPORTED_MODULE_2__["default"].round = 0;
+      _game__WEBPACK_IMPORTED_MODULE_2__["default"].point = 100;
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["points_div"].innerText = _game__WEBPACK_IMPORTED_MODULE_2__["default"].point;
+      console.log("reset " + _game__WEBPACK_IMPORTED_MODULE_2__["default"].point);
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].style.display = "none";
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.display = "none"; // gameInSession = false;
+
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["howtoplay_div"].style.display = "block";
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.color = "rgb(246, 171, 73)";
     }
   }]);
 
