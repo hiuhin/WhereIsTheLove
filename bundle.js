@@ -644,9 +644,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
-var Round =
-/*#__PURE__*/
-function () {
+var Round = /*#__PURE__*/function () {
   function Round(ctx, heartSpots, shapeSize, topSpot, rightSpot, bottomSpot, leftSpot, drawHeart, drawSpade, drawClub, drawDiamond, roundNum, speed) {
     _classCallCheck(this, Round);
 
