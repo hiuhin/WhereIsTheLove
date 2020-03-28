@@ -54,5 +54,4 @@ Player can toggle on and off sound effects and background music. By default, sou
 
 ### Future Plans
 
-* Sort score board records by points.
 * Include AI players.

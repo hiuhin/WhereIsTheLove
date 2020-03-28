@@ -1,21 +1,27 @@
 import * as dom from "./dom-loader.js"; 
 import Round from "./round.js";
-import {toggleGameInSession} from "./index";
 import * as audio from "./audio";
+import {toggleGameInSession} from "./index";
 
 
 export default class Game {
-    constructor() {
+    constructor(options) {
         this.ctx = dom.canvas.getContext('2d');
-        this.level = "medium";
-        this.speed = 900;
+        this.level = options.level;
+        this.speed = options.speed;
+        // this.gameInSession = gameInSession;
         this.numRounds = 3;
         this.roundNum = null;
         this.buffer = 1500;
         this.play = this.play.bind(this);
         this.nextRound = this.nextRound.bind(this);
+        this.changeScore = this.changeScore.bind(this);
+        this.reset = false;
+        this.restart = this.restart.bind(this);
         this.point = 0;
-        console.log(this.point);
+        this.scoreBoardNum = 0;
+        // console.log(gameInSession);
+        // console.log(this.gameInSession);
     }
 
     play() {  
@@ -26,6 +32,7 @@ export default class Game {
     }
 
     nextRound() {
+        if (this.reset) {return;}
 
         if (this.roundNum === this.numRounds) {
             this.gameOver();
@@ -34,12 +41,13 @@ export default class Game {
         }
 
         this.roundNum += 1;
-        // let round = new Round(this, this.ctx, this.speed, this.roundNum);
-        round = new Round({
+
+        let round = new Round({
             game: this,
             ctx: this.ctx,
             speed: this.speed,
-            roundNum: this.roundNum
+            roundNum: this.roundNum,
+            changeScore: this.changeScore
         })
         round.start();
         setTimeout(this.nextRound, this.speed + this.buffer);
@@ -50,16 +58,44 @@ export default class Game {
 
 
     gameOver() {
-        toggleGameInSession();
+        this.gameInSession = false;
         dom.gameover_span.style.display = "block";
         dom.round_div.style.display = "none"
+        dom.minus_span.style.display = "none";
+        dom.plus_span.style.display = "none";
         if (audio.sound) audio.gameover_sound.play();
         dom.reset_div.style.display = "none";
-        addScore();
+        this.appendScoreBoard();
     }
 
     changeScore(points) {
-        console.log("hiiii" + this.points);
+        return this.point += points;
+    }
+
+    appendScoreBoard() {
+        this.scoreBoardNum += 1;
+
+        if (this.scoreBoardNum === 9) {
+            dom.scorelist_ul.removeChild(scorelist_ul.firstChild);
+            this.scoreBoardNum -= 1;
+        }
+
+        let div = document.createElement("div");
+        div.innerText = this.name + "  |  " + this.point + "pts" + "  |  " + this.level;
+        dom.scorelist_ul.appendChild(div);
+    }
+
+    restart() {
+        this.reset = true;
+        toggleGameInSession();
+        console.log(toggleGameInSession);
+        this.round = 0;
+        this.point = 100;
+        dom.points_div.innerText = this.point;
+        dom.round_div.style.display = "none";
+        dom.reset_div.style.display = "none";
+        dom.howtoplay_div.style.display = "block";
+        dom.reset_div.style.color = "rgb(246, 171, 73)";
     }
 
 

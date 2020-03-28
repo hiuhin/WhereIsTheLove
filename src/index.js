@@ -1,6 +1,3 @@
-// import Round from "./round";
-// // import InputHandler from "./input";
-
 import * as dom from "./dom-loader.js"
 import Game from "./game.js";
 import * as audio from "./audio";
@@ -10,20 +7,24 @@ let gameInSession = false;
 let speed = 900;
 let level = "medium";
 
-export function toggleGameInSession() {
-    gameInSession = !gameInSession
-}
-
-
 document.addEventListener("keyup", event => {
+    console.log(gameInSession);
     if (!gameInSession && event.code === "Space") {
-        let game = new Game();
-        toggleGameInSession();
+        let game = new Game({
+            speed: speed,
+            level: level,
+            gameInSession: gameInSession
+        });
+        gameInSession = true;
         dom.howtoplay_div.style.display = "none";
-        // dom.gameover_span.style.display = "none";
+        dom.gameover_span.style.display = "none";
         game.play();
     }
 })
+
+export function toggleGameInSession() {
+    gameInSession = !gameInSession;
+}
 
 // let roundNum;
 // let heartSpots = [];
@@ -57,29 +58,26 @@ dom.impossible_span.addEventListener("click", () => changeLevel("impossible"));
 
 
 function changeLevel(lev) {
-    if (gameInSession === false) {
+    if (!gameInSession) {
         if (audio.sound) audio.select_sound.play();
+        resetLevelColors();
         switch (lev) {
             case "easy":
                 speed = 2000;
-                level = "easy";
-                resetLevelColors();
+                level = "easy";             
                 dom.easy_span.style.color = "tomato";
                 break;
             case "medium":
                 speed = 1000;
                 level = "medium";
-                resetLevelColors();
                 dom.medium_span.style.color = "tomato";
                 break;
             case "hard":
                 speed = 700;
                 level = "hard";
-                resetLevelColors();
                 dom.hard_span.style.color = "tomato";
                 break;
             case "impossible":
-                resetLevelColors();
                 dom.impossible_span.style.color = "tomato";
                 speed = 400;
                 level = "impossible";
@@ -94,6 +92,7 @@ function resetLevelColors() {
     dom.hard_span.style.color = "black";
     dom.impossible_span.style.color = "black";
 }
+
 
 // document.addEventListener("keyup", event => {
 //     if (event.code === "Space") {

@@ -142,9 +142,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
-var Board =
-/*#__PURE__*/
-function () {
+var Board = /*#__PURE__*/function () {
   function Board(ctx, heartSpot, otherSpots) {
     _classCallCheck(this, Board);
 
@@ -378,8 +376,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Game; });
 /* harmony import */ var _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dom-loader.js */ "./src/dom-loader.js");
 /* harmony import */ var _round_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./round.js */ "./src/round.js");
-/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./index */ "./src/index.js");
-/* harmony import */ var _audio__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./audio */ "./src/audio.js");
+/* harmony import */ var _audio__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./audio */ "./src/audio.js");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./index */ "./src/index.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -391,28 +389,31 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
-var Game =
-/*#__PURE__*/
-function () {
-  function Game() {
+var Game = /*#__PURE__*/function () {
+  function Game(options) {
     _classCallCheck(this, Game);
 
     this.ctx = _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["canvas"].getContext('2d');
-    this.level = "medium";
-    this.speed = 900;
+    this.level = options.level;
+    this.speed = options.speed; // this.gameInSession = gameInSession;
+
     this.numRounds = 3;
     this.roundNum = null;
     this.buffer = 1500;
     this.play = this.play.bind(this);
     this.nextRound = this.nextRound.bind(this);
+    this.changeScore = this.changeScore.bind(this);
+    this.reset = false;
+    this.restart = this.restart.bind(this);
     this.point = 0;
-    console.log(this.point);
+    this.scoreBoardNum = 0; // console.log(gameInSession);
+    // console.log(this.gameInSession);
   }
 
   _createClass(Game, [{
     key: "play",
     value: function play() {
-      if (_audio__WEBPACK_IMPORTED_MODULE_3__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_3__["startgame_sound"].play(); // arrowKeys = false;
+      if (_audio__WEBPACK_IMPORTED_MODULE_2__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_2__["startgame_sound"].play(); // arrowKeys = false;
 
       this.roundNum = 0;
       setTimeout(this.nextRound, this.speed + this.buffer);
@@ -420,6 +421,10 @@ function () {
   }, {
     key: "nextRound",
     value: function nextRound() {
+      if (this.reset) {
+        return;
+      }
+
       if (this.roundNum === this.numRounds) {
         this.gameOver(); // arrowKeys = false;
 
@@ -427,7 +432,13 @@ function () {
       }
 
       this.roundNum += 1;
-      var round = new _round_js__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.speed, this.roundNum);
+      var round = new _round_js__WEBPACK_IMPORTED_MODULE_1__["default"]({
+        game: this,
+        ctx: this.ctx,
+        speed: this.speed,
+        roundNum: this.roundNum,
+        changeScore: this.changeScore
+      });
       round.start();
       setTimeout(this.nextRound, this.speed + this.buffer); // setTimeout(() => round.clearSpots(), this.speed);
       // setTimeout(() => toggleOff(), this.speed);
@@ -435,17 +446,47 @@ function () {
   }, {
     key: "gameOver",
     value: function gameOver() {
-      Object(_index__WEBPACK_IMPORTED_MODULE_2__["toggleGameInSession"])();
+      this.gameInSession = false;
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["gameover_span"].style.display = "block";
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["round_div"].style.display = "none";
-      if (_audio__WEBPACK_IMPORTED_MODULE_3__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_3__["gameover_sound"].play();
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["minus_span"].style.display = "none";
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["plus_span"].style.display = "none";
+      if (_audio__WEBPACK_IMPORTED_MODULE_2__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_2__["gameover_sound"].play();
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].style.display = "none";
-      addScore();
+      this.appendScoreBoard();
     }
   }, {
     key: "changeScore",
     value: function changeScore(points) {
-      console.log("hiiii" + this.points);
+      return this.point += points;
+    }
+  }, {
+    key: "appendScoreBoard",
+    value: function appendScoreBoard() {
+      this.scoreBoardNum += 1;
+
+      if (this.scoreBoardNum === 9) {
+        _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["scorelist_ul"].removeChild(scorelist_ul.firstChild);
+        this.scoreBoardNum -= 1;
+      }
+
+      var div = document.createElement("div");
+      div.innerText = this.name + "  |  " + this.point + "pts" + "  |  " + this.level;
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["scorelist_ul"].appendChild(div);
+    }
+  }, {
+    key: "restart",
+    value: function restart() {
+      this.reset = true;
+      Object(_index__WEBPACK_IMPORTED_MODULE_3__["toggleGameInSession"])();
+      console.log(_index__WEBPACK_IMPORTED_MODULE_3__["toggleGameInSession"]);
+      this.round = 0;
+      this.point = 100;
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["points_div"].innerText = this.point;
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["round_div"].style.display = "none";
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].style.display = "none";
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["howtoplay_div"].style.display = "block";
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].style.color = "rgb(246, 171, 73)";
     } // }
     // dom.round_div.style.display = "block";
     // dom.round_div.innerText = "Round " + roundNum;
@@ -536,26 +577,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dom-loader.js */ "./src/dom-loader.js");
 /* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game.js */ "./src/game.js");
 /* harmony import */ var _audio__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./audio */ "./src/audio.js");
-// import Round from "./round";
-// // import InputHandler from "./input";
 
 
 
 var gameInSession = false;
 var speed = 900;
 var level = "medium";
-function toggleGameInSession() {
-  gameInSession = !gameInSession;
-}
 document.addEventListener("keyup", function (event) {
-  if (!gameInSession && event.code === "Space") {
-    var game = new _game_js__WEBPACK_IMPORTED_MODULE_1__["default"]();
-    toggleGameInSession();
-    _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["howtoplay_div"].style.display = "none"; // dom.gameover_span.style.display = "none";
+  console.log(gameInSession);
 
+  if (!gameInSession && event.code === "Space") {
+    var game = new _game_js__WEBPACK_IMPORTED_MODULE_1__["default"]({
+      speed: speed,
+      level: level,
+      gameInSession: gameInSession
+    });
+    gameInSession = true;
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["howtoplay_div"].style.display = "none";
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["gameover_span"].style.display = "none";
     game.play();
   }
-}); // let roundNum;
+});
+function toggleGameInSession() {
+  gameInSession = !gameInSession;
+} // let roundNum;
 // let heartSpots = [];
 // let numRounds = 10;
 // let round;
@@ -593,33 +638,30 @@ _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["impossible_span"].addEventListener(
 });
 
 function changeLevel(lev) {
-  if (gameInSession === false) {
+  if (!gameInSession) {
     if (_audio__WEBPACK_IMPORTED_MODULE_2__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_2__["select_sound"].play();
+    resetLevelColors();
 
     switch (lev) {
       case "easy":
         speed = 2000;
         level = "easy";
-        resetLevelColors();
         _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["easy_span"].style.color = "tomato";
         break;
 
       case "medium":
         speed = 1000;
         level = "medium";
-        resetLevelColors();
         _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["medium_span"].style.color = "tomato";
         break;
 
       case "hard":
         speed = 700;
         level = "hard";
-        resetLevelColors();
         _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["hard_span"].style.color = "tomato";
         break;
 
       case "impossible":
-        resetLevelColors();
         _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["impossible_span"].style.color = "tomato";
         speed = 400;
         level = "impossible";
@@ -827,18 +869,19 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
-var Round =
-/*#__PURE__*/
-function () {
-  function Round(ctx, speed, roundNum) {
+var Round = /*#__PURE__*/function () {
+  function Round(options) {
     var _this = this;
 
     _classCallCheck(this, Round);
 
-    this.ctx = ctx;
-    this.speed = speed;
+    this.game = options.game;
+    this.ctx = options.ctx;
+    this.speed = options.speed;
+    this.roundNum = options.roundNum;
+    this.changeScore = options.changeScore;
     this.spots = ["top", "bottom", "left", "right"];
-    this.heartSpot = new _spots__WEBPACK_IMPORTED_MODULE_0__["default"](this.spots[Math.floor(Math.random() * this.spots.length)]);
+    this.heartSpot = this.generateRandomSpot();
     this.otherSpots = this.spots.filter(function (spot) {
       return spot !== _this.heartSpot.location;
     }).map(function (spot) {
@@ -847,23 +890,24 @@ function () {
     this.gameHeight = 1000;
     this.gameWidth = 1000;
     this.arrowKeysControl = false;
-    this.roundNum = roundNum;
+    this.clearSpots = this.clearSpots.bind(this);
   }
 
   _createClass(Round, [{
+    key: "generateRandomSpot",
+    value: function generateRandomSpot() {
+      return new _spots__WEBPACK_IMPORTED_MODULE_0__["default"](this.spots[Math.floor(Math.random() * this.spots.length)]);
+    }
+  }, {
     key: "start",
     value: function start() {
       var _this2 = this;
 
       var board = new _board__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.heartSpot, this.otherSpots);
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].style.display = "block";
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].innerText = "Round " + this.roundNum;
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.display = "block";
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["plus_span"].style.display = "none";
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["minus_span"].style.display = "none";
       board.generate();
-      this.arrowKeysControl = true;
-      this.clearSpots(this.speed);
+      this.playingDisplay();
+      setTimeout(this.clearSpots, this.speed); // this.clearSpots(this.speed);
+
       document.addEventListener("keydown", function (event) {
         if (_this2.arrowKeysControl) {
           _this2.arrowKeysControl = false;
@@ -872,7 +916,9 @@ function () {
         }
       });
       _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].addEventListener("click", function () {
-        _this2.reset();
+        _this2.game.restart();
+
+        _this2.clearSpots();
 
         _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.color = "red";
         if (_audio__WEBPACK_IMPORTED_MODULE_4__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_4__["reset_sound"].play();
@@ -887,150 +933,42 @@ function () {
         "left": "ArrowLeft",
         "right": "ArrowRight"
       };
-      console.log("check" + _game__WEBPACK_IMPORTED_MODULE_2__["default"].point);
 
       if (keywords[this.heartSpot.location] === code) {
-        console.log("correctb" + _game__WEBPACK_IMPORTED_MODULE_2__["default"].point);
-        _game__WEBPACK_IMPORTED_MODULE_2__["default"].point += 5;
-        console.log("correcta" + _game__WEBPACK_IMPORTED_MODULE_2__["default"].point); // Game.changeScore(5);
-
-        _dom_loader__WEBPACK_IMPORTED_MODULE_3__["plus_span"].style.display = "block"; // dom.plus_span.classList.add("popup");
-
-        _dom_loader__WEBPACK_IMPORTED_MODULE_3__["points_div"].innerText = _game__WEBPACK_IMPORTED_MODULE_2__["default"].point;
+        this.changeScore(5);
+        _dom_loader__WEBPACK_IMPORTED_MODULE_3__["plus_span"].style.display = "block";
+        _dom_loader__WEBPACK_IMPORTED_MODULE_3__["plus_span"].classList.add("popup");
+        _dom_loader__WEBPACK_IMPORTED_MODULE_3__["points_div"].innerText = this.game.point;
         this.clearSpots();
         if (_audio__WEBPACK_IMPORTED_MODULE_4__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_4__["correct_sound"].play();
-      } // if (userChoice === round.heartSpots[round.roundNum - 1]) {
-      //     dom.plus_span.style.display = "block";
-      //     dom.plus_span.classList.add("popup");
-      //     point += 5;
-      //     dom.points_div.innerText = point;
-      //     round.clearSpots();
-      //     if (sound) correct_sound.play();
-      // } else {
-      //     dom.minus_span.style.display = "block";
-      //     dom.minus_span.classList.add("popup");
-      //     point -= 5;
-      //     dom.points_div.innerText = point;
-      //     round.clearSpots();
-      //     if (sound) wrong_sound.play();
-      // }
-
+      } else {
+        this.changeScore(-5);
+        _dom_loader__WEBPACK_IMPORTED_MODULE_3__["minus_span"].style.display = "block";
+        _dom_loader__WEBPACK_IMPORTED_MODULE_3__["minus_span"].classList.add("popup");
+        _dom_loader__WEBPACK_IMPORTED_MODULE_3__["points_div"].innerText = this.game.point;
+        this.clearSpots();
+        if (_audio__WEBPACK_IMPORTED_MODULE_4__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_4__["wrong_sound"].play();
+      }
     }
   }, {
     key: "clearSpots",
-    value: function clearSpots(speed) {
-      var _this3 = this;
-
-      setTimeout(function () {
-        return _this3.ctx.clearRect(0, 0, _this3.gameWidth, _this3.gameHeight);
-      }, speed);
+    value: function clearSpots() {
+      this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
     }
   }, {
-    key: "reset",
-    value: function reset() {
-      console.log("reset " + _game__WEBPACK_IMPORTED_MODULE_2__["default"].point);
-      _game__WEBPACK_IMPORTED_MODULE_2__["default"].round = 0;
-      _game__WEBPACK_IMPORTED_MODULE_2__["default"].point = 100;
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["points_div"].innerText = _game__WEBPACK_IMPORTED_MODULE_2__["default"].point;
-      console.log("reset " + _game__WEBPACK_IMPORTED_MODULE_2__["default"].point);
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].style.display = "none";
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.display = "none"; // gameInSession = false;
-
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["howtoplay_div"].style.display = "block";
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.color = "rgb(246, 171, 73)";
+    key: "playingDisplay",
+    value: function playingDisplay() {
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].style.display = "block";
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].innerText = "Round " + this.roundNum;
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.display = "block";
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["plus_span"].style.display = "none";
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["minus_span"].style.display = "none";
+      this.arrowKeysControl = true;
     }
   }]);
 
   return Round;
-}(); // import InputHandler from "./input";
-// export default class Round {
-//     constructor(
-//         ctx,
-//         heartSpots,
-//         shapeSize,
-//         topSpot,
-//         rightSpot,
-//         bottomSpot,
-//         leftSpot,
-//         roundNum,
-//         speed
-//     ) {
-//         this.gameHeight = 1000;
-//         this.gameWidth = 1000;
-//         this.ctx = ctx;
-//         this.heartSpots = heartSpots;
-//         this.shapeSize = shapeSize;
-//         this.spots = [topSpot, rightSpot, bottomSpot, leftSpot];
-//         this.colors = [
-//             "red",
-//             "lawngreen",
-//             "crimson",
-//             "gold",
-//             "orangered"
-//         ];
-//         this.roundNum = roundNum;
-//         this.shuffle = this.shuffle.bind(this);
-//         this.choice = null;
-//         this.speed = speed;
-//     }
-//         // flashHeart() {
-//         //     this.drawHeart(
-//         //         this.ctx,
-//         //         this.spots[this.heartSpots[this.roundNum-1]].x,
-//         //         this.spots[this.heartSpots[this.roundNum-1]].y,
-//         //         this.shapeSize.w,
-//         //         this.shapeSize.h,
-//         //         this.colors[Math.floor(Math.random() * this.colors.length)]
-//         //     );
-//         // }
-//         // flashShapes() {
-//         //     let noHeartSpots = this.spots.filter((spot, idx) => idx !== this.heartSpots[this.roundNum-1]);
-//         //     let shuffledSpots = this.shuffle(noHeartSpots);
-//         //     this.drawSpade(
-//         //         this.ctx,
-//         //         shuffledSpots[0].x,
-//         //         shuffledSpots[0].y,
-//         //         this.shapeSize.w,
-//         //         this.shapeSize.h,
-//         //         this.colors[Math.floor(Math.random() * this.colors.length)],
-//         //         );
-//         //     this.drawDiamond(
-//         //         this.ctx,
-//         //         shuffledSpots[1].x,
-//         //         shuffledSpots[1].y,
-//         //         this.shapeSize.w,
-//         //         this.shapeSize.h,
-//         //         this.colors[
-//         //         Math.floor(Math.random() * this.colors.length)
-//         //         ]
-//         //     ); 
-//         //     this.drawClub(
-//         //         this.ctx,
-//         //         shuffledSpots[2].x,
-//         //         shuffledSpots[2].y,
-//         //         this.shapeSize.w,
-//         //         this.shapeSize.h,
-//         //         this.colors[
-//         //         Math.floor(Math.random() * this.colors.length)
-//         //         ]
-//         //     ); 
-//         // }
-//         // shuffle(spots) {
-//         //     let newPos;
-//         //     let temp;
-//         //     for (let i = spots.length - 1; i > 0; i--) {
-//         //         newPos = Math.floor(Math.random() * (i + 1));
-//         //         temp = spots[i];
-//         //         spots[i] = spots[newPos];
-//         //         spots[newPos] = temp;
-//         //     }
-//         //     return spots;
-//         //  }
-//         //  clearSpots() {
-//         //     this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
-//         //  }
-// }
-
+}();
 
 
 
@@ -1055,9 +993,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
-var Shape =
-/*#__PURE__*/
-function () {
+var Shape = /*#__PURE__*/function () {
   function Shape(type) {
     _classCallCheck(this, Shape);
 
@@ -1231,9 +1167,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Spot =
-/*#__PURE__*/
-function () {
+var Spot = /*#__PURE__*/function () {
   function Spot(location) {
     _classCallCheck(this, Spot);
 
