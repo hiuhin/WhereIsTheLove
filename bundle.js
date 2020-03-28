@@ -377,13 +377,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dom-loader.js */ "./src/dom-loader.js");
 /* harmony import */ var _round_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./round.js */ "./src/round.js");
 /* harmony import */ var _audio__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./audio */ "./src/audio.js");
-/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./index */ "./src/index.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
 
 
 
@@ -395,8 +393,8 @@ var Game = /*#__PURE__*/function () {
 
     this.ctx = _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["canvas"].getContext('2d');
     this.level = options.level;
-    this.speed = options.speed; // this.gameInSession = gameInSession;
-
+    this.speed = options.speed;
+    this.toggleGameInSession = options.toggleGameInSession;
     this.numRounds = 3;
     this.roundNum = null;
     this.buffer = 1500;
@@ -413,6 +411,7 @@ var Game = /*#__PURE__*/function () {
   _createClass(Game, [{
     key: "play",
     value: function play() {
+      this.toggleGameInSession();
       if (_audio__WEBPACK_IMPORTED_MODULE_2__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_2__["startgame_sound"].play(); // arrowKeys = false;
 
       this.roundNum = 0;
@@ -446,7 +445,7 @@ var Game = /*#__PURE__*/function () {
   }, {
     key: "gameOver",
     value: function gameOver() {
-      this.gameInSession = false;
+      this.toggleGameInSession();
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["gameover_span"].style.display = "block";
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["round_div"].style.display = "none";
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["minus_span"].style.display = "none";
@@ -478,10 +477,9 @@ var Game = /*#__PURE__*/function () {
     key: "restart",
     value: function restart() {
       this.reset = true;
-      Object(_index__WEBPACK_IMPORTED_MODULE_3__["toggleGameInSession"])();
-      console.log(_index__WEBPACK_IMPORTED_MODULE_3__["toggleGameInSession"]);
+      this.toggleGameInSession();
       this.round = 0;
-      this.point = 100;
+      this.point = 0;
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["points_div"].innerText = this.point;
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["round_div"].style.display = "none";
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].style.display = "none";
@@ -568,12 +566,11 @@ var Game = /*#__PURE__*/function () {
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-/*! exports provided: toggleGameInSession */
+/*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleGameInSession", function() { return toggleGameInSession; });
 /* harmony import */ var _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dom-loader.js */ "./src/dom-loader.js");
 /* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game.js */ "./src/game.js");
 /* harmony import */ var _audio__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./audio */ "./src/audio.js");
@@ -584,20 +581,18 @@ var gameInSession = false;
 var speed = 900;
 var level = "medium";
 document.addEventListener("keyup", function (event) {
-  console.log(gameInSession);
-
   if (!gameInSession && event.code === "Space") {
     var game = new _game_js__WEBPACK_IMPORTED_MODULE_1__["default"]({
       speed: speed,
       level: level,
-      gameInSession: gameInSession
+      toggleGameInSession: toggleGameInSession
     });
-    gameInSession = true;
     _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["howtoplay_div"].style.display = "none";
     _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["gameover_span"].style.display = "none";
     game.play();
   }
 });
+
 function toggleGameInSession() {
   gameInSession = !gameInSession;
 } // let roundNum;
@@ -623,6 +618,7 @@ function toggleGameInSession() {
 // let sound = true;
 // let name = "Player";
 // let scoreNum = 0;
+
 
 _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["easy_span"].addEventListener("click", function () {
   return changeLevel("easy");

@@ -8,21 +8,19 @@ let speed = 900;
 let level = "medium";
 
 document.addEventListener("keyup", event => {
-    console.log(gameInSession);
     if (!gameInSession && event.code === "Space") {
         let game = new Game({
             speed: speed,
             level: level,
-            gameInSession: gameInSession
+            toggleGameInSession: toggleGameInSession
         });
-        gameInSession = true;
         dom.howtoplay_div.style.display = "none";
         dom.gameover_span.style.display = "none";
         game.play();
     }
 })
 
-export function toggleGameInSession() {
+function toggleGameInSession() {
     gameInSession = !gameInSession;
 }
 

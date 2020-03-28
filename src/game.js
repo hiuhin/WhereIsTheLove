@@ -1,15 +1,13 @@
 import * as dom from "./dom-loader.js"; 
 import Round from "./round.js";
 import * as audio from "./audio";
-import {toggleGameInSession} from "./index";
-
 
 export default class Game {
     constructor(options) {
         this.ctx = dom.canvas.getContext('2d');
         this.level = options.level;
         this.speed = options.speed;
-        // this.gameInSession = gameInSession;
+        this.toggleGameInSession = options.toggleGameInSession;
         this.numRounds = 3;
         this.roundNum = null;
         this.buffer = 1500;
@@ -25,6 +23,7 @@ export default class Game {
     }
 
     play() {  
+        this.toggleGameInSession();
         if (audio.sound) audio.startgame_sound.play();
         // arrowKeys = false;
         this.roundNum = 0;
@@ -58,7 +57,7 @@ export default class Game {
 
 
     gameOver() {
-        this.gameInSession = false;
+        this.toggleGameInSession();
         dom.gameover_span.style.display = "block";
         dom.round_div.style.display = "none"
         dom.minus_span.style.display = "none";
@@ -87,10 +86,9 @@ export default class Game {
 
     restart() {
         this.reset = true;
-        toggleGameInSession();
-        console.log(toggleGameInSession);
+        this.toggleGameInSession();
         this.round = 0;
-        this.point = 100;
+        this.point = 0;
         dom.points_div.innerText = this.point;
         dom.round_div.style.display = "none";
         dom.reset_div.style.display = "none";
