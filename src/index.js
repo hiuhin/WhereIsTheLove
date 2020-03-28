@@ -6,10 +6,11 @@ import * as audio from "./audio";
 let gameInSession = false;
 let speed = 900;
 let level = "medium";
+let game;
 
 document.addEventListener("keyup", event => {
     if (!gameInSession && event.code === "Space") {
-        let game = new Game({
+        game = new Game({
             speed: speed,
             level: level,
             toggleGameInSession: toggleGameInSession
@@ -19,6 +20,15 @@ document.addEventListener("keyup", event => {
         game.play();
     }
 })
+
+dom.reset_div.addEventListener("click", () => {
+            console.log("top of click event")
+            game.restart();
+            // this.clearSpots();
+            // this.arrowKeysControl = false;
+            dom.reset_div.style.color = "red";
+            if (audio.sound) audio.reset_sound.play();
+        })
 
 function toggleGameInSession() {
     gameInSession = !gameInSession;

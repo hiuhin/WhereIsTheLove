@@ -395,7 +395,7 @@ var Game = /*#__PURE__*/function () {
     this.level = options.level;
     this.speed = options.speed;
     this.toggleGameInSession = options.toggleGameInSession;
-    this.numRounds = 3;
+    this.numRounds = 10;
     this.roundNum = null;
     this.buffer = 1500;
     this.play = this.play.bind(this);
@@ -404,8 +404,7 @@ var Game = /*#__PURE__*/function () {
     this.reset = false;
     this.restart = this.restart.bind(this);
     this.point = 0;
-    this.scoreBoardNum = 0; // console.log(gameInSession);
-    // console.log(this.gameInSession);
+    this.scoreBoardNum = 0;
   }
 
   _createClass(Game, [{
@@ -414,8 +413,7 @@ var Game = /*#__PURE__*/function () {
       console.log("top of play");
       this.toggleGameInSession();
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["points_div"].innerText = this.point;
-      if (_audio__WEBPACK_IMPORTED_MODULE_2__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_2__["startgame_sound"].play(); // arrowKeys = false;
-
+      if (_audio__WEBPACK_IMPORTED_MODULE_2__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_2__["startgame_sound"].play();
       this.roundNum = 0;
       setTimeout(this.nextRound, this.speed + this.buffer);
     }
@@ -427,8 +425,7 @@ var Game = /*#__PURE__*/function () {
       }
 
       if (this.roundNum === this.numRounds) {
-        this.gameOver(); // arrowKeys = false;
-
+        this.gameOver();
         return;
       }
 
@@ -441,8 +438,7 @@ var Game = /*#__PURE__*/function () {
         changeScore: this.changeScore
       });
       round.start();
-      setTimeout(this.nextRound, this.speed + this.buffer); // setTimeout(() => round.clearSpots(), this.speed);
-      // setTimeout(() => toggleOff(), this.speed);
+      setTimeout(this.nextRound, this.speed + this.buffer);
     }
   }, {
     key: "gameOver",
@@ -479,6 +475,7 @@ var Game = /*#__PURE__*/function () {
     key: "restart",
     value: function restart() {
       console.log("beginning of restart");
+      console.log(this.round);
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].style.color = "rgb(246, 171, 73)";
       this.reset = true;
       this.toggleGameInSession();
@@ -584,9 +581,10 @@ __webpack_require__.r(__webpack_exports__);
 var gameInSession = false;
 var speed = 900;
 var level = "medium";
+var game;
 document.addEventListener("keyup", function (event) {
   if (!gameInSession && event.code === "Space") {
-    var game = new _game_js__WEBPACK_IMPORTED_MODULE_1__["default"]({
+    game = new _game_js__WEBPACK_IMPORTED_MODULE_1__["default"]({
       speed: speed,
       level: level,
       toggleGameInSession: toggleGameInSession
@@ -595,6 +593,14 @@ document.addEventListener("keyup", function (event) {
     _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["gameover_span"].style.display = "none";
     game.play();
   }
+});
+_dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].addEventListener("click", function () {
+  console.log("top of click event");
+  game.restart(); // this.clearSpots();
+  // this.arrowKeysControl = false;
+
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].style.color = "red";
+  if (_audio__WEBPACK_IMPORTED_MODULE_2__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_2__["reset_sound"].play();
 });
 
 function toggleGameInSession() {
@@ -910,20 +916,14 @@ var Round = /*#__PURE__*/function () {
 
           _this2.check(event.code);
         }
-      });
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].addEventListener("click", function () {
-        console.log("top of click event");
-
-        _this2.game.restart();
-
-        _this2.clearSpots();
-
-        _this2.arrowKeysControl = false;
-        _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.color = "red";
-        if (_audio__WEBPACK_IMPORTED_MODULE_4__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_4__["reset_sound"].play();
-        console.log("bottom click event");
-      });
-      console.log("bottom of start round");
+      }); // dom.reset_div.addEventListener("click", () => {
+      //     console.log("top of click event")
+      //     this.game.restart();
+      //     this.clearSpots();
+      //     this.arrowKeysControl = false;
+      //     dom.reset_div.style.color = "red";
+      //     if (audio.sound) audio.reset_sound.play();
+      // })
     }
   }, {
     key: "generateRandomSpot",

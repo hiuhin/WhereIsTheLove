@@ -8,7 +8,7 @@ export default class Game {
         this.level = options.level;
         this.speed = options.speed;
         this.toggleGameInSession = options.toggleGameInSession;
-        this.numRounds = 3;
+        this.numRounds = 10;
         this.roundNum = null;
         this.buffer = 1500;
         this.play = this.play.bind(this);
@@ -18,8 +18,6 @@ export default class Game {
         this.restart = this.restart.bind(this);
         this.point = 0;
         this.scoreBoardNum = 0;
-        // console.log(gameInSession);
-        // console.log(this.gameInSession);
     }
 
     play() {  
@@ -27,23 +25,22 @@ export default class Game {
         this.toggleGameInSession();
         dom.points_div.innerText = this.point;
         if (audio.sound) audio.startgame_sound.play();
-        // arrowKeys = false;
         this.roundNum = 0;
         setTimeout(this.nextRound, this.speed + this.buffer);
     }
 
     nextRound() {
+
         if (this.reset) {return;}
 
         if (this.roundNum === this.numRounds) {
             this.gameOver();
-            // arrowKeys = false;
             return;
         }
 
         this.roundNum += 1;
 
-        let round = new Round({
+            let round = new Round({
             game: this,
             ctx: this.ctx,
             speed: this.speed,
@@ -52,9 +49,6 @@ export default class Game {
         })
         round.start();
         setTimeout(this.nextRound, this.speed + this.buffer);
-
-        // setTimeout(() => round.clearSpots(), this.speed);
-        // setTimeout(() => toggleOff(), this.speed);
     }
 
 
@@ -87,7 +81,8 @@ export default class Game {
     }
 
     restart() {
-        console.log("beginning of restart")
+        console.log("beginning of restart");
+        console.log(this.round);
         dom.reset_div.style.color = "rgb(246, 171, 73)";
         this.reset = true;
         this.toggleGameInSession();

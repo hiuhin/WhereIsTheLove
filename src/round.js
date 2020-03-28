@@ -39,16 +39,14 @@ export default class Round {
             }
         })
 
-        dom.reset_div.addEventListener("click", () => {
-            console.log("top of click event")
-            this.game.restart();
-            this.clearSpots();
-            this.arrowKeysControl = false;
-            dom.reset_div.style.color = "red";
-            if (audio.sound) audio.reset_sound.play();
-            console.log("bottom click event")
-        })
-        console.log("bottom of start round")
+        // dom.reset_div.addEventListener("click", () => {
+        //     console.log("top of click event")
+        //     this.game.restart();
+        //     this.clearSpots();
+        //     this.arrowKeysControl = false;
+        //     dom.reset_div.style.color = "red";
+        //     if (audio.sound) audio.reset_sound.play();
+        // })
     }
 
     generateRandomSpot() {
