@@ -411,7 +411,9 @@ var Game = /*#__PURE__*/function () {
   _createClass(Game, [{
     key: "play",
     value: function play() {
+      console.log("top of play");
       this.toggleGameInSession();
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["points_div"].innerText = this.point;
       if (_audio__WEBPACK_IMPORTED_MODULE_2__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_2__["startgame_sound"].play(); // arrowKeys = false;
 
       this.roundNum = 0;
@@ -476,6 +478,8 @@ var Game = /*#__PURE__*/function () {
   }, {
     key: "restart",
     value: function restart() {
+      console.log("beginning of restart");
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].style.color = "rgb(246, 171, 73)";
       this.reset = true;
       this.toggleGameInSession();
       this.round = 0;
@@ -484,7 +488,7 @@ var Game = /*#__PURE__*/function () {
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["round_div"].style.display = "none";
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].style.display = "none";
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["howtoplay_div"].style.display = "block";
-      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].style.color = "rgb(246, 171, 73)";
+      console.log("end of restart");
     } // }
     // dom.round_div.style.display = "block";
     // dom.round_div.innerText = "Round " + roundNum;
@@ -890,20 +894,16 @@ var Round = /*#__PURE__*/function () {
   }
 
   _createClass(Round, [{
-    key: "generateRandomSpot",
-    value: function generateRandomSpot() {
-      return new _spots__WEBPACK_IMPORTED_MODULE_0__["default"](this.spots[Math.floor(Math.random() * this.spots.length)]);
-    }
-  }, {
     key: "start",
     value: function start() {
       var _this2 = this;
 
+      console.log("top of start round");
       var board = new _board__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.heartSpot, this.otherSpots);
       board.generate();
+      this.arrowKeysControl = true;
       this.playingDisplay();
-      setTimeout(this.clearSpots, this.speed); // this.clearSpots(this.speed);
-
+      setTimeout(this.clearSpots, this.speed);
       document.addEventListener("keydown", function (event) {
         if (_this2.arrowKeysControl) {
           _this2.arrowKeysControl = false;
@@ -912,13 +912,39 @@ var Round = /*#__PURE__*/function () {
         }
       });
       _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].addEventListener("click", function () {
+        console.log("top of click event");
+
         _this2.game.restart();
 
         _this2.clearSpots();
 
+        _this2.arrowKeysControl = false;
         _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.color = "red";
         if (_audio__WEBPACK_IMPORTED_MODULE_4__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_4__["reset_sound"].play();
+        console.log("bottom click event");
       });
+      console.log("bottom of start round");
+    }
+  }, {
+    key: "generateRandomSpot",
+    value: function generateRandomSpot() {
+      return new _spots__WEBPACK_IMPORTED_MODULE_0__["default"](this.spots[Math.floor(Math.random() * this.spots.length)]);
+    }
+  }, {
+    key: "clearSpots",
+    value: function clearSpots() {
+      this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+      this.arrowKeysControl = false;
+    }
+  }, {
+    key: "playingDisplay",
+    value: function playingDisplay() {
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].style.display = "block";
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].innerText = "Round " + this.roundNum;
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.display = "block";
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["plus_span"].style.display = "none";
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["minus_span"].style.display = "none";
+      this.arrowKeysControl = true;
     }
   }, {
     key: "check",
@@ -945,21 +971,6 @@ var Round = /*#__PURE__*/function () {
         this.clearSpots();
         if (_audio__WEBPACK_IMPORTED_MODULE_4__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_4__["wrong_sound"].play();
       }
-    }
-  }, {
-    key: "clearSpots",
-    value: function clearSpots() {
-      this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
-    }
-  }, {
-    key: "playingDisplay",
-    value: function playingDisplay() {
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].style.display = "block";
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].innerText = "Round " + this.roundNum;
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.display = "block";
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["plus_span"].style.display = "none";
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["minus_span"].style.display = "none";
-      this.arrowKeysControl = true;
     }
   }]);
 

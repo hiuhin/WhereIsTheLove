@@ -23,7 +23,9 @@ export default class Game {
     }
 
     play() {  
+        console.log("top of play")
         this.toggleGameInSession();
+        dom.points_div.innerText = this.point;
         if (audio.sound) audio.startgame_sound.play();
         // arrowKeys = false;
         this.roundNum = 0;
@@ -85,6 +87,8 @@ export default class Game {
     }
 
     restart() {
+        console.log("beginning of restart")
+        dom.reset_div.style.color = "rgb(246, 171, 73)";
         this.reset = true;
         this.toggleGameInSession();
         this.round = 0;
@@ -93,7 +97,7 @@ export default class Game {
         dom.round_div.style.display = "none";
         dom.reset_div.style.display = "none";
         dom.howtoplay_div.style.display = "block";
-        dom.reset_div.style.color = "rgb(246, 171, 73)";
+        console.log("end of restart")
     }
 
 

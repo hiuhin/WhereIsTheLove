@@ -23,16 +23,14 @@ export default class Round {
         this.clearSpots = this.clearSpots.bind(this);
     }
 
-    generateRandomSpot() {
-        return new Spot(this.spots[Math.floor(Math.random() * this.spots.length)]);
-    }
-
     start() {
+        console.log("top of start round")
         let board = new Board(this.ctx, this.heartSpot, this.otherSpots);
         board.generate();
+        this.arrowKeysControl = true;
         this.playingDisplay();
-        setTimeout(this.clearSpots, this.speed)
-        // this.clearSpots(this.speed);
+
+        setTimeout(this.clearSpots, this.speed);
 
         document.addEventListener("keydown", event => {
             if (this.arrowKeysControl) {
@@ -41,23 +39,44 @@ export default class Round {
             }
         })
 
-        dom.reset_div.addEventListener("click", () => { 
+        dom.reset_div.addEventListener("click", () => {
+            console.log("top of click event")
             this.game.restart();
             this.clearSpots();
-            dom.reset_div.style.color = "red"; 
-            if (audio.sound) audio.reset_sound.play(); });
-        }
+            this.arrowKeysControl = false;
+            dom.reset_div.style.color = "red";
+            if (audio.sound) audio.reset_sound.play();
+            console.log("bottom click event")
+        })
+        console.log("bottom of start round")
+    }
 
+    generateRandomSpot() {
+        return new Spot(this.spots[Math.floor(Math.random() * this.spots.length)]);
+    }
 
+    clearSpots() {
+        this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+        this.arrowKeysControl = false;
+    }
+
+    playingDisplay() {
+        dom.round_div.style.display = "block";
+        dom.round_div.innerText = "Round " + this.roundNum;
+        dom.reset_div.style.display = "block";
+        dom.plus_span.style.display = "none";
+        dom.minus_span.style.display = "none";
+        this.arrowKeysControl = true;
+    }
 
     check(code) {
         let keywords = {
-            "top": "ArrowUp", 
+            "top": "ArrowUp",
             "bottom": "ArrowDown",
             "left": "ArrowLeft",
             "right": "ArrowRight"
         }
-        
+
         if (keywords[this.heartSpot.location] === code) {
             this.changeScore(5);
             dom.plus_span.style.display = "block";
@@ -73,22 +92,6 @@ export default class Round {
             this.clearSpots();
             if (audio.sound) audio.wrong_sound.play();
         }
-    }
-
-
-    clearSpots() {
-        this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight)
-    }
-
-   
-
-    playingDisplay() {
-        dom.round_div.style.display = "block";
-        dom.round_div.innerText = "Round " + this.roundNum;
-        dom.reset_div.style.display = "block";
-        dom.plus_span.style.display = "none";
-        dom.minus_span.style.display = "none";
-        this.arrowKeysControl = true;
     }
 
 }
