@@ -1,114 +1,85 @@
-import InputHandler from "./input";
+import Spot from "./spots";
+import Board from "./board";
+import Game from "./game";
+import * as dom from "./dom-loader";
+import * as audio from "./audio";
+
 
 export default class Round {
-    constructor(
-        ctx,
-        heartSpots,
-        shapeSize,
-        topSpot,
-        rightSpot,
-        bottomSpot,
-        leftSpot,
-        drawHeart,
-        drawSpade,
-        drawClub,
-        drawDiamond,
-        roundNum,
-        speed
-    ) {
+    constructor(options) {
+        this.game = options.game;
+        this.ctx = options.ctx;
+        this.speed = options.speed;
+        this.roundNum = options.roundNum;
+        this.changeScore = options.changeScore;
+        this.spots = ["top", "bottom", "left", "right"];
+        this.heartSpot = this.generateRandomSpot();
+        this.otherSpots = 
+            this.spots.filter(spot => spot !== this.heartSpot.location)
+            .map(spot => new Spot(spot));
         this.gameHeight = 1000;
         this.gameWidth = 1000;
-        this.ctx = ctx;
-        this.heartSpots = heartSpots;
-        this.shapeSize = shapeSize;
-        this.spots = [topSpot, rightSpot, bottomSpot, leftSpot];
-        this.colors = [
-            "red",
-            "lawngreen",
-            "crimson",
-            "gold",
-            "orangered"
-        ];
-        this.drawHeart = drawHeart;
-        this.drawSpade = drawSpade;
-        this.drawClub = drawClub;
-        this.drawDiamond = drawDiamond;
-        this.roundNum = roundNum;
-        this.shuffle = this.shuffle.bind(this);
-        this.choice = null;
-        this.speed = speed;
+        this.arrowKeysControl = false;
+        this.clearSpots = this.clearSpots.bind(this);
     }
-        
-        flashHeart() {
-            this.drawHeart(
-                this.ctx,
-                this.spots[this.heartSpots[this.roundNum-1]].x,
-                this.spots[this.heartSpots[this.roundNum-1]].y,
-                this.shapeSize.w,
-                this.shapeSize.h,
-                this.colors[Math.floor(Math.random() * this.colors.length)]
-            );
-        }
 
-        flashShapes() {
-            let noHeartSpots = this.spots.filter((spot, idx) => idx !== this.heartSpots[this.roundNum-1]);
-            let shuffledSpots = this.shuffle(noHeartSpots);
+    start() {
+        let board = new Board(this.ctx, this.heartSpot, this.otherSpots);
+        board.generate();
+        this.arrowKeysControl = true;
+        this.playingDisplay();
 
-            this.drawSpade(
-                this.ctx,
-                shuffledSpots[0].x,
-                shuffledSpots[0].y,
-                this.shapeSize.w,
-                this.shapeSize.h,
-                this.colors[Math.floor(Math.random() * this.colors.length)],
-                );
+        setTimeout(this.clearSpots, this.speed);
 
-            this.drawDiamond(
-                this.ctx,
-                shuffledSpots[1].x,
-                shuffledSpots[1].y,
-                this.shapeSize.w,
-                this.shapeSize.h,
-                this.colors[
-                Math.floor(Math.random() * this.colors.length)
-                ]
-            ); 
-
-            this.drawClub(
-                this.ctx,
-                shuffledSpots[2].x,
-                shuffledSpots[2].y,
-                this.shapeSize.w,
-                this.shapeSize.h,
-                this.colors[
-                Math.floor(Math.random() * this.colors.length)
-                ]
-            ); 
-            
-            //clear left spot only:
-            // setTimeout(() => {
-            //     this.ctx.clearRect(70,
-            //         50,
-            //         30,
-            //         30)
-            // }, 2000)
-
-        }
-
-        shuffle(spots) {
-            let newPos;
-            let temp;
-            for (let i = spots.length - 1; i > 0; i--) {
-                newPos = Math.floor(Math.random() * (i + 1));
-                temp = spots[i];
-                spots[i] = spots[newPos];
-                spots[newPos] = temp;
+        document.addEventListener("keydown", event => {
+            if (this.arrowKeysControl) {
+                this.arrowKeysControl = false;
+                this.check(event.code);
             }
-            return spots;
-         }
+        })
+    }
 
-         clearSpots() {
-            this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
-         }
+    generateRandomSpot() {
+        return new Spot(this.spots[Math.floor(Math.random() * this.spots.length)]);
+    }
+
+    clearSpots() {
+        this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+        this.arrowKeysControl = false;
+    }
+
+    playingDisplay() {
+        dom.round_div.style.display = "block";
+        dom.round_div.innerText = "Round " + this.roundNum;
+        dom.reset_div.style.display = "block";
+        dom.plus_span.style.display = "none";
+        dom.minus_span.style.display = "none";
+        this.arrowKeysControl = true;
+    }
+
+    check(code) {
+        let keywords = {
+            "top": "ArrowUp",
+            "bottom": "ArrowDown",
+            "left": "ArrowLeft",
+            "right": "ArrowRight"
+        }
+
+        if (keywords[this.heartSpot.location] === code) {
+            this.changeScore(5);
+            dom.plus_span.style.display = "block";
+            dom.plus_span.classList.add("popup");
+            dom.points_div.innerText = this.game.point;
+            this.clearSpots();
+            if (audio.sound) audio.correct_sound.play();
+        } else {
+            this.changeScore(-5);
+            dom.minus_span.style.display = "block";
+            dom.minus_span.classList.add("popup");
+            dom.points_div.innerText = this.game.point;
+            this.clearSpots();
+            if (audio.sound) audio.wrong_sound.play();
+        }
+    }
 
 }

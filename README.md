@@ -17,35 +17,52 @@ A quick-reaction game based on Super Mario Party minigame "Looking for Love". Up
 ![level](assets/gifs/levels.gif)
 
 #### Levels
-Player can choose from 4 levels. Each level differs in the amount of time the shapes appear on screen, ranging from 2 seconds (easy) to 400 milliseconds (impossible). A series of setTimeout are used to control clearing the shapes as well as disabling the event listeners for arrowkeys.
+Player can choose from 4 levels. Each level differs in the amount of time the shapes appear on screen, ranging from 2 seconds (easy) to 400 milliseconds (impossible). SetTimeout is used to control how long the shapes are displayed and how long the event listeners for arrowkeys are active.
 
 ```
-    setTimeout(() => round.clearSpots(), speed);
-    setTimeout(() => toggleOff(), speed);
-    setTimeout(nextRound, speed + 1500); 
+    start() {
+        let board = new Board(this.ctx, this.heartSpot, this.otherSpots);
+        board.generate();
+        this.arrowKeysControl = true;
+        this.playingDisplay();
+
+        setTimeout(this.clearSpots, this.speed);
+
+        document.addEventListener("keydown", event => {
+            if (this.arrowKeysControl) {
+                this.arrowKeysControl = false;
+                this.check(event.code);
+            }
+        })
+    }
+
+    clearSpots() {
+        this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+        this.arrowKeysControl = false;
+    }
 
 ```
 
 
 #### Scoring
-Answering correctly and quick enough earns the player 5 points. Incorrect answers results in negative 5 points. Not answering or delayed responses do not affect scores.
+Answering correctly and quick enough earns the player 5 points. Incorrect answers results in negative 5 points. Not answering or delayed responses do not affect score.
 
 #### Score Board 
-After each game, player's Name (optional), score, and level is recorded under the score board. A maximum of 9 records are displayed. If there are any more than 9 records, the oldest one is removed using Node.removeChild().
+After each game, player's name (optional), score, and level is recorded under the score board. A maximum of 9 records are displayed. If there are any more than 9 records, the oldest one is removed using Node.removeChild().
 
 ``` 
-function addScore() {
-    scoreNum += 1;
+    appendScoreBoard() {
+        this.scoreBoardNum += 1;
 
-    if (scoreNum === 9) {
-        scorelist_ul.removeChild(scorelist_ul.firstChild);
-        scoreNum -= 1;
+        if (this.scoreBoardNum === 9) {
+            dom.scorelist_ul.removeChild(scorelist_ul.firstChild);
+            this.scoreBoardNum -= 1;
+        }
+
+        let div = document.createElement("div");
+        div.innerText = this.name + "  |  " + this.point + "pts" + "  |  " + this.level;
+        dom.scorelist_ul.appendChild(div);
     }
-
-    let div = document.createElement("div");
-    div.innerText = name + " " + point + "pts" + " " + level;
-    scorelist_ul.appendChild(div);
-}
 ```
 
 #### Sound Effects and Music
@@ -54,5 +71,4 @@ Player can toggle on and off sound effects and background music. By default, sou
 
 ### Future Plans
 
-* Sort score board records by points.
 * Include AI players.

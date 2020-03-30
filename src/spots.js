@@ -1,22 +1,23 @@
 export default class Spot {
     constructor(location) {
-        this.x = null;
-        this.y = null;
+        this.location = location;
+        this.coordinates = this.getCoordinates();
     }
 
-    coordinates(location) {
-        switch (location) {
-            case top:
+    getCoordinates() {
+        switch (this.location) {
+            case "top":
                 return { x: 159, y: 16 };
                 break;
-            case right:
+            case "right":
                 return { x: 251, y: 57 };
                 break;
-            case bottom:
+            case "bottom":
                 return { x: 159, y: 99 };
                 break;
-            case left:
+            case "left":
                 return { x: 67, y: 57 };
-                break
+                break;
         }
+    }
 }
