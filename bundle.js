@@ -418,7 +418,15 @@ var Game = /*#__PURE__*/function () {
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["points_div"].innerText = this.point;
       if (_audio__WEBPACK_IMPORTED_MODULE_2__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_2__["startgame_sound"].play();
       this.roundNum = 0;
+      this.loadPreGame();
       setTimeout(this.nextRound, this.speed + this.buffer);
+    }
+  }, {
+    key: "loadPreGame",
+    value: function loadPreGame() {
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["round_div"].style.display = "block";
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["round_div"].innerText = "Round 1";
+      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].style.display = "block";
     }
   }, {
     key: "nextRound",
@@ -718,9 +726,9 @@ var Round = /*#__PURE__*/function () {
   }, {
     key: "playingDisplay",
     value: function playingDisplay() {
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].style.display = "block";
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].innerText = "Round " + this.roundNum;
-      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["reset_div"].style.display = "block";
+      // dom.round_div.style.display = "block";
+      _dom_loader__WEBPACK_IMPORTED_MODULE_3__["round_div"].innerText = "Round " + this.roundNum; // dom.reset_div.style.display = "block";
+
       _dom_loader__WEBPACK_IMPORTED_MODULE_3__["plus_span"].style.display = "none";
       _dom_loader__WEBPACK_IMPORTED_MODULE_3__["minus_span"].style.display = "none";
       this.arrowKeysControl = true;

@@ -49,9 +49,9 @@ export default class Round {
     }
 
     playingDisplay() {
-        dom.round_div.style.display = "block";
+        // dom.round_div.style.display = "block";
         dom.round_div.innerText = "Round " + this.roundNum;
-        dom.reset_div.style.display = "block";
+        // dom.reset_div.style.display = "block";
         dom.plus_span.style.display = "none";
         dom.minus_span.style.display = "none";
         this.arrowKeysControl = true;

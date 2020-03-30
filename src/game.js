@@ -26,7 +26,14 @@ export default class Game {
         dom.points_div.innerText = this.point;
         if (audio.sound) audio.startgame_sound.play();
         this.roundNum = 0;
+        this.loadPreGame();
         setTimeout(this.nextRound, this.speed + this.buffer);
+    }
+
+    loadPreGame() {
+        dom.round_div.style.display = "block";
+        dom.round_div.innerText = "Round 1";
+        dom.reset_div.style.display = "block";
     }
 
     nextRound() {
@@ -41,7 +48,7 @@ export default class Game {
             ctx: this.ctx,
             speed: this.speed,
             roundNum: this.roundNum,
-            changeScore: this.changeScore
+        changeScore: this.changeScore
         })
         round.start();
         setTimeout(this.nextRound, this.speed + this.buffer);
