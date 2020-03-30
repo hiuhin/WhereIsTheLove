@@ -7,6 +7,7 @@ let gameInSession = false;
 let speed = 900;
 let level = "medium";
 let game;
+let name;
 
 document.addEventListener("keyup", event => {
     if (!gameInSession && event.code === "Space") {
@@ -26,7 +27,6 @@ dom.reset_div.addEventListener("click", () => {
             game.restart();
             // this.clearSpots();
             // this.arrowKeysControl = false;
-            dom.reset_div.style.color = "red";
             if (audio.sound) audio.reset_sound.play();
         })
 
@@ -99,6 +99,39 @@ function resetLevelColors() {
     dom.medium_span.style.color = "black";
     dom.hard_span.style.color = "black";
     dom.impossible_span.style.color = "black";
+}
+
+dom.playbutton.addEventListener("click", toggleMusic);
+
+function toggleMusic() {
+    if (dom.playbutton.classList.value === "play") {
+        dom.playbutton.classList = "pause";
+        audio.music.play();
+    } else {
+        dom.playbutton.classList = "play";
+        audio.music.pause();
+    }
+}
+
+dom.sounds_div.addEventListener("click", toggleSounds);
+
+function toggleSounds() {
+    if (dom.sounds_div.classList.value === "sounds") {
+        dom.sounds_div.classList = "mute";
+        audio.toggleSound();
+    } else {
+        dom.sounds_div.classList = "sounds";
+        audio.toggleSound();
+    }
+}
+
+dom.name_input.onchange = updateName;
+
+function updateName() {
+    if (audio.sound) audio.submit_sound.play();
+    name = dom.name_input.value;
+    dom.name_input.style.color = "rgb(240, 102, 38)";
+    dom.name_input.blur();
 }
 
 

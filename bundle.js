@@ -105,19 +105,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "submit_sound", function() { return submit_sound; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sound", function() { return sound; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleSound", function() { return toggleSound; });
-function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
-
 var startgame_sound = new Audio('assets/sounds/startgame.mp3');
 var correct_sound = new Audio('assets/sounds/correct.wav');
 var wrong_sound = new Audio('assets/sounds/wrong2.wav');
 var gameover_sound = new Audio('assets/sounds/gameover.wav');
 var reset_sound = new Audio('assets/sounds/reset.wav');
 var music = new Audio('assets/sounds/BEPmidi.mp3');
+music.currentTime = 2;
+music.volume = 0.6;
+music.loop = true;
 var select_sound = new Audio('assets/sounds/select.wav');
 var submit_sound = new Audio('assets/sounds/submit.wav');
 var sound = true;
 function toggleSound() {
-  sound = (_readOnlyError("sound"), !sound);
+  sound = !sound;
 }
 ;
 
@@ -474,9 +475,6 @@ var Game = /*#__PURE__*/function () {
   }, {
     key: "restart",
     value: function restart() {
-      console.log("beginning of restart");
-      console.log(this.round);
-      _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].style.color = "rgb(246, 171, 73)";
       this.reset = true;
       this.toggleGameInSession();
       this.round = 0;
@@ -485,7 +483,6 @@ var Game = /*#__PURE__*/function () {
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["round_div"].style.display = "none";
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].style.display = "none";
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["howtoplay_div"].style.display = "block";
-      console.log("end of restart");
     } // }
     // dom.round_div.style.display = "block";
     // dom.round_div.innerText = "Round " + roundNum;
@@ -582,6 +579,7 @@ var gameInSession = false;
 var speed = 900;
 var level = "medium";
 var game;
+var name;
 document.addEventListener("keyup", function (event) {
   if (!gameInSession && event.code === "Space") {
     game = new _game_js__WEBPACK_IMPORTED_MODULE_1__["default"]({
@@ -599,7 +597,6 @@ _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].addEventListener("click
   game.restart(); // this.clearSpots();
   // this.arrowKeysControl = false;
 
-  _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].style.color = "red";
   if (_audio__WEBPACK_IMPORTED_MODULE_2__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_2__["reset_sound"].play();
 });
 
@@ -681,6 +678,39 @@ function resetLevelColors() {
   _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["medium_span"].style.color = "black";
   _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["hard_span"].style.color = "black";
   _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["impossible_span"].style.color = "black";
+}
+
+_dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["playbutton"].addEventListener("click", toggleMusic);
+
+function toggleMusic() {
+  if (_dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["playbutton"].classList.value === "play") {
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["playbutton"].classList = "pause";
+    _audio__WEBPACK_IMPORTED_MODULE_2__["music"].play();
+  } else {
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["playbutton"].classList = "play";
+    _audio__WEBPACK_IMPORTED_MODULE_2__["music"].pause();
+  }
+}
+
+_dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["sounds_div"].addEventListener("click", toggleSounds);
+
+function toggleSounds() {
+  if (_dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["sounds_div"].classList.value === "sounds") {
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["sounds_div"].classList = "mute";
+    _audio__WEBPACK_IMPORTED_MODULE_2__["toggleSound"]();
+  } else {
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["sounds_div"].classList = "sounds";
+    _audio__WEBPACK_IMPORTED_MODULE_2__["toggleSound"]();
+  }
+}
+
+_dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["name_input"].onchange = updateName;
+
+function updateName() {
+  if (_audio__WEBPACK_IMPORTED_MODULE_2__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_2__["submit_sound"].play();
+  name = _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["name_input"].value;
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["name_input"].style.color = "rgb(240, 102, 38)";
+  _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["name_input"].blur();
 } // document.addEventListener("keyup", event => {
 //     if (event.code === "Space") {
 //         if (gameInSession === false) {

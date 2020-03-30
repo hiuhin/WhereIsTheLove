@@ -81,9 +81,6 @@ export default class Game {
     }
 
     restart() {
-        console.log("beginning of restart");
-        console.log(this.round);
-        dom.reset_div.style.color = "rgb(246, 171, 73)";
         this.reset = true;
         this.toggleGameInSession();
         this.round = 0;
@@ -92,7 +89,6 @@ export default class Game {
         dom.round_div.style.display = "none";
         dom.reset_div.style.display = "none";
         dom.howtoplay_div.style.display = "block";
-        console.log("end of restart")
     }
 
 
