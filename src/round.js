@@ -24,7 +24,6 @@ export default class Round {
     }
 
     start() {
-        console.log("top of start round")
         let board = new Board(this.ctx, this.heartSpot, this.otherSpots);
         board.generate();
         this.arrowKeysControl = true;

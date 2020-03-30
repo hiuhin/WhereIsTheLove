@@ -7,6 +7,7 @@ export default class Game {
         this.ctx = dom.canvas.getContext('2d');
         this.level = options.level;
         this.speed = options.speed;
+        this.name = options.name;
         this.toggleGameInSession = options.toggleGameInSession;
         this.numRounds = 10;
         this.roundNum = null;
@@ -21,7 +22,6 @@ export default class Game {
     }
 
     play() {  
-        console.log("top of play")
         this.toggleGameInSession();
         dom.points_div.innerText = this.point;
         if (audio.sound) audio.startgame_sound.play();
@@ -90,6 +90,7 @@ export default class Game {
         dom.reset_div.style.display = "none";
         dom.howtoplay_div.style.display = "block";
     }
+
 
 
 // }

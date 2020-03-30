@@ -7,13 +7,14 @@ let gameInSession = false;
 let speed = 900;
 let level = "medium";
 let game;
-let name;
+let name = "Player1";
 
 document.addEventListener("keyup", event => {
     if (!gameInSession && event.code === "Space") {
         game = new Game({
             speed: speed,
             level: level,
+            name: name,
             toggleGameInSession: toggleGameInSession
         });
         dom.howtoplay_div.style.display = "none";
@@ -23,7 +24,6 @@ document.addEventListener("keyup", event => {
 })
 
 dom.reset_div.addEventListener("click", () => {
-            console.log("top of click event")
             game.restart();
             // this.clearSpots();
             // this.arrowKeysControl = false;
@@ -32,6 +32,15 @@ dom.reset_div.addEventListener("click", () => {
 
 function toggleGameInSession() {
     gameInSession = !gameInSession;
+
+    if (!gameInSession) {
+        dom.name_input.style.display = "block";
+        dom.name_output_div.style.display = "none";
+    } else {
+        dom.name_input.style.display = "none";
+        dom.name_output_div.style.display = "block";
+        dom.name_output_div.innerText = name;
+    }
 }
 
 // let roundNum;

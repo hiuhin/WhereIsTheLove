@@ -14,3 +14,4 @@ export const playbutton = document.getElementById("playbutton");
 export const sounds_div = document.getElementById("sounds");
 export const scorelist_ul = document.getElementById("scorelist");
 export const name_input = document.getElementById("name");
+export const name_output_div = document.getElementById("name_output")

@@ -196,7 +196,7 @@ var Board = /*#__PURE__*/function () {
 /*!***************************!*\
   !*** ./src/dom-loader.js ***!
   \***************************/
-/*! exports provided: canvas, easy_span, medium_span, hard_span, impossible_span, plus_span, minus_span, round_div, reset_div, points_div, howtoplay_div, gameover_span, playbutton, sounds_div, scorelist_ul, name_input */
+/*! exports provided: canvas, easy_span, medium_span, hard_span, impossible_span, plus_span, minus_span, round_div, reset_div, points_div, howtoplay_div, gameover_span, playbutton, sounds_div, scorelist_ul, name_input, name_output_div */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -217,6 +217,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sounds_div", function() { return sounds_div; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "scorelist_ul", function() { return scorelist_ul; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "name_input", function() { return name_input; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "name_output_div", function() { return name_output_div; });
 var canvas = document.getElementById('canvas');
 var easy_span = document.getElementById('easy');
 var medium_span = document.getElementById('medium');
@@ -233,6 +234,7 @@ var playbutton = document.getElementById("playbutton");
 var sounds_div = document.getElementById("sounds");
 var scorelist_ul = document.getElementById("scorelist");
 var name_input = document.getElementById("name");
+var name_output_div = document.getElementById("name_output");
 
 /***/ }),
 
@@ -395,6 +397,7 @@ var Game = /*#__PURE__*/function () {
     this.ctx = _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["canvas"].getContext('2d');
     this.level = options.level;
     this.speed = options.speed;
+    this.name = options.name;
     this.toggleGameInSession = options.toggleGameInSession;
     this.numRounds = 10;
     this.roundNum = null;
@@ -411,7 +414,6 @@ var Game = /*#__PURE__*/function () {
   _createClass(Game, [{
     key: "play",
     value: function play() {
-      console.log("top of play");
       this.toggleGameInSession();
       _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["points_div"].innerText = this.point;
       if (_audio__WEBPACK_IMPORTED_MODULE_2__["sound"]) _audio__WEBPACK_IMPORTED_MODULE_2__["startgame_sound"].play();
@@ -579,12 +581,13 @@ var gameInSession = false;
 var speed = 900;
 var level = "medium";
 var game;
-var name;
+var name = "Player1";
 document.addEventListener("keyup", function (event) {
   if (!gameInSession && event.code === "Space") {
     game = new _game_js__WEBPACK_IMPORTED_MODULE_1__["default"]({
       speed: speed,
       level: level,
+      name: name,
       toggleGameInSession: toggleGameInSession
     });
     _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["howtoplay_div"].style.display = "none";
@@ -593,7 +596,6 @@ document.addEventListener("keyup", function (event) {
   }
 });
 _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].addEventListener("click", function () {
-  console.log("top of click event");
   game.restart(); // this.clearSpots();
   // this.arrowKeysControl = false;
 
@@ -602,6 +604,15 @@ _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["reset_div"].addEventListener("click
 
 function toggleGameInSession() {
   gameInSession = !gameInSession;
+
+  if (!gameInSession) {
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["name_input"].style.display = "block";
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["name_output_div"].style.display = "none";
+  } else {
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["name_input"].style.display = "none";
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["name_output_div"].style.display = "block";
+    _dom_loader_js__WEBPACK_IMPORTED_MODULE_0__["name_output_div"].innerText = name;
+  }
 } // let roundNum;
 // let heartSpots = [];
 // let numRounds = 10;
@@ -934,7 +945,6 @@ var Round = /*#__PURE__*/function () {
     value: function start() {
       var _this2 = this;
 
-      console.log("top of start round");
       var board = new _board__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.heartSpot, this.otherSpots);
       board.generate();
       this.arrowKeysControl = true;

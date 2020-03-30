@@ -264,12 +264,9 @@ h1 {
     font-family: 'Pangolin';
 }
 
-input {
+.name {
     width: 180px;
     font-family: 'Press Start 2P', monospace;
-}
-
-#name {
     text-align: center;
     position: absolute;
     left: 440px;
@@ -302,6 +299,9 @@ input:-webkit-autofill {
     -webkit-animation-fill-mode: both;
 }
 
+#name_output { 
+    color: rgb(240, 102, 38);
+}
 
 .links {
     font-size: 30px;
@@ -364,3 +364,4 @@ input:-webkit-autofill {
 	width: 26px;
 	height: 26px;
 }
+
